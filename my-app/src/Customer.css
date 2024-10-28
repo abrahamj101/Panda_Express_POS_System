@@ -5,9 +5,7 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.App {
-  text-align: center;
-  background-color: #f8f8f8;
+.menu-page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -36,29 +34,28 @@ body {
   cursor: pointer;
 }
 
-.main-content {
+.menu-content {
   flex-grow: 1;
-  padding: 50px 0;
-}
-
-.carousel {
-  height: 300px;
-  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px dashed #b02321;
-  margin-bottom: 50px;
+  padding: 20px;
 }
 
-.order-btn {
-  background-color: #b02321;
-  color: white;
-  border: none;
-  padding: 15px 40px;
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.food-item {
+  background-color: #e0e0e0;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 18px;
-  border-radius: 5px;
-  cursor: pointer;
+  color: #555;
 }
 
 .footer {
