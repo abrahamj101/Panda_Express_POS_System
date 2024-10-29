@@ -18,8 +18,9 @@ function LandingPage() {
       </header>
 
       <main className="main-content">
-        <div className="carousel-container">
+        <div className="carousel-wrapper">
           <Carousel
+            className="carousel-container"
             showArrows={true}
             autoPlay={true}
             infiniteLoop={true}
@@ -27,15 +28,27 @@ function LandingPage() {
             interval={3000}
           >
             <div className="image-box">
-              <img src="/images/orangechicken.jpg" alt="Menu Item 1" />
+              <img
+                className="carousel-image"
+                src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Chicken_OrangeChicken.png"
+                alt="Menu Item 1"
+              />
               <p className="legend">Orange Chicken</p>
             </div>
             <div className="image-box">
-              <img src="/images/beijingbeef.jpg" alt="Menu Item 2" />
+              <img
+                className="carousel-image"
+                src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Beef_BeijingBeef.png"
+                alt="Menu Item 2"
+              />
               <p className="legend">Beijing Beef</p>
             </div>
             <div className="image-box">
-              <img src="/images/honeywalnut.jpg" alt="Menu Item 3" />
+              <img
+                className="carousel-image"
+                src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Seafood_HoneyWalnutShrimp.png"
+                alt="Menu Item 3"
+              />
               <p className="legend">Honey Walnut Shrimp</p>
             </div>
             {/* Add more carousel items as needed */}
