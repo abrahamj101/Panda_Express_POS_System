@@ -26,7 +26,10 @@ function MenuPage() {
       </main>
 
       <footer className="footer">
-        <p>*Contact Info*</p>
+        <p>300 Polo Rd Room 129, College Station, TX 77840</p>
+        <p>
+          <b>(979) 773-8811</b>
+        </p>
       </footer>
     </div>
   );
