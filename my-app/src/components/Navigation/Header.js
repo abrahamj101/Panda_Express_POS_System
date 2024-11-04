@@ -1,4 +1,4 @@
-import logo from "../images/panda-express-logo-1.svg";
+import logo from "../../images/panda-express-logo-1.svg";
 
 
 const Header = () => {

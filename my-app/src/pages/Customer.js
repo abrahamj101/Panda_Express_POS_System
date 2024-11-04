@@ -1,8 +1,7 @@
 import React from "react";
 import "../styles/Customer.css";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-
+import Header from "../components/Navigation/Header";
+import Footer from "../components/Navigation/Footer";
 function MenuPage() {
   const foodItems = Array(9).fill("*Food Item Image*");
 

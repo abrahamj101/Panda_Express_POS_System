@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
 import CustomerPage from "./Customer";
 import "../styles/App.css";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import ImageCarousel from "../components/ImageCarousel";
+import Header from "../components/Navigation/Header";
+import Footer from "../components/Navigation/Footer";
+import ImageCarousel from "../components/Carosuel/ImageCarousel";
 
 function LandingPage() {
   return (
