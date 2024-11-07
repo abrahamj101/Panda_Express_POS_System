@@ -26,13 +26,6 @@ app.listen(port, () => {
 
 app.post("/api/menuItems", async (req, res) => {
   try {
-    // const { menuItem_name, price, foodItem_ids, inventoryItem_ids, in_stock } = req.body;
-
-    // const result = await pool.query(
-    //   "INSERT INTO MenuItems (menuItem_name, price, foodItem_ids, inventoryitem_ids, in_stock) VALUES($1, $2, $3, $4, $5) RETURNING *",
-    //   [menuItem_name, price, foodItem_ids, inventoryItem_ids, in_stock]
-    // );
-
     const { menuItem_id, menuItem_name, price, foodItem_ids, inventoryItem_ids, in_stock } = req.body;
 
     const result = await pool.query(
