@@ -1,24 +1,38 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { Fragment, useState, useEffect } from "react";
+import MenuItemCard from "./MenuItemCard";
 
 function MenuItemGrid() {
+  const [menuItems, setMenuItems] = useState([]);
+
+  const getMenuItems = async () => {
+    try {
+      const response = await fetch("http://localhost:5001/api/menuItems");
+      const jsonData = await response.json();
+      setMenuItems(jsonData);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5001/api/carousel")
-      .then((response) => {
-        console.log("Fetched Carousel Data:", response.data);
-        setCarouselData(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching carousel data:", error);
-      });
+    getMenuItems();
   }, []);
 
+  console.log(menuItems);
   return (
-    <div>
-      
-    </div>
+    <Fragment>
+      <div>
+        {menuItems.map((menuItem) => {
+          return (
+            <MenuItemCard 
+              key={menuItem.menuItem_id}
+              menuItem_name={menuItem.menuItem_name}
+              price={menuItem.price}
+            />
+          );
+        })}
+      </div>
+    </Fragment>
   );
 }
 

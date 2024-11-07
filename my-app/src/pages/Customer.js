@@ -2,13 +2,15 @@ import React from "react";
 import "../styles/Customer.css";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
+import MenuItemGrid from "../components/MenuItems/MenuItemGrid";
+
 function MenuPage() {
   const foodItems = Array(9).fill("*Food Item Image*");
 
   return (
     <div className="menu-page">
       <Header />
-
+      <MenuItemGrid />
       <main className="menu-content">
         <div className="food-grid">
           {foodItems.map((item, index) => (
