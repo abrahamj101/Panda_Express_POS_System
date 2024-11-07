@@ -1,16 +1,34 @@
+import React, { useState } from "react";
 import logo from "../images/panda-express-logo-1.svg";
+import Modal from "./Modal"; // Import the Modal component
+import { Link } from "react-router-dom";
 
+function Header() {
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
 
-const Header = () => {
-    return (
-        <header className="header">
-        <div className="logo">
+  const handleLoginClick = () => {
+    setIsModalOpen(true); // Open modal on button click
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false); // Close modal
+  };
+
+  return (
+    <header className="header">
+      <div className="logo">
+        <Link to="/">
           <img src={logo} alt="Panda Express Logo" />
-        </div>
-        <h1>Panda Express</h1>
-        <button className="login-btn">Login</button>
-      </header>
-    );
-};
+        </Link>
+      </div>
+      <h1>Panda Express</h1>
+      <button className="login-btn" onClick={handleLoginClick}>
+        Login
+      </button>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal} />{" "}
+      {/* Render Modal */}
+    </header>
+  );
+}
 
 export default Header;

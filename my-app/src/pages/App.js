@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
 import CustomerPage from "./Customer";
+import ManagerPage from "./Manager";
+import CashierPage from "./Cashier";
 import "../styles/App.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -31,6 +33,8 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/customer" element={<CustomerPage />} />
+        <Route path="/manager" element={<ManagerPage />} />
+        <Route path="/cashier" element={<CashierPage />} />
       </Routes>
     </Router>
   );
