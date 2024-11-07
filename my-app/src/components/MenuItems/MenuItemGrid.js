@@ -26,7 +26,7 @@ function MenuItemGrid() {
           return (
             <MenuItemCard 
               key={menuItem.menuItem_id}
-              menuItem_name={menuItem.menuItem_name}
+              menuItem_name={menuItem.menuitem_name}
               price={menuItem.price}
               image_link={menuItem.image_link}
             />
