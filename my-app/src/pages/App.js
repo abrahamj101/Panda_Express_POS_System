@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import CustomerPage from "./Customer";
 import ManagerPage from "./Manager";
 import CashierPage from "./Cashier";
