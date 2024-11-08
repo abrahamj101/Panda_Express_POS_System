@@ -4,6 +4,7 @@ import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import FoodItemGrid from "../components/FoodItems/FoodItemGrid";
 import BackButton from "../components/Navigation/BackButton";
+import AddToCartButton from "../components/Cart/AddToCartButton";
 import "../styles/default.css"
 
 function Food() {
