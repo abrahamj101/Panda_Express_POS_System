@@ -11,8 +11,10 @@ function MenuPage() {
   return (
     <div>
       <Header />
-      <BackButton />
-      <MenuItemGrid />
+      <div className="main-content">
+        <BackButton />
+        <MenuItemGrid />
+      </div>
       <Footer />
     </div>
   );

@@ -12,15 +12,12 @@ function LandingPage() {
   return (
     <div className="App">
       <Header />
-
-      <main className="main-content">
+      <div className="main-content">
         <ImageCarousel />
-
         <Link to="/menu">
           <button className="order-btn">ORDER NOW!</button>
         </Link>
-      </main>
-
+      </div>
       <Footer />
     </div>
   );

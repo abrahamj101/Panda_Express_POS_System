@@ -13,8 +13,10 @@ function Food() {
   return (
     <div>
         <Header />
-        <BackButton />
-        <FoodItemGrid foodItemIds={foodItem_ids} />
+        <div className="main-content">
+          <BackButton />
+          <FoodItemGrid foodItemIds={foodItem_ids} />
+        </div>
         <Footer />
     </div>
   );
