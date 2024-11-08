@@ -3,8 +3,9 @@ import getFoodItems from '../../pages/api/fooditems/getFooditems';
 import FoodItemCard from './FoodItemCard';
 import "../../styles/Grid.css";
 
-function FoodItemGrid({ foodItemIds }) {
+function FoodItemGrid({ foodItemIds, onSelectionChange }) {
   const [foodItems, setFoodItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState({});
 
   const fetchFoodItems = async () => {
     try {
@@ -19,8 +20,37 @@ function FoodItemGrid({ foodItemIds }) {
     fetchFoodItems();
   }, []);
 
-  const currentMonth = new Date().getMonth() + 1;
+  const handleSelectItem = (foodItem) => {
+    setSelectedItems((prevSelectedItems) => {
+      const currentCount = prevSelectedItems[foodItem.fooditem_id] || 0;
+      if (currentCount < 3) {
+        const updatedSelectedItems = {
+          ...prevSelectedItems,
+          [foodItem.fooditem_id]: currentCount + 1,
+        };
+        onSelectionChange(updatedSelectedItems);
+        return updatedSelectedItems;
+      }
+      return prevSelectedItems;
+    });
+  };
 
+  const handleDeselectItem = (foodItem) => {
+    setSelectedItems((prevSelectedItems) => {
+      const currentCount = prevSelectedItems[foodItem.fooditem_id] || 0;
+      if (currentCount > 0) {
+        const updatedSelectedItems = {
+          ...prevSelectedItems,
+          [foodItem.fooditem_id]: currentCount - 1,
+        };
+        onSelectionChange(updatedSelectedItems);
+        return updatedSelectedItems;
+      }
+      return prevSelectedItems;
+    });
+  };
+
+  const currentMonth = new Date().getMonth() + 1;
   const filteredFoodItems = foodItems
     .filter(
       (foodItem) =>
@@ -47,9 +77,10 @@ function FoodItemGrid({ foodItemIds }) {
               {groupedFoodItems[type].map((foodItem) => (
                 <FoodItemCard
                   key={foodItem.fooditem_id}
-                  foodItem_name={foodItem.fooditem_name}
-                  image_link={foodItem.image_link}
-                  premium={foodItem.premium}
+                  foodItem={foodItem}
+                  onSelect={() => handleSelectItem(foodItem)}
+                  onDeselect={() => handleDeselectItem(foodItem)}
+                  selectedCount={selectedItems[foodItem.fooditem_id] || 0}
                 />
               ))}
             </div>
