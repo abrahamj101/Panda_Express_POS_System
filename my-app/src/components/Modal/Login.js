@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./../styles/Modal.css"; // Add styles for the modal
+import "../../styles/Modal.css"; // Add styles for the modal
 
-const Modal = ({ isOpen, onClose }) => {
+const Login = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
@@ -23,4 +23,4 @@ const Modal = ({ isOpen, onClose }) => {
   );
 };
 
-export default Modal;
+export default Login;
