@@ -35,9 +35,9 @@ function FoodItemGrid({ foodItemIds }) {
             .map((foodItem) => (
               <FoodItemCard
                 key={foodItem.fooditem_id}
-                foodItem_id={foodItem.fooditem_id}
                 foodItem_name={foodItem.fooditem_name}
                 image_link={foodItem.image_link}
+                premium={foodItem.premium}
               />
             ))
         ) : (
