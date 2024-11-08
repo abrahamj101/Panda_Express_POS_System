@@ -1,23 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import FoodItemGrid from "../components/FoodItems/FoodItemGrid";
 import BackButton from "../components/Navigation/BackButton";
-import "../styles/default.css"
+import AddToCartButton from "../components/Cart/AddToCartButton";
+import "../styles/default.css";
 
 function Food() {
   const location = useLocation();
   const { foodItem_ids } = location.state || {};
-  console.log(foodItem_ids)
+  const [selectedItems, setSelectedItems] = useState({});
+
+  const handleSelectionChange = (newSelectedItems) => {
+    setSelectedItems(newSelectedItems);
+  };
+
+  const handleAddToCart = () => {
+    const selectedIds = Object.entries(selectedItems)
+      .flatMap(([id, count]) => Array(count).fill(id));
+    console.log("Selected food items for cart:", selectedIds);
+  };
+
   return (
     <div>
-        <Header />
-        <div className="main-content">
-          <BackButton />
-          <FoodItemGrid foodItemIds={foodItem_ids} />
-        </div>
-        <Footer />
+      <Header />
+      <div className="main-content">
+        <BackButton />
+        <FoodItemGrid foodItemIds={foodItem_ids} onSelectionChange={handleSelectionChange} />
+        <AddToCartButton onClick={handleAddToCart} />
+      </div>
+      <Footer />
     </div>
   );
 }

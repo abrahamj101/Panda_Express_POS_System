@@ -4,7 +4,7 @@ const BackButton = () => {
   const navigate = useNavigate();
 
   return (
-    <button onClick={() => navigate(-1)}  className="back-button">
+    <button onClick={() => navigate(-1)}  className="button">
       Go Back
     </button>
   );
