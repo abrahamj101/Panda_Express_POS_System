@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
-import CustomerPage from "./Customer";
+import MenuPage from "./Menu";
+import FoodPage from "./Food"
 import "../styles/App.css";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
@@ -15,7 +16,7 @@ function LandingPage() {
       <main className="main-content">
         <ImageCarousel />
 
-        <Link to="/customer">
+        <Link to="/menu">
           <button className="order-btn">ORDER NOW!</button>
         </Link>
       </main>
@@ -30,7 +31,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/customer" element={<CustomerPage />} />
+        <Route path="/menu" element={<MenuPage />} />
+        <Route path="/food" element={<FoodPage />} />
       </Routes>
     </Router>
   );

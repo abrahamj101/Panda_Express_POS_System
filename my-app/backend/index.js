@@ -24,6 +24,8 @@ app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
 
+
+// Adds a Menu Item
 app.post("/api/menuItems", async (req, res) => {
   try {
     const { menuItem_id, menuItem_name, price, foodItem_ids, inventoryItem_ids, in_stock } = req.body;
@@ -41,6 +43,7 @@ app.post("/api/menuItems", async (req, res) => {
 });
 
 
+// Gets the Menu Items
 app.get("/api/menuItems", async (req, res) => {
   try {
     const result = await pool.query(
@@ -53,6 +56,8 @@ app.get("/api/menuItems", async (req, res) => {
   }
 })
 
+
+// Deletes a given Menu Item by id
 app.delete("/api/menuItems/:menuItem_id", async (req, res) => {
   try {
     const { menuItem_id } = req.params;
@@ -66,6 +71,7 @@ app.delete("/api/menuItems/:menuItem_id", async (req, res) => {
   }
 })
 
+// Gets Food Items
 app.get("/api/foodItems", async (req, res) => {
   try {
     const result = await pool.query(

@@ -25,10 +25,11 @@ function MenuItemGrid() {
         {menuItems.length > 0 ? (
           menuItems.map((menuItem) => (
             <MenuItemCard
-              key={menuItem.menuItem_id}
+              key={menuItem.menuitem_id}
               menuItem_name={menuItem.menuitem_name}
               price={menuItem.price}
               image_link={menuItem.image_link}
+              foodItem_ids={menuItem.fooditem_ids}
             />
           ))
         ) : (
