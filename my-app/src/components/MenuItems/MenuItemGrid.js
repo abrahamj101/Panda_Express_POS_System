@@ -6,7 +6,6 @@ import "../../styles/Grid.css"
 function MenuItemGrid() {
   const [menuItems, setMenuItems] = useState([]);
 
-  // Fetch menu items from the database using the generalized function
   const fetchMenuItems = async () => {
     try {
       const items = await getMenuItems();
@@ -23,7 +22,7 @@ function MenuItemGrid() {
   return (
     <Fragment>
       <div className='item-grid'>
-        {menuItems.length > 0 ? (
+        {
           menuItems.map((menuItem) => (
             <MenuItemCard
               key={menuItem.menuitem_id}
@@ -33,9 +32,7 @@ function MenuItemGrid() {
               foodItem_ids={menuItem.fooditem_ids}
             />
           ))
-        ) : (
-          <p>Loading menu items...</p>
-        )}
+        }
       </div>
     </Fragment>
   );

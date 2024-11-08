@@ -79,12 +79,12 @@ html {
 
 
 /* Center the back button */
-.back-button {
+.button {
   background-color: #7e7e7e;
   color: white;
   border: none;
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 32px;
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -94,13 +94,12 @@ html {
   width: 60%;
 }
 
-.back-button:hover {
+.button:hover {
   background-color: #9a1e1a;
 }
 
-.back-button:focus {
+.button:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
-
 

@@ -39,21 +39,23 @@ function FoodItemGrid({ foodItemIds }) {
 
   return (
     <Fragment>
-      {Object.keys(groupedFoodItems).map((type) => (
-        <div key={type}>
-          <h1 className='type'>{type}</h1>
-          <div className="item-grid">
-            {groupedFoodItems[type].map((foodItem) => (
-              <FoodItemCard
-                key={foodItem.fooditem_id}
-                foodItem_name={foodItem.fooditem_name}
-                image_link={foodItem.image_link}
-                premium={foodItem.premium}
-              />
-            ))}
+      {
+        Object.keys(groupedFoodItems).map((type) => (
+          <div key={type}>
+            <h1 className='type'>{type}</h1>
+            <div className="item-grid">
+              {groupedFoodItems[type].map((foodItem) => (
+                <FoodItemCard
+                  key={foodItem.fooditem_id}
+                  foodItem_name={foodItem.fooditem_name}
+                  image_link={foodItem.image_link}
+                  premium={foodItem.premium}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      }
     </Fragment>
   );
 }
