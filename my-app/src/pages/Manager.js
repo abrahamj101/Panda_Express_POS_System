@@ -1,7 +1,7 @@
 import React from "react";
-import "../styles/Customer.css";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import "../styles/default.css";
+import Header from "../components/Navigation/Header";
+import Footer from "../components/Navigation/Footer";
 
 function ManagerPage() {
   return (

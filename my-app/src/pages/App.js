@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
 import MenuPage from "./Menu";
 import FoodPage from "./Food"
+import CashierPage from "./Cashier"
+import ManagerPage from "./Manager"
 import "../styles/default.css";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
@@ -30,6 +32,8 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/food" element={<FoodPage />} />
+        <Route path="/cashier" element={<CashierPage />} />
+        <Route path="/manager" element={<ManagerPage />} />
       </Routes>
     </Router>
   );
