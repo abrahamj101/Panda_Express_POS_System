@@ -21,9 +21,7 @@ function Header() {
           <img src={logo} alt="Panda Express Logo" />
         </Link>
       </div>
-      <Link to="/">
-        <h1>Panda Express</h1>
-      </Link>
+      <h1>Panda Express</h1>
       <button className="login-btn" onClick={handleLoginClick}>
         Login
       </button>
