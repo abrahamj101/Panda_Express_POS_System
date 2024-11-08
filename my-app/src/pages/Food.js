@@ -16,6 +16,7 @@ function Food() {
         <div className="main-content">
           <BackButton />
           <FoodItemGrid foodItemIds={foodItem_ids} />
+          <AddToCartButton />
         </div>
         <Footer />
     </div>
