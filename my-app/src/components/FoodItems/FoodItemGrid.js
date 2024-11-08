@@ -1,6 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import getFoodItems from '../../pages/api/fooditems/getFooditems';
 import FoodItemCard from './FoodItemCard';
+import "../../styles/Grid.css"
+
 
 function FoodItemGrid({ foodItemIds }) {
   const [foodItems, setFoodItems] = useState([]);
@@ -21,7 +23,7 @@ function FoodItemGrid({ foodItemIds }) {
 
   return (
     <Fragment>
-      <div>
+      <div className='item-grid'>
         {foodItems.length > 0 ? (
           foodItems
             .filter((foodItem) => foodItemIds.includes(foodItem.fooditem_id))

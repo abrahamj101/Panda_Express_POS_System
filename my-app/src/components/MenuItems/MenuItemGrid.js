@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import MenuItemCard from './MenuItemCard';
 import getMenuItems from '../../pages/api/menuItems/getMenuitem'
+import "../../styles/Grid.css"
 
 function MenuItemGrid() {
   const [menuItems, setMenuItems] = useState([]);
@@ -21,7 +22,7 @@ function MenuItemGrid() {
 
   return (
     <Fragment>
-      <div>
+      <div className='item-grid'>
         {menuItems.length > 0 ? (
           menuItems.map((menuItem) => (
             <MenuItemCard
