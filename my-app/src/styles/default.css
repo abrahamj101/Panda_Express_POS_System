@@ -1,0 +1,106 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.App {
+  text-align: center;
+  background-color: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #b02321;
+  padding: 10px 20px;
+  color: white;
+}
+
+.logo img {
+  height: 50px;
+}
+
+.login-btn {
+  background-color: white;
+  border: none;
+  padding: 10px 20px;
+  color: #b02321;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.footer {
+  background-color: #b02321;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.order-btn {
+  background-color: #b02321;
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 50px;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 50px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  color: inherit;
+  transform: none;
+  box-shadow: none;
+  text-decoration: none;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+
+/* Center the back button */
+.back-button {
+  background-color: #7e7e7e;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 5px auto;
+  padding: 1rem;
+  width: 60%;
+}
+
+.back-button:hover {
+  background-color: #9a1e1a;
+}
+
+.back-button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+
