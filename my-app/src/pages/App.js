@@ -1,27 +1,23 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import CustomerPage from "./Customer";
-import ManagerPage from "./Manager";
-import CashierPage from "./Cashier";
-import "../styles/App.css";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import ImageCarousel from "../components/ImageCarousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
+import MenuPage from "./Menu";
+import FoodPage from "./Food"
+import "../styles/default.css";
+import Header from "../components/Navigation/Header";
+import Footer from "../components/Navigation/Footer";
+import ImageCarousel from "../components/Carosuel/ImageCarousel";
 
 function LandingPage() {
   return (
     <div className="App">
       <Header />
-
-      <main className="main-content">
+      <div className="main-content">
         <ImageCarousel />
-
-        <Link to="/customer">
+        <Link to="/menu">
           <button className="order-btn">ORDER NOW!</button>
         </Link>
-      </main>
-
+      </div>
       <Footer />
     </div>
   );
@@ -32,9 +28,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/customer" element={<CustomerPage />} />
-        <Route path="/manager" element={<ManagerPage />} />
-        <Route path="/cashier" element={<CashierPage />} />
+        <Route path="/menu" element={<MenuPage />} />
+        <Route path="/food" element={<FoodPage />} />
       </Routes>
     </Router>
   );
