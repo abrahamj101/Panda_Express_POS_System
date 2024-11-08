@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../../images/panda-express-logo-1.svg";
-import Modal from "../Modal"; // Import the Modal component
+import Login from "../Modal/Login.js"; // Import the Modal component
 import { Link } from "react-router-dom";
 
 function Header() {
@@ -25,7 +25,7 @@ function Header() {
       <button className="login-btn" onClick={handleLoginClick}>
         Login
       </button>
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal} />{" "}
+      <Login isOpen={isModalOpen} onClose={handleCloseModal} />{" "}
       {/* Render Modal */}
     </header>
   );
