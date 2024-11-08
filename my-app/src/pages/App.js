@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
 import MenuPage from "./Menu";
 import FoodPage from "./Food"
-import "../styles/App.css";
+import "../styles/default.css";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import ImageCarousel from "../components/Carosuel/ImageCarousel";

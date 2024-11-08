@@ -1,8 +1,9 @@
 import React from "react";
-import "../styles/Customer.css";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import MenuItemGrid from "../components/MenuItems/MenuItemGrid";
+import "../styles/default.css"
+
 
 function MenuPage() {
 

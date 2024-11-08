@@ -45,6 +45,7 @@
 
 
 import { Carousel } from "react-responsive-carousel";
+import "../../styles/carousel.css"
 
 function ImageCarousel() {
   

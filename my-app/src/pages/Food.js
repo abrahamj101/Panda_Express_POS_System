@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import FoodItemGrid from "../components/FoodItems/FoodItemGrid";
+import "../styles/default.css"
 
 function Food() {
   const location = useLocation();

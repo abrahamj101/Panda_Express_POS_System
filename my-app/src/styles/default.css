@@ -5,6 +5,14 @@ body {
   font-family: Arial, sans-serif;
 }
 
+.App {
+  text-align: center;
+  background-color: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .menu-page {
   display: flex;
   flex-direction: column;
@@ -42,25 +50,25 @@ body {
   padding: 20px;
 }
 
-.food-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.food-item {
-  background-color: #e0e0e0;
-  height: 150px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-  color: #555;
-}
-
 .footer {
   background-color: #b02321;
   color: white;
   padding: 20px;
   text-align: center;
+}
+
+.order-btn {
+  background-color: #b02321;
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 50px;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 50px;
 }
