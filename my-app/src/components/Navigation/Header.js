@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import logo from "../images/panda-express-logo-1.svg";
-import Modal from "./Modal"; // Import the Modal component
+import logo from "../../images/panda-express-logo-1.svg";
+import Modal from "../Modal"; // Import the Modal component
 import { Link } from "react-router-dom";
 
 function Header() {
@@ -21,7 +21,9 @@ function Header() {
           <img src={logo} alt="Panda Express Logo" />
         </Link>
       </div>
-      <h1>Panda Express</h1>
+      <Link to="/">
+        <h1>Panda Express</h1>
+      </Link>
       <button className="login-btn" onClick={handleLoginClick}>
         Login
       </button>
