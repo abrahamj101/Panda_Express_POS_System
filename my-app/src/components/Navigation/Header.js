@@ -10,7 +10,9 @@ const Header = () => {
               <img src={logo} alt="Panda Express Logo" />
             </div>
           </Link>
-        <h1>Panda Express</h1>
+        <Link to="/">
+          <h1>Panda Express</h1>
+        </Link>
         <button className="login-btn">Login</button>
       </header>
     );

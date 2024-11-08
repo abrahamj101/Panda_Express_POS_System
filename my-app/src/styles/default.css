@@ -13,11 +13,7 @@ body {
   min-height: 100vh;
 }
 
-.menu-page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
+
 
 .header {
   display: flex;
@@ -42,14 +38,6 @@ body {
   cursor: pointer;
 }
 
-.menu-content {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
 .footer {
   background-color: #b02321;
   color: white;
@@ -72,3 +60,47 @@ body {
   flex-grow: 1;
   padding: 50px;
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  color: inherit;
+  transform: none;
+  box-shadow: none;
+  text-decoration: none;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+
+/* Center the back button */
+.back-button {
+  background-color: #7e7e7e;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 5px auto;
+  padding: 1rem;
+  width: 60%;
+}
+
+.back-button:hover {
+  background-color: #9a1e1a;
+}
+
+.back-button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+
