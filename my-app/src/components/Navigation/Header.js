@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import logo from "../../images/panda-express-logo-1.svg";
 import Login from "../Modal/Login.js"; // Import the Modal component
 import { Link } from "react-router-dom";
+import AuthButton from "./AuthButton.js";
 
 function Header() {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
@@ -26,6 +27,12 @@ function Header() {
         Login
       </button>
       <Login isOpen={isModalOpen} onClose={handleCloseModal} />{" "}
+      {/* <AuthButton
+          clientId={clientId}
+          isSignedIn={isSignedIn}
+          setIsSignedIn={setIsSignedIn}
+          setUser={setUser}
+        /> */}
       {/* Render Modal */}
     </header>
   );
