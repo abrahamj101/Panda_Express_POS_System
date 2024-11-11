@@ -27,12 +27,12 @@ function Header() {
         Login
       </button>
       <Login isOpen={isModalOpen} onClose={handleCloseModal} />{" "}
-      <AuthButton
+      {/* <AuthButton
           clientId={clientId}
           isSignedIn={isSignedIn}
           setIsSignedIn={setIsSignedIn}
           setUser={setUser}
-        />
+        /> */}
       {/* Render Modal */}
     </header>
   );
