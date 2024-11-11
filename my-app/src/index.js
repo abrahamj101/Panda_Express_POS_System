@@ -1,10 +1,11 @@
 import React from "react";
-import ReactDOM from "react-dom/client"; // Import from "react-dom/client" in React 18
-import { BrowserRouter as Router } from "react-router-dom";
-import App from "./App";
-import "./index.css";
+import ReactDOM from "react-dom/client";
+import "./styles/index.css";
+import App from "./pages/App";
+import reportWebVitals from "./reportWebVitals";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-const root = ReactDOM.createRoot(document.getElementById("root")); // Use createRoot
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Router>
     <App />
