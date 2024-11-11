@@ -1,18 +1,32 @@
-import React from "react";
+// Customer.js
+import React, { useState } from "react";
 import logo from "./panda-express-logo-1.svg";
+import AuthButton from "./AuthButton";
 import "./Customer.css";
 
-function MenuPage() {
+function CustomerPage() {
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [user, setUser] = useState(null);
   const foodItems = Array(9).fill("*Food Item Image*");
 
   return (
     <div className="menu-page">
       <header className="header">
         <div className="logo">
+          <a href="/">
           <img src={logo} alt="Panda Express Logo" />
+          </a>
         </div>
         <h1>Panda Express</h1>
-        <button className="login-btn">Login</button>
+        
+        {}
+        <AuthButton
+          clientId={clientId}
+          isSignedIn={isSignedIn}
+          setIsSignedIn={setIsSignedIn}
+          setUser={setUser}
+        />
       </header>
 
       <main className="menu-content">
@@ -35,4 +49,4 @@ function MenuPage() {
   );
 }
 
-export default MenuPage;
+export default CustomerPage;

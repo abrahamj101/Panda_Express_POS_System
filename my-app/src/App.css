@@ -36,13 +36,17 @@ body {
   cursor: pointer;
 }
 
+.order-btn:hover {
+  transform: scale(1.01);
+}
+
 .main-content {
   flex-grow: 1;
   padding: 50px;
 }
 
 .carousel-container {
-  width: 100%;
+  width: 30%;
   max-width: 700px;
   height: auto;
   overflow: hidden;
@@ -78,6 +82,9 @@ body {
   color: white;
   padding: 20px;
   text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 .image-box {
@@ -93,4 +100,9 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+span {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 170px;
 }

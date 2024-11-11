@@ -1,20 +1,31 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+// App.js
+import React, { useState } from "react";
+import { Routes, Route, Link } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import CustomerPage from "./Customer";
+import ManagerPage from "./Manager";
 import logo from "./panda-express-logo-1.svg";
+import AuthButton from "./AuthButton";
 import "./App.css";
 
-function LandingPage() {
+function MainPage({ clientId, isSignedIn, setIsSignedIn, setUser }) {
   return (
     <div className="App">
       <header className="header">
         <div className="logo">
-          <img src={logo} alt="Panda Express Logo" />
+          <a href="/">
+            <img src={logo} alt="Panda Express Logo" />
+          </a>
         </div>
         <h1>Panda Express</h1>
-        <button className="login-btn">Login</button>
+
+        <AuthButton
+          clientId={clientId}
+          isSignedIn={isSignedIn}
+          setIsSignedIn={setIsSignedIn}
+          setUser={setUser}
+        />
       </header>
 
       <main className="main-content">
@@ -51,13 +62,21 @@ function LandingPage() {
               />
               <p className="legend">Honey Walnut Shrimp</p>
             </div>
-            {/* Add more carousel items as needed */}
           </Carousel>
         </div>
 
-        <Link to="/customer">
-          <button className="order-btn">ORDER NOW!</button>
-        </Link>
+        <div className="buttons">
+          <span>
+            <Link to="/customer">
+              <button className="order-btn">ORDER NOW!</button>
+            </Link>
+          </span>
+          <span>
+            <Link to="/manager">
+              <button className="order-btn">MANAGER</button>
+            </Link>
+          </span>
+        </div>
       </main>
 
       <footer className="footer">
@@ -71,13 +90,31 @@ function LandingPage() {
 }
 
 function App() {
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [user, setUser] = useState(null);
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/customer" element={<CustomerPage />} />
-      </Routes>
-    </Router>
+    <Routes>
+      {}
+      <Route
+        path="/"
+        element={
+          <MainPage
+            clientId={clientId}
+            isSignedIn={isSignedIn}
+            setIsSignedIn={setIsSignedIn}
+            setUser={setUser}
+          />
+        }
+      />
+      
+      {}
+      <Route path="/customer" element={<CustomerPage />} />
+      
+      {}
+      <Route path="/manager" element={<ManagerPage />} />
+    </Routes>
   );
 }
 
