@@ -1,0 +1,19 @@
+Scrum Meeting:
+
+What have you worked on:
+    Nathan Tserng   - Create a basic front end with Robert using react
+    Christopher Kim - Attempted to connect to the remote database with Joshua and Roshan, but had issues and was unsuccessful
+    Robert Longo    - Create a basic front end with Nathan using react
+    Roshan Sreedhar - Attempted to connect to the remote database with Joshua and Christopher, but had issues and was unsuccessful
+    Joshua Abraham  - Attempted to connect to the remote database with Christopher and Roshan, but had issues and was unsuccessful
+
+
+WHat you are doing today:
+    Nathan Tserng   - Going to connect to the database
+    Christopher Kim - Work on header and footer components
+    Robert Longo    - Work on login component
+    Roshan Sreedhar - Going to connect to the database
+    Joshua Abraham  - Work on different pages
+
+Are we on track:
+    A little behind because we were unsuccessful in connect the database

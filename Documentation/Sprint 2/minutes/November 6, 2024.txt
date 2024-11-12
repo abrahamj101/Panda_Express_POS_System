@@ -1,0 +1,19 @@
+Scrum Meeting:
+
+What have you worked on:
+    Nathan Tserng   - Created a modal that will pop up when trying to login
+    Christopher Kim - create a component that successfully displays all the menu items and food items
+    Robert Longo    - Created the manager page with some content
+    Roshan Sreedhar - worked on translate api
+    Joshua Abraham  - worke on color contrast api
+
+
+WHat you are doing today:
+    Nathan Tserng   - Work on completing all the other pages
+    Christopher Kim - Work on a cart component and placing orders
+    Robert Longo    - Finish manager page with functionality
+    Roshan Sreedhar - work on translate api
+    Joshua Abraham  - work on color contrast api
+
+Are we on track:
+    A little behind because we were not able to finish some of the APIs

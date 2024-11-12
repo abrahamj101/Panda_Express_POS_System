@@ -1,0 +1,19 @@
+Scrum Meeting:
+
+What have you worked on:
+    Nathan Tserng   - Created the ability to move between pages
+    Christopher Kim - Worked on creating the components to display the menu and food items
+    Robert Longo    - Worked on manager page
+    Roshan Sreedhar - Work on cashier page
+    Joshua Abraham  - Worked on cart functionality
+
+
+WHat you are doing today:
+    Nathan Tserng   - Create a modal for login purposes
+    Christopher Kim - Finish the menu item and food item displays
+    Robert Longo    - Work on the functionality of the manager page
+    Roshan Sreedhar - work on translate API
+    Joshua Abraham  - Work on color contrast API
+
+Are we on track:
+    Yes

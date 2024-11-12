@@ -1,0 +1,19 @@
+Scrum Meeting:
+
+What have you worked on:
+    Nathan Tserng   - Connected to the database and was able to retrieve data and created an image carousel
+    Christopher Kim - Created a footer and header component
+    Robert Longo    - Almost got the google auth login to work
+    Roshan Sreedhar - Connected to the database and was able to retrieve data
+    Joshua Abraham  - working on cashier page
+
+
+WHat you are doing today:
+    Nathan Tserng   - Work on the customer page and other pages
+    Christopher Kim - Use the database connection to display the menu and food items
+    Robert Longo    - Get the functionality of customer page working
+    Roshan Sreedhar - Upload the GitHub repository to render.com to host our project
+    Joshua Abraham  - Help Roshan get our remote hosting working
+
+Are we on track:
+    No, we are a little behind. We need to be able to display the menu items before the sprint ends

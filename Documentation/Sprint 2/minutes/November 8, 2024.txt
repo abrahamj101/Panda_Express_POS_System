@@ -1,0 +1,19 @@
+Scrum Meeting:
+
+What have you worked on:
+    Nathan Tserng   - created separate pages for cashier and manager
+    Christopher Kim - added ability to select the different food items
+    Robert Longo    - worked on manager page
+    Roshan Sreedhar - work on translate api
+    Joshua Abraham  - worked on color contrast
+
+
+WHat you are doing today:
+    Nathan Tserng   - work on role credentials
+    Christopher Kim - Work on a cart component and placing orders
+    Robert Longo    - Finish manager page with functionality
+    Roshan Sreedhar - work on translate api
+    Joshua Abraham  - work on color contrast api
+
+Are we on track:
+    No, we are a little behind. We need to have some api and the manager page done

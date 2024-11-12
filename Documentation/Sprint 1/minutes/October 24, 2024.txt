@@ -1,0 +1,19 @@
+Scrum Meeting:
+
+What have you worked on:
+    Nathan Tserng   - Create react project
+    Christopher Kim - Create GitHub Repositories
+    Robert Longo    - Work on product backlog
+    Roshan Sreedhar - Work on sprint backlog
+    Joshua Abraham  - Identify different user stories
+
+
+WHat you are doing today:
+    Nathan Tserng   - Working on creating a basic front-end: landing, customer, manager, and cashier page
+    Christopher Kim - Use node and express to connect to sql database
+    Robert Longo    - Working on creating a basic front-end: landing, customer, manager, and cashier page
+    Roshan Sreedhar - Use node and express to connect to sql database
+    Joshua Abraham  - Use node and express to connect to sql database
+
+Are we on track:
+    Yes
