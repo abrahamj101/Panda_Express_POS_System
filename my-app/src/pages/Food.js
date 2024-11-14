@@ -10,10 +10,9 @@ import MenuItem from "../components/MenuItems/MenuItemClass";
 
 function Food() {
   const location = useLocation();
-  const { foodItem_ids, menuItem_id, menuItem_name } = location.state || {};
+  const { foodItem_ids, menuItem_id, menuItem_name, price } = location.state || {};
   const [selectedItems, setSelectedItems] = useState({});
-
-  const menuItemObject = new MenuItem(menuItem_id, menuItem_name);
+  const menuItemObject = new MenuItem(menuItem_id, menuItem_name, Number(price));
 
   const handleSelectionChange = (newSelectedItems) => {
     setSelectedItems(newSelectedItems);

@@ -1,8 +1,8 @@
 class MenuItem {
-    constructor(menuitemId, menuItemName) {
+    constructor(menuitemId, menuItemName, price) {
         this.menuitemId = menuitemId;
         this.foodItemIds = [];
-        this.total = 0.0;
+        this.total = price;
         this.name = menuItemName;
     }
 
