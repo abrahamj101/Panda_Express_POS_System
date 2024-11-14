@@ -2,8 +2,21 @@ import React from "react";
 import "../../styles/Cards.css";
 import "../../styles/FoodCard.css"
 
-const FoodItemCard = ({ foodItem, onSelect, onDeselect, selectedCount }) => {
-  const { fooditem_name, image_link, premium } = foodItem;
+const FoodItemCard = ({ foodItem, onSelect, onDeselect, selectedCount, totalSelectedCount, menuItem_id }) => {
+  const { fooditem_name, image_link, premium, type } = foodItem;
+  let maxCount;
+  if (type === "Side") {
+    maxCount = 2
+  } else if (type == "Entree") {
+    // if ()
+    maxCount = 2
+  } else if (type == "Appetizer") {
+    maxCount = 1
+  } else if (type == "Dessert") {
+    maxCount = 1
+  } else if (type == "Drinks") {
+    maxCount = 1
+  }
   
   return (
     <div className="item-card">
@@ -14,7 +27,7 @@ const FoodItemCard = ({ foodItem, onSelect, onDeselect, selectedCount }) => {
       <div className="selection-controls">
         <button onClick={onDeselect} disabled={selectedCount === 0}>-</button>
         <span>{selectedCount}</span>
-        <button onClick={onSelect} disabled={selectedCount === 3}>+</button>
+        <button onClick={onSelect} disabled={selectedCount === maxCount || totalSelectedCount === 5}>+</button>
       </div>
     </div>
   );

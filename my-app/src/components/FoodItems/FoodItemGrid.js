@@ -3,9 +3,10 @@ import getFoodItems from '../../pages/api/fooditems/getFooditems';
 import FoodItemCard from './FoodItemCard';
 import "../../styles/Grid.css";
 
-function FoodItemGrid({ foodItemIds, onSelectionChange }) {
+function FoodItemGrid({ foodItemIds, onSelectionChange, menuItem_id }) {
   const [foodItems, setFoodItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState({});
+  const [totalSelectedCount, setTotalSelectedCount] = useState(0);
 
   const fetchFoodItems = async () => {
     try {
@@ -23,11 +24,12 @@ function FoodItemGrid({ foodItemIds, onSelectionChange }) {
   const handleSelectItem = (foodItem) => {
     setSelectedItems((prevSelectedItems) => {
       const currentCount = prevSelectedItems[foodItem.fooditem_id] || 0;
-      if (currentCount < 3) {
+      if (currentCount < 3 && totalSelectedCount < 5) {
         const updatedSelectedItems = {
           ...prevSelectedItems,
           [foodItem.fooditem_id]: currentCount + 1,
         };
+        setTotalSelectedCount(totalSelectedCount + 1);
         onSelectionChange(updatedSelectedItems);
         return updatedSelectedItems;
       }
@@ -43,6 +45,7 @@ function FoodItemGrid({ foodItemIds, onSelectionChange }) {
           ...prevSelectedItems,
           [foodItem.fooditem_id]: currentCount - 1,
         };
+        setTotalSelectedCount(totalSelectedCount - 1);
         onSelectionChange(updatedSelectedItems);
         return updatedSelectedItems;
       }
@@ -78,9 +81,11 @@ function FoodItemGrid({ foodItemIds, onSelectionChange }) {
                 <FoodItemCard
                   key={foodItem.fooditem_id}
                   foodItem={foodItem}
+                  menuItem_id={menuItem_id}
                   onSelect={() => handleSelectItem(foodItem)}
                   onDeselect={() => handleDeselectItem(foodItem)}
                   selectedCount={selectedItems[foodItem.fooditem_id] || 0}
+                  totalSelectedCount={totalSelectedCount}
                 />
               ))}
             </div>
