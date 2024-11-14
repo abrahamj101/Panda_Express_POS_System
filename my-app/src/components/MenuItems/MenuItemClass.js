@@ -138,3 +138,6 @@ class MenuItem {
         return true;
     }
 }
+
+
+export default MenuItem;

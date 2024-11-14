@@ -9,7 +9,7 @@ import "../styles/default.css";
 
 function Food() {
   const location = useLocation();
-  const { foodItem_ids, menuItem_id } = location.state || {};
+  const { foodItem_ids, menuItem_id, menuItemObject } = location.state || {};
   const [selectedItems, setSelectedItems] = useState({});
 
   const handleSelectionChange = (newSelectedItems) => {
@@ -20,12 +20,14 @@ function Food() {
     const selectedIds = Object.entries(selectedItems)
       .flatMap(([id, count]) => Array(count).fill(id));
     console.log("Selected food items for cart:", selectedIds);
+
+    // Example of using menuItemObject
+    console.log("Menu Item Details:", menuItemObject.getName(), menuItemObject.getTotal());
   };
 
   return (
     <div>
       <Header />
-      <h1>{menuItem_id}</h1>
       <div className="main-content">
         <BackButton />
         <FoodItemGrid foodItemIds={foodItem_ids} menuItemId={menuItem_id} onSelectionChange={handleSelectionChange} />
