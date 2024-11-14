@@ -1,12 +1,12 @@
+// FoodItemGrid.js
 import React, { Fragment, useState, useEffect } from 'react';
 import getFoodItems from '../../pages/api/fooditems/getFooditems';
 import FoodItemCard from './FoodItemCard';
 import "../../styles/Grid.css";
 
-function FoodItemGrid({ foodItemIds, onSelectionChange, menuItem_id }) {
+function FoodItemGrid({ foodItemIds, onSelectionChange, menuItemId }) {
   const [foodItems, setFoodItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState({});
-  const [totalSelectedCount, setTotalSelectedCount] = useState(0);
+  const [itemCounts, setItemCounts] = useState({});
 
   const fetchFoodItems = async () => {
     try {
@@ -21,35 +21,61 @@ function FoodItemGrid({ foodItemIds, onSelectionChange, menuItem_id }) {
     fetchFoodItems();
   }, []);
 
-  const handleSelectItem = (foodItem) => {
-    setSelectedItems((prevSelectedItems) => {
-      const currentCount = prevSelectedItems[foodItem.fooditem_id] || 0;
-      if (currentCount < 3 && totalSelectedCount < 5) {
-        const updatedSelectedItems = {
-          ...prevSelectedItems,
-          [foodItem.fooditem_id]: currentCount + 1,
-        };
-        setTotalSelectedCount(totalSelectedCount + 1);
-        onSelectionChange(updatedSelectedItems);
-        return updatedSelectedItems;
+  const getMaxCount = (type) => {
+    const id = parseInt(menuItemId, 10); // Ensure menuItemId is an integer
+    console.log("Getting max count for type:", type, "with menuItem_id:", id);
+  
+    if (type === "Side") return 2;
+    if (type === "Entree") {
+      switch (id) {
+        case 1: return 1;
+        case 2: return 2;
+        case 3: return 3;
+        case 4: return 2;
+        case 5: return 3;
+        default: return 1;
       }
-      return prevSelectedItems;
-    });
+    }
+    if (["Appetizer", "Drinks", "Dessert"].includes(type)) return 1;
+    return 0;
+  };
+  
+
+  const handleSelectItem = (foodItem) => {
+    const { fooditem_id, type } = foodItem;
+    const maxCount = getMaxCount(type);
+
+    // Calculate the current total count for this type
+    const currentTypeCount = Object.values(itemCounts).reduce(
+      (count, { type: itemType, quantity }) => 
+        itemType === type ? count + quantity : count,
+      0
+    );
+
+    // If total count for the type is below max, update the count
+    if (currentTypeCount < maxCount) {
+      setItemCounts(prevCounts => ({
+        ...prevCounts,
+        [fooditem_id]: {
+          type,
+          quantity: (prevCounts[fooditem_id]?.quantity || 0) + 1,
+        },
+      }));
+    }
   };
 
   const handleDeselectItem = (foodItem) => {
-    setSelectedItems((prevSelectedItems) => {
-      const currentCount = prevSelectedItems[foodItem.fooditem_id] || 0;
-      if (currentCount > 0) {
-        const updatedSelectedItems = {
-          ...prevSelectedItems,
-          [foodItem.fooditem_id]: currentCount - 1,
-        };
-        setTotalSelectedCount(totalSelectedCount - 1);
-        onSelectionChange(updatedSelectedItems);
-        return updatedSelectedItems;
+    const { fooditem_id, type } = foodItem;
+
+    setItemCounts(prevCounts => {
+      const updatedCounts = { ...prevCounts };
+      if (updatedCounts[fooditem_id]?.quantity > 0) {
+        updatedCounts[fooditem_id].quantity -= 1;
+        if (updatedCounts[fooditem_id].quantity === 0) {
+          delete updatedCounts[fooditem_id];
+        }
       }
-      return prevSelectedItems;
+      return updatedCounts;
     });
   };
 
@@ -73,24 +99,33 @@ function FoodItemGrid({ foodItemIds, onSelectionChange, menuItem_id }) {
   return (
     <Fragment>
       {
-        Object.keys(groupedFoodItems).map((type) => (
-          <div key={type}>
-            <h1 className='type'>{type}</h1>
-            <div className="item-grid">
-              {groupedFoodItems[type].map((foodItem) => (
-                <FoodItemCard
-                  key={foodItem.fooditem_id}
-                  foodItem={foodItem}
-                  menuItem_id={menuItem_id}
-                  onSelect={() => handleSelectItem(foodItem)}
-                  onDeselect={() => handleDeselectItem(foodItem)}
-                  selectedCount={selectedItems[foodItem.fooditem_id] || 0}
-                  totalSelectedCount={totalSelectedCount}
-                />
-              ))}
+        Object.keys(groupedFoodItems).map((type) => {
+          const maxCount = getMaxCount(type);
+          const currentTypeCount = Object.values(itemCounts).reduce(
+            (count, { type: itemType, quantity }) => 
+              itemType === type ? count + quantity : count,
+            0
+          );
+          const disableAdd = currentTypeCount >= maxCount;
+
+          return (
+            <div key={type}>
+              <h1 className='type'>{type}</h1>
+              <div className="item-grid">
+                {groupedFoodItems[type].map((foodItem) => (
+                  <FoodItemCard
+                    key={foodItem.fooditem_id}
+                    foodItem={foodItem}
+                    quantity={itemCounts[foodItem.fooditem_id]?.quantity || 0}
+                    onSelect={() => handleSelectItem(foodItem)}
+                    onDeselect={() => handleDeselectItem(foodItem)}
+                    disableAdd={disableAdd}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))
+          );
+        })
       }
     </Fragment>
   );
