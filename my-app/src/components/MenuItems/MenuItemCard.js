@@ -12,7 +12,7 @@ const MenuItemCard = ({ menuItem_name, price, image_link, foodItem_ids, menuItem
           state={{
             foodItem_ids,
             menuItem_id,
-            menuItemObject, // Pass MenuItem object in the state
+            menuItem_name,
           }}
         >
           <img src={image_link} alt={menuItem_name} className="item-image" />
