@@ -1,15 +1,16 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
- const AddToCartButton = () => {
-    const navigate = useNavigate();
+ const AddToCartButton = ({onClick}) => {
 
 
   return (
-    <button onClick={() => navigate(-1)}  className="button">
-      Add To Cart
-    </button>
+    <Link to="/menu" style={{ textDecoration: 'none' }}>
+      <button onClick={ onClick }  className="button">
+        Add To Cart
+      </button>
+    </Link>
   )
 }
 

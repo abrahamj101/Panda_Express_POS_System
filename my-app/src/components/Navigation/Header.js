@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import logo from "../../images/panda-express-logo-1.svg";
 import Login from "../Modal/Login.js"; // Import the Modal component
 import { Link } from "react-router-dom";
-import AuthButton from "./AuthButton.js";
+import CartIcon from "../Cart/CartIcon.js";
+import CartModal from "../Modal/CartModal.js";
 
 function Header() {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
@@ -15,6 +16,8 @@ function Header() {
     setIsModalOpen(false); // Close modal
   };
 
+  
+
   return (
     <header className="header">
       <div className="logo">
@@ -23,17 +26,14 @@ function Header() {
         </Link>
       </div>
       <h1>Panda Express</h1>
-      <button className="login-btn" onClick={handleLoginClick}>
-        Login
-      </button>
-      <Login isOpen={isModalOpen} onClose={handleCloseModal} />{" "}
-      {/* <AuthButton
-          clientId={clientId}
-          isSignedIn={isSignedIn}
-          setIsSignedIn={setIsSignedIn}
-          setUser={setUser}
-        /> */}
-      {/* Render Modal */}
+      <div className="header-buttons">
+        <CartIcon/>
+        <CartModal/>
+        <button className="login-btn" onClick={handleLoginClick}>
+          Login
+        </button>
+      </div>
+      <Login isOpen={isModalOpen} onClose={handleCloseModal} /> {/* Render Modal */}
     </header>
   );
 }

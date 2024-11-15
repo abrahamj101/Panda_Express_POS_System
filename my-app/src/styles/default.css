@@ -36,6 +36,13 @@ body {
   cursor: pointer;
 }
 
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+
 .footer {
   background-color: #b02321;
   color: white;

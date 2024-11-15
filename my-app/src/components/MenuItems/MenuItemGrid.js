@@ -30,6 +30,7 @@ function MenuItemGrid() {
               price={menuItem.price}
               image_link={menuItem.image_link}
               foodItem_ids={menuItem.fooditem_ids}
+              menuItem_id={menuItem.menuitem_id}
             />
           ))
         }

@@ -12,7 +12,7 @@ function MenuPage() {
     <div>
       <Header />
       <div className="main-content">
-        <BackButton />
+        <BackButton location="/" />
         <MenuItemGrid />
       </div>
       <Footer />

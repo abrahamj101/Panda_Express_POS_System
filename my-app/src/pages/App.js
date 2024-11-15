@@ -11,6 +11,7 @@ import "../styles/Weather.css";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import ImageCarousel from "../components/Carosuel/ImageCarousel";
+import { CartContextProvider } from "../components/Cart/CartContext";
 
 function WeatherWidget() {
   const [weather, setWeather] = useState(null);
@@ -80,15 +81,17 @@ function LandingPage() {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/menu" element={<MenuPage />} />
-        <Route path="/food" element={<FoodPage />} />
-        <Route path="/cashier" element={<CashierPage />} />
-        <Route path="/manager" element={<ManagerPage />} />
-      </Routes>
-    </Router>
+    <CartContextProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/menu" element={<MenuPage />} />
+          <Route path="/food" element={<FoodPage />} />
+          <Route path="/cashier" element={<CashierPage />} />
+          <Route path="/manager" element={<ManagerPage />} />
+        </Routes>
+      </Router>
+    </CartContextProvider>
   );
 }
 
