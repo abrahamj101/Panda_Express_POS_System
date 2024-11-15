@@ -35,7 +35,7 @@ function Food() {
     <div>
       <Header />
       <div className="main-content">
-        <BackButton />
+        <BackButton location="/menu"/>
         <FoodItemGrid 
           foodItemIds={foodItem_ids} 
           menuItemId={menuItem_id} 

@@ -1,12 +1,14 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const BackButton = () => {
+const BackButton = ({location}) => {
   const navigate = useNavigate();
 
   return (
-    <button onClick={() => navigate(-1)}  className="button">
-      Go Back
-    </button>
+    <Link to={location} style={{ textDecoration: 'none' }}>
+      <button className="button">
+        Go Back
+      </button>
+    </Link>
   );
 }
 
