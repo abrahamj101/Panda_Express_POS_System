@@ -118,7 +118,25 @@
     background-color: #d70000;
   }
   
+  .checkout-button {
+    background-color: #2b43f8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 20px;
+    align-self: center;
+    width: 80%;
+    font-size: 30px;
+  }
   
+
+  .checkout-button:hover {
+    background-color: black;
+  }
+
   .close-button {
     background-color: #9a1e1a;
     color: white;

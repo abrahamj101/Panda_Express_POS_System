@@ -3,7 +3,7 @@ import CartContext from "../Cart/CartContext";
 import "../../styles/cartStyle.css";
 
 const CartModal = () => {
-  const { menuItems, isCartOpen, removeMenuItem, toggleCart, total, tax } = useContext(CartContext);
+  const { menuItems, isCartOpen, removeMenuItem, toggleCart, total, tax, completeOrder } = useContext(CartContext);
   const [foodItemNames, setFoodItemNames] = useState({}); // Store food item names for each menu item
 
   useEffect(() => {
@@ -50,6 +50,7 @@ const CartModal = () => {
           <span className="totals"><strong>Total: </strong><span className="right-justified">${(total + tax).toFixed(2)}</span></span>
         </div>
       </div>
+      <button className="checkout-button" onClick={completeOrder}>Checkout</button>
       <button className="close-button" onClick={toggleCart}>Close</button>
     </div>
   );
