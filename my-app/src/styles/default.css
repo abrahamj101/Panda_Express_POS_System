@@ -38,6 +38,13 @@ body {
   cursor: pointer;
 }
 
+.header-buttons {
+  display: flex;
+  gap: 10px; /* Adds space between the buttons */
+  align-items: center; /* Ensures vertical alignment */
+}
+
+
 .footer {
   background-color: #b02321;
   color: white;
