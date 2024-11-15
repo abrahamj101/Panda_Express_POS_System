@@ -7,11 +7,12 @@ import FoodPage from "./Food";
 import CashierPage from "./Cashier";
 import ManagerPage from "./Manager";
 import "../styles/default.css";
+import "../styles/Weather.css";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import ImageCarousel from "../components/Carosuel/ImageCarousel";
 
-function LandingPage() {
+function WeatherWidget() {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState(null);
 
@@ -26,28 +27,47 @@ function LandingPage() {
         setWeather(response.data);
       } catch (err) {
         setError("Failed to fetch weather data.");
-        console.error(err);
+        console.error("Error details:", err);
       }
     };
 
     fetchWeather();
   }, []);
+
+  if (error) {
+    return <div className="weather-error">{error}</div>;
+  }
+
+  if (!weather) {
+    return <div className="weather-loading">Loading weather...</div>;
+  }
+
+  return (
+    <div className="weather-widget">
+      <h3 className="weather-city">{weather.name}</h3>
+      <div className="weather-info">
+        <img
+          className="weather-icon"
+          src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+          alt={weather.weather[0].description}
+        />
+        <div className="weather-details">
+          <p className="weather-temp">{Math.round(weather.main.temp)}°F</p>
+          <p className="weather-description">
+            {weather.weather[0].description}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LandingPage() {
   return (
     <div className="App">
       <Header />
       <div className="main-content">
-        <div className="weather-section">
-          {error && <p>{error}</p>}
-          {weather ? (
-            <div>
-              <h2>Current Weather in {weather.name}</h2>
-              <p>Temperature: {weather.main.temp} °F</p>
-              <p>Weather: {weather.weather[0].description}</p>
-            </div>
-          ) : (
-            <p>Loading weather...</p>
-          )}
-        </div>
+        <WeatherWidget></WeatherWidget>
         <ImageCarousel />
         <Link to="/menu">
           <button className="order-btn">ORDER NOW!</button>
