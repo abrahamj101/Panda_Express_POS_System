@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
@@ -7,12 +7,14 @@ import BackButton from "../components/Navigation/BackButton";
 import AddToCartButton from "../components/Cart/AddToCartButton";
 import "../styles/default.css";
 import MenuItem from "../components/MenuItems/MenuItemClass";
+import CartContext from "../components/Cart/CartContext";
 
 function Food() {
   const location = useLocation();
   const { foodItem_ids, menuItem_id, menuItem_name, price } = location.state || {};
   const [selectedItems, setSelectedItems] = useState({});
   const menuItemObject = new MenuItem(menuItem_id, menuItem_name, Number(price));
+  const { addMenuItem, printCart } = useContext(CartContext);
 
   const handleSelectionChange = (newSelectedItems) => {
     setSelectedItems(newSelectedItems);
@@ -24,6 +26,8 @@ function Food() {
     console.log("Selected food items for cart:", selectedIds);
 
     console.log("Menu Item Details:", menuItemObject.getName(), menuItemObject.getTotal());
+    addMenuItem(menuItemObject);
+    printCart()
   };
 
   // This function will add the food item to the menuItemObject when an item is selected

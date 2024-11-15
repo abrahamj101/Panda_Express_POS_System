@@ -13,32 +13,32 @@ import { CartContextProvider } from "../components/Cart/CartContext";
 
 function LandingPage() {
   return (
-    <CartContextProvider>
-      <div className="App">
-        <Header />
-        <div className="main-content">
-          <ImageCarousel />
-          <Link to="/menu">
-            <button className="order-btn">ORDER NOW!</button>
-          </Link>
-        </div>
-        <Footer />
+    <div className="App">
+      <Header />
+      <div className="main-content">
+        <ImageCarousel />
+        <Link to="/menu">
+          <button className="order-btn">ORDER NOW!</button>
+        </Link>
       </div>
-    </CartContextProvider >
+      <Footer />
+    </div>
   );
 }
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/menu" element={<MenuPage />} />
-        <Route path="/food" element={<FoodPage />} />
-        <Route path="/cashier" element={<CashierPage />} />
-        <Route path="/manager" element={<ManagerPage />} />
-      </Routes>
-    </Router>
+    <CartContextProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/menu" element={<MenuPage />} />
+          <Route path="/food" element={<FoodPage />} />
+          <Route path="/cashier" element={<CashierPage />} />
+          <Route path="/manager" element={<ManagerPage />} />
+        </Routes>
+      </Router>
+    </CartContextProvider>
   );
 }
 

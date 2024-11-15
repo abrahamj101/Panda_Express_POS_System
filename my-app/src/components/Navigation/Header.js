@@ -7,7 +7,7 @@ import CartContext from "../Cart/CartContext"
 
 function Header() {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
-  const { menuItems } = useContext(CartContext); // Access cart state from context
+  const { menuItems, printCart } = useContext(CartContext); // Access cart state from context
 
   const handleLoginClick = () => {
     setIsModalOpen(true); // Open modal on button click
@@ -18,8 +18,7 @@ function Header() {
   };
 
   const handleCartClick = () => {
-    console.log("Cart button clicked!");
-    // Add functionality to open a cart modal/page if needed
+    printCart()
   };
 
   return (

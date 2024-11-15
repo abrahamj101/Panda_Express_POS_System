@@ -48,21 +48,14 @@ export const CartContextProvider = ({ children }) => {
     return menuItems;
   };
 
-  const printCart = async () => {
+  const printCart = () => {
     console.log("Menu Item Name                  Price");
     console.log("------------------------------------");
-
+    
     for (let menuItem of menuItems) {
       console.log(`${menuItem.getName().padEnd(30)} $${menuItem.getTotal().toFixed(2)}`);
 
-      try {
-        const foodItemNames = await menuItem.getFoodItemNames(); // Assuming this is async
-        for (const foodItemName of foodItemNames) {
-          console.log(`  - ${foodItemName}`);
-        }
-      } catch (error) {
-        console.error("Error retrieving food item names:", error.message);
-      }
+      
     }
 
     console.log("------------------------------------");
