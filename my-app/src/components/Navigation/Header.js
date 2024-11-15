@@ -3,6 +3,7 @@ import logo from "../../images/panda-express-logo-1.svg";
 import Login from "../Modal/Login.js"; // Import the Modal component
 import { Link } from "react-router-dom";
 import CartIcon from "../Cart/CartIcon.js";
+import CartModal from "../Modal/CartModal.js";
 
 function Header() {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
@@ -27,6 +28,7 @@ function Header() {
       <h1>Panda Express</h1>
       <div className="header-buttons">
         <CartIcon/>
+        <CartModal/>
         <button className="login-btn" onClick={handleLoginClick}>
           Login
         </button>

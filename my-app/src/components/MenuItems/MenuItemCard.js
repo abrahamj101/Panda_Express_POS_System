@@ -12,6 +12,7 @@ const MenuItemCard = ({ menuItem_name, price, image_link, foodItem_ids, menuItem
             menuItem_id,
             menuItem_name,
             price,
+            image_link,
           }}
         >
           <img src={image_link} alt={menuItem_name} className="item-image" />

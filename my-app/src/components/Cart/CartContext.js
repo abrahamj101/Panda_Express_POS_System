@@ -7,6 +7,7 @@ export const CartContextProvider = ({ children }) => {
   const [menuItems, setMenuItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [tax, setTax] = useState(0);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const updateCartTotals = (items) => {
     const newTotal = items.reduce((acc, item) => acc + item.getTotal(), 0);
@@ -48,6 +49,9 @@ export const CartContextProvider = ({ children }) => {
     return menuItems;
   };
 
+  const toggleCart = () => setIsCartOpen((prev) => !prev);
+
+  // Used for testing
   const printCart = async () => {
     console.log("Menu Item Name                  Price");
     console.log("------------------------------------");
@@ -77,12 +81,14 @@ export const CartContextProvider = ({ children }) => {
         menuItems,
         total,
         tax,
+        isCartOpen,
         addMenuItem,
         removeMenuItem,
         getMenuIds,
         emptyCart,
         completeOrder,
         printCart,
+        toggleCart,
       }}
     >
       {children}

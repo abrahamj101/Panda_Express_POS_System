@@ -11,11 +11,10 @@ import CartContext from "../components/Cart/CartContext";
 
 function Food() {
   const location = useLocation();
-  const { foodItem_ids, menuItem_id, menuItem_name, price } = location.state || {};
+  const { foodItem_ids, menuItem_id, menuItem_name, price, image_link } = location.state || {};
   const [selectedItems, setSelectedItems] = useState({});
-  const menuItemObject = new MenuItem(menuItem_id, menuItem_name, Number(price));
-  const { addMenuItem, printCart } = useContext(CartContext);
-
+  const menuItemObject = new MenuItem(menuItem_id, menuItem_name, Number(price), image_link);
+  const { addMenuItem,  } = useContext(CartContext);
   const handleSelectionChange = (newSelectedItems) => {
     setSelectedItems(newSelectedItems);
   };
@@ -24,7 +23,6 @@ function Food() {
     addMenuItem(menuItemObject);
   };
 
-  // This function will add the food item to the menuItemObject when an item is selected
   const addFoodItemToMenu = (foodItemId) => {    
     menuItemObject.addFoodItem(foodItemId);
   };

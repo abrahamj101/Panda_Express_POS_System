@@ -2,11 +2,12 @@ import getFoodItems from "../../pages/api/fooditems/getFooditems"
 import { useState } from "react";
 
 class MenuItem {
-    constructor(menuitemId, menuItemName, price) {
+    constructor(menuitemId, menuItemName, price, imgLink) {
         this.menuitemId = menuitemId;
         this.foodItemIds = [];
         this.total = price;
         this.name = menuItemName;
+        this.imgLink = imgLink;
     }
 
     // Adds a food item ID to the foodItemIds array and updates the total price if needed
@@ -56,6 +57,11 @@ class MenuItem {
     // Returns the menu item ID
     getMenuItemId() {
         return this.menuitemId;
+    }
+
+    getImageLink() {
+        console.log(this.imgLink)
+        return this.imgLink;
     }
 
     // Alters the inventory quantities based on the food items associated with this menu item
@@ -143,21 +149,25 @@ class MenuItem {
     }
 
     async getFoodItemNames() {
-        let fooditems;
-        let returnValue = [];
+        const returnValue = [];
         try {
-            const items = await getFoodItems();
-            fooditems = items;
-        } catch (err) {
-            console.error('Error fetching food items:', err);
-        }
-        if (fooditems) {
-            for (let i = 0; i < this.foodItemIds.length; ++i) {
-                returnValue.push(fooditems.find(item => item.fooditem_id === this.foodItemIds[i]).fooditem_name);
+            const foodItems = await getFoodItems();
+            if (foodItems) {
+                for (const foodItemId of this.foodItemIds) {
+                    const foodItem = foodItems.find(item => item.fooditem_id === foodItemId);
+                    if (foodItem) {
+                        returnValue.push(foodItem.fooditem_name);
+                    }
+                }
             }
+        } catch (err) {
+            console.error("Error fetching food items:", err);
         }
         return returnValue;
-    };
+    }
+    
+    
+
 }
 
 
