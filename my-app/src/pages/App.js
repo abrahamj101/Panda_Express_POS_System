@@ -9,19 +9,22 @@ import "../styles/default.css";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import ImageCarousel from "../components/Carosuel/ImageCarousel";
+import { CartContextProvider } from "../components/Cart/CartContext";
 
 function LandingPage() {
   return (
-    <div className="App">
-      <Header />
-      <div className="main-content">
-        <ImageCarousel />
-        <Link to="/menu">
-          <button className="order-btn">ORDER NOW!</button>
-        </Link>
+    <CartContextProvider>
+      <div className="App">
+        <Header />
+        <div className="main-content">
+          <ImageCarousel />
+          <Link to="/menu">
+            <button className="order-btn">ORDER NOW!</button>
+          </Link>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </CartContextProvider >
   );
 }
 
