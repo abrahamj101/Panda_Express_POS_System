@@ -21,24 +21,16 @@ function Food() {
   };
 
   const handleAddToCart = () => {
-    const selectedIds = Object.entries(selectedItems)
-      .flatMap(([id, count]) => Array(count).fill(id));
-    console.log("Selected food items for cart:", selectedIds);
-
-    console.log("Menu Item Details:", menuItemObject.getName(), menuItemObject.getTotal());
     addMenuItem(menuItemObject);
-    printCart()
   };
 
   // This function will add the food item to the menuItemObject when an item is selected
   const addFoodItemToMenu = (foodItemId) => {    
     menuItemObject.addFoodItem(foodItemId);
-    console.log(menuItemObject);
   };
 
   const removeFoodItemFromMenu = (foodItemId) => {
     menuItemObject.removeFoodItem(foodItemId);
-    console.log(menuItemObject);
   }
 
   return (

@@ -1,3 +1,6 @@
+import getFoodItems from "../../pages/api/fooditems/getFooditems"
+import { useState } from "react";
+
 class MenuItem {
     constructor(menuitemId, menuItemName, price) {
         this.menuitemId = menuitemId;
@@ -18,6 +21,7 @@ class MenuItem {
                 this.total += 1.0;
             }
         }
+        this.foodItemIds.sort()
     }
 
     removeFoodItem(foodItemId) {
@@ -137,6 +141,23 @@ class MenuItem {
     isSeason(menuItem) {
         return true;
     }
+
+    async getFoodItemNames() {
+        let fooditems;
+        let returnValue = [];
+        try {
+            const items = await getFoodItems();
+            fooditems = items;
+        } catch (err) {
+            console.error('Error fetching food items:', err);
+        }
+        if (fooditems) {
+            for (let i = 0; i < this.foodItemIds.length; ++i) {
+                returnValue.push(fooditems.find(item => item.fooditem_id === this.foodItemIds[i]).fooditem_name);
+            }
+        }
+        return returnValue;
+    };
 }
 
 
