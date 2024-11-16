@@ -70,8 +70,8 @@ class MenuItem {
     // Alters the inventory quantities based on the food items associated with this menu item
     async alterInventory() {
         for (const foodItemId of this.foodItemIds) {
-            const inventoryIds = await this.getFoodInventoryIds(foodItemId);
-            const inventoryAmounts = await this.getInventoryAmounts(foodItemId);
+            const inventoryIds = await this.getFoodItemInventoryItemIds(foodItemId);
+            const inventoryAmounts = await this.getFoodItemInventoryAmounts(foodItemId);
 
             for (let j = 0; j < inventoryIds.length; j++) {
                 const inventoryId = inventoryIds[j];
@@ -151,23 +151,45 @@ class MenuItem {
         return true;
     }
 
-    async getFoodItemNames() {
+    async getFoodItems() {
+        try {
+            return await getFoodItems();
+        } catch (err) {
+            console.error("Error fetching food items:", err);
+            return [];
+        }
+    }
+
+    async extractFoodItemData(key) {
         const returnValue = [];
         try {
-            const foodItems = await getFoodItems();
+            const foodItems = await this.getFoodItems();
             if (foodItems) {
                 for (const foodItemId of this.foodItemIds) {
                     const foodItem = foodItems.find(item => item.fooditem_id === foodItemId);
-                    if (foodItem) {
-                        returnValue.push(foodItem.fooditem_name);
+                    if (foodItem && foodItem[key] !== undefined) {
+                        returnValue.push(foodItem[key]);
                     }
                 }
             }
         } catch (err) {
-            console.error("Error fetching food items:", err);
+            console.error(`Error extracting ${key} from food items:`, err);
         }
         return returnValue;
     }
+    
+    async getFoodItemInventoryItemIds() {
+        return await this.extractFoodItemData("inventoryitem_ids");
+    }
+    
+    async getFoodItemInventoryAmounts() {
+        return await this.extractFoodItemData("inventory_amounts");
+    }
+    
+    async getFoodItemNames() {
+        return await this.extractFoodItemData("fooditem_name");
+    }
+    
     
     
 

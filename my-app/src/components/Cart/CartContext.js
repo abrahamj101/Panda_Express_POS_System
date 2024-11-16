@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
+import addOrders from "../../pages/api/orders/addOrders";
 
 const CartContext = createContext();
 export default CartContext
@@ -42,11 +43,19 @@ export const CartContextProvider = ({ children }) => {
   };
 
   const completeOrder = async () => {
-    for (let menuItem of menuItems) {
-      await menuItem.alterInventory();
+    if (menuItems.length > 0) {
+      try {
+        await addOrders(menuItems, total, tax);
+        // for (let menuItem of menuItems) {
+        //   await menuItem.alterInventory();
+        // }
+
+        emptyCart();
+      } catch (error) {
+        console.error("Failed to complete order:", error.message);
+      }
     }
-    emptyCart();
-    return menuItems;
+      
   };
 
   const toggleCart = () => setIsCartOpen((prev) => !prev);

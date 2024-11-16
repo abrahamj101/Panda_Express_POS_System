@@ -25,6 +25,11 @@ app.listen(port, () => {
 });
 
 
+
+/**
+ *  Menu Items
+ */
+
 // Adds a Menu Item
 app.post("/api/menuItems", async (req, res) => {
   try {
@@ -71,6 +76,10 @@ app.delete("/api/menuItems/:menuItem_id", async (req, res) => {
   }
 })
 
+
+/**
+ *  Food Items
+ */
 // Gets Food Items
 app.get("/api/foodItems", async (req, res) => {
   try {
@@ -108,22 +117,28 @@ app.delete("/api/foodItems/:id", async (req, res) => {
 })
 
 
+/**
+ *  Orders
+ */
+
 // inserting an order
 app.post("/api/orders", async (req, res) => {
   try {
     const { employee_id, customer_id, menuitem_ids, total, tax, ordered_time } = req.body;
-
+    
     const result = await pool.query(
-      "INSERT INTO MenuItems (employee_id, customer_id, menuitem_ids, total, tax, ordered_time) VALUES ($1,$2,$3,$4,$5,$6)",
+      "INSERT INTO Orders (employee_id, customer_id, menuitem_ids, total, tax, ordered_time) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
       [employee_id, customer_id, menuitem_ids, total, tax, ordered_time]
     );
+
 
     res.status(201).json(result.rows[0]); // Send back the inserted row as JSON
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "An error occurred while adding the menu item" });
+    res.status(500).json({ error: "An error occurred while adding the order" });
   }
 });
+
 
 // getting the orders
 app.get("/api/orders", async (req, res) => {
@@ -132,6 +147,23 @@ app.get("/api/orders", async (req, res) => {
       "SELECT * FROM orders ORDER BY ordered_time DESC LIMIT 10"
     );
     res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch food items"})
+  }
+})
+
+
+/** 
+ * Inventory Items
+ */
+
+app.put("/api/inventoryItems/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { quantity } = req.body;
+    const updateInventory = await pool.query("UPDATE inventoryitems SET quantity = quantity - $1 WHERE inventoryItem_id = $2", [quantity, id])
+    res.json("Inventory item updated");
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch food items"})
