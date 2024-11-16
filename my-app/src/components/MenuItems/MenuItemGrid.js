@@ -31,6 +31,8 @@ function MenuItemGrid() {
               image_link={menuItem.image_link}
               foodItem_ids={menuItem.fooditem_ids}
               menuItem_id={menuItem.menuitem_id}
+              inventoryItemIds={menuItem.inventoryitem_ids}
+              inStock={menuItem.in_stock}
             />
           ))
         }

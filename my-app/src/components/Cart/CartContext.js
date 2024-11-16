@@ -43,7 +43,7 @@ export const CartContextProvider = ({ children }) => {
 
   const completeOrder = async () => {
     for (let menuItem of menuItems) {
-      await menuItem.alterInventory(); // Assuming this is an async operation
+      await menuItem.alterInventory();
     }
     emptyCart();
     return menuItems;

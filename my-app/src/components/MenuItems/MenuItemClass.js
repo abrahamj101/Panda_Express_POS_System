@@ -1,13 +1,16 @@
 import getFoodItems from "../../pages/api/fooditems/getFooditems"
+import getMenuItems from "../../pages/api/menuItems/getMenuitem"
 import { useState } from "react";
 
 class MenuItem {
-    constructor(menuitemId, menuItemName, price, imgLink) {
+    constructor(menuitemId, menuItemName, price, imgLink, inventoryItemIds, inStock) {
         this.menuitemId = menuitemId;
         this.foodItemIds = [];
         this.total = price;
         this.name = menuItemName;
         this.imgLink = imgLink;
+        this.inventoryItemIds = inventoryItemIds;
+        this.inStock = inStock;
     }
 
     // Adds a food item ID to the foodItemIds array and updates the total price if needed

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "../../styles/Cards.css";
 
-const MenuItemCard = ({ menuItem_name, price, image_link, foodItem_ids, menuItem_id }) => {
+const MenuItemCard = ({ menuItem_name, price, image_link, foodItem_ids, menuItem_id, inventoryItemIds, inStock }) => {
     
     return (
       <div className="item-card">
@@ -13,6 +13,8 @@ const MenuItemCard = ({ menuItem_name, price, image_link, foodItem_ids, menuItem
             menuItem_name,
             price,
             image_link,
+            inventoryItemIds, 
+            inStock,
           }}
         >
           <img src={image_link} alt={menuItem_name} className="item-image" />
