@@ -106,3 +106,34 @@ app.delete("/api/foodItems/:id", async (req, res) => {
     console.error(error)
   }
 })
+
+
+// inserting an order
+app.post("/api/orders", async (req, res) => {
+  try {
+    const { employee_id, customer_id, menuitem_ids, total, tax, ordered_time } = req.body;
+
+    const result = await pool.query(
+      "INSERT INTO MenuItems (employee_id, customer_id, menuitem_ids, total, tax, ordered_time) VALUES ($1,$2,$3,$4,$5,$6)",
+      [employee_id, customer_id, menuitem_ids, total, tax, ordered_time]
+    );
+
+    res.status(201).json(result.rows[0]); // Send back the inserted row as JSON
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred while adding the menu item" });
+  }
+});
+
+// getting the orders
+app.get("/api/orders", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM orders ORDER BY ordered_time DESC LIMIT 10"
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch food items"})
+  }
+})
