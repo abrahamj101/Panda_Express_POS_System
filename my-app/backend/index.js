@@ -124,15 +124,15 @@ app.delete("/api/foodItems/:id", async (req, res) => {
 // inserting an order
 app.post("/api/orders", async (req, res) => {
   try {
-    const { employee_id, customer_id, menuitem_ids, total, tax, ordered_time } = req.body;
-    
+    const { employee_id, customer_id, menuitem_ids, total, tax, ordered_time, fooditem_ids } = req.body;
+
     const result = await pool.query(
-      "INSERT INTO Orders (employee_id, customer_id, menuitem_ids, total, tax, ordered_time) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [employee_id, customer_id, menuitem_ids, total, tax, ordered_time]
+      "INSERT INTO Orders (employee_id, customer_id, menuitem_ids, total, tax, ordered_time, fooditem_ids) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+      [employee_id, customer_id, menuitem_ids, total, tax, ordered_time, fooditem_ids]
     );
 
 
-    res.status(201).json(result.rows[0]); // Send back the inserted row as JSON
+    res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "An error occurred while adding the order" });

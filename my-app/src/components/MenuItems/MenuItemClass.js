@@ -63,8 +63,11 @@ class MenuItem {
     }
 
     getImageLink() {
-        console.log(this.imgLink)
         return this.imgLink;
+    }
+
+    getFoodItemIds() {
+        return this.foodItemIds;
     }
 
     // Alters the inventory quantities based on the food items associated with this menu item

@@ -8,6 +8,7 @@ const addOrders = async (menuItems, total, tax) => {
         total,
         tax,
         ordered_time: new Date().toISOString(),
+        fooditem_ids: JSON.stringify(menuItems.map(item => item.getFoodItemIds())),
       };
   
       // Send the POST request
