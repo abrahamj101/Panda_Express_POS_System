@@ -1,6 +1,8 @@
 import getFoodItems from "../../pages/api/fooditems/getFooditems"
-import getMenuItems from "../../pages/api/menuItems/getMenuitem"
-import { useState } from "react";
+import updateInventoryItemQuantity from "../../pages/api/inventory/updateQuantityOrders";
+import getInventoryItems from "../../pages/api/inventory/getInventoryItems";
+import updateFoodItemInStock from "../../pages/api/fooditems/updateInStock";
+import updateMenuItemInStock from "../../pages/api/menuItems/updateInStock";
 
 class MenuItem {
     constructor(menuitemId, menuItemName, price, imgLink, inventoryItemIds, inStock) {
@@ -76,17 +78,20 @@ class MenuItem {
             const inventoryIds = await this.getFoodItemInventoryItemIds(foodItemId);
             const inventoryAmounts = await this.getFoodItemInventoryAmounts(foodItemId);
 
-            for (let j = 0; j < inventoryIds.length; j++) {
-                const inventoryId = inventoryIds[j];
-                const amountToSubtract = inventoryAmounts[j];
-
-                await this.updateInventoryQuantity(inventoryId, amountToSubtract);
-                await this.updateInStockFoodItem(foodItemId, inventoryId, amountToSubtract);
+            for (let i = 0; i < inventoryIds.length; i++){
+                const amountToSubtractArray = inventoryAmounts[i]
+                const inventoryIdArray = inventoryIds[i]
+                for (let j = 0; j < amountToSubtractArray.length; j++) {
+                    const inventoryId = inventoryIdArray[j];
+                    const amountToSubtract = amountToSubtractArray[j];
+                    await this.updateInventoryQuantity(inventoryId, amountToSubtract);
+                    
+                    await this.updateInStockFoodItem(foodItemId, inventoryId, amountToSubtract);
+                }
             }
+            
         }
-
-        const menuInventoryIds = await this.getMenuInventoryIds(this.menuitemId);
-        for (const inventoryId of menuInventoryIds) {
+        for (const inventoryId of this.inventoryItemIds) {
             await this.updateInventoryQuantity(inventoryId, 1);
             await this.updateInStockMenuItem(this.menuitemId, inventoryId);
         }
@@ -94,30 +99,23 @@ class MenuItem {
 
     // Updates the stock status of a food item based on inventory quantity
     async updateInStockFoodItem(foodItemId, inventoryId, neededQuantity) {
-        const quantity = await this.database.getInventoryQuantity(inventoryId);
+        const quantity = (await getInventoryItems()).find(item => item.inventoryitem_id === inventoryId).quantity;
         if (quantity < neededQuantity) {
-            const sql = "UPDATE foodItems SET in_stock = ? WHERE foodItem_id = ?";
-            await this.database.query(sql, [false, foodItemId]);
-            return false;
+            await updateFoodItemInStock(foodItemId, false);
         }
-        return true;
     }
 
     // Updates the stock status of a menu item based on inventory quantity
     async updateInStockMenuItem(menuItemId, inventoryId) {
-        const quantity = await this.database.getInventoryQuantity(inventoryId);
+        const quantity = (await getInventoryItems()).find(item => item.inventoryitem_id === inventoryId).quantity;
         if (quantity < 1) {
-            const sql = "UPDATE MenuItems SET in_stock = ? WHERE menuItem_id = ?";
-            await this.database.query(sql, [false, menuItemId]);
-            return false;
+            await updateMenuItemInStock(menuItemId, false);
         }
-        return true;
     }
 
     // Updates the quantity of a specific inventory item by subtracting a given amount
     async updateInventoryQuantity(inventoryId, amountToSubtract) {
-        const sql = "UPDATE inventoryitems SET quantity = quantity - ? WHERE inventoryItem_id = ?";
-        await this.database.query(sql, [amountToSubtract, inventoryId]);
+        await updateInventoryItemQuantity(inventoryId, amountToSubtract);
     }
 
     // Retrieves the inventory IDs associated with a specified food item

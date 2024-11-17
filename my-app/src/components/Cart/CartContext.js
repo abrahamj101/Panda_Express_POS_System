@@ -46,10 +46,9 @@ export const CartContextProvider = ({ children }) => {
     if (menuItems.length > 0) {
       try {
         await addOrders(menuItems, total, tax);
-        // for (let menuItem of menuItems) {
-        //   await menuItem.alterInventory();
-        // }
-
+        for (let menuItem of menuItems) {
+          await menuItem.alterInventory();
+        }
         emptyCart();
       } catch (error) {
         console.error("Failed to complete order:", error.message);
