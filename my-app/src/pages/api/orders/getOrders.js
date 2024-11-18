@@ -1,6 +1,6 @@
-const getInventoryItems = async () => {
+const getOrders = async () => {
     try {
-      const response = await fetch("http://localhost:5001/api/inventoryItems");
+      const response = await fetch("http://localhost:5001/api/orders");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -12,5 +12,5 @@ const getInventoryItems = async () => {
     }
   };
   
-  export default getInventoryItems;
+  export default getOrders;
   

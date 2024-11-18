@@ -25,6 +25,11 @@ app.listen(port, () => {
 });
 
 
+
+/**
+ *  Menu Items
+ */
+
 // Adds a Menu Item
 app.post("/api/menuItems", async (req, res) => {
   try {
@@ -71,6 +76,21 @@ app.delete("/api/menuItems/:menuItem_id", async (req, res) => {
   }
 })
 
+app.put("/api/menuitems/update/instock", async (req, res) => {
+  try {
+    const { id, inStock } = req.body;
+    const updateInventory = await pool.query("UPDATE menuitems SET instock = $1 WHERE menuitems = $2", [inStock, id])
+    
+    
+  } catch (error) {
+    console.error(error)
+  }
+})
+
+
+/**
+ *  Food Items
+ */
 // Gets Food Items
 app.get("/api/foodItems", async (req, res) => {
   try {
@@ -84,9 +104,10 @@ app.get("/api/foodItems", async (req, res) => {
   }
 })
 
-app.put("/api/foodItems/:id", async (req, res) => {
+app.put("/api/foodItems/update/instock", async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id, inStock } = req.body;
+    const updateInventory = await pool.query("UPDATE fooditems SET instock = $1 WHERE fooditem_id = $2", [inStock, id])
 
     
   } catch (error) {
@@ -104,5 +125,72 @@ app.delete("/api/foodItems/:id", async (req, res) => {
     res.json("Deleted Food Item Successfully")
   } catch (error) {
     console.error(error)
+  }
+})
+
+
+/**
+ *  Orders
+ */
+
+// inserting an order
+app.post("/api/orders", async (req, res) => {
+  try {
+    const { employee_id, customer_id, menuitem_ids, total, tax, ordered_time, fooditem_ids } = req.body;
+
+    const result = await pool.query(
+      "INSERT INTO Orders (employee_id, customer_id, menuitem_ids, total, tax, ordered_time, fooditem_ids) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+      [employee_id, customer_id, menuitem_ids, total, tax, ordered_time, fooditem_ids]
+    );
+
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred while adding the order" });
+  }
+});
+
+
+// getting the orders
+app.get("/api/orders", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM orders ORDER BY ordered_time DESC LIMIT 10"
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch food items"})
+  }
+})
+
+
+/** 
+ * Inventory Items
+ */
+
+app.put("/api/inventoryItems/update/quantity/orders", async (req, res) => {
+  try {
+    const { quantity, id } = req.body;
+    console.log(quantity);
+    console.log(id);
+    const updateInventory = await pool.query("UPDATE inventoryitems SET quantity = quantity - $1 WHERE inventoryItem_id = $2", [quantity, id])
+    res.json("Inventory item quantity updated");
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch food items"})
+  }
+})
+
+app.get("/api/inventoryItems", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM InventoryItems ORDER BY inventoryItem_id"
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to inventory items"})
   }
 })
