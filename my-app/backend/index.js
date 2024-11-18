@@ -79,7 +79,7 @@ app.delete("/api/menuItems/:menuItem_id", async (req, res) => {
 app.put("/api/menuitems/update/instock", async (req, res) => {
   try {
     const { id, inStock } = req.body;
-    const updateInventory = await pool.query("UPDATE menuitems SET instock = $1 WHERE menuitems = $2", [inStock, id])
+    const updateInventory = await pool.query("UPDATE menuitems SET in_stock = $1 WHERE menuitems = $2", [inStock, id])
     
     
   } catch (error) {
@@ -107,7 +107,7 @@ app.get("/api/foodItems", async (req, res) => {
 app.put("/api/foodItems/update/instock", async (req, res) => {
   try {
     const { id, inStock } = req.body;
-    const updateInventory = await pool.query("UPDATE fooditems SET instock = $1 WHERE fooditem_id = $2", [inStock, id])
+    const updateInventory = await pool.query("UPDATE fooditems SET in_stock = $1 WHERE fooditem_id = $2", [inStock, id])
 
     
   } catch (error) {
