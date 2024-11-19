@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import "../styles/Manager.css";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
+import { useZoom } from "../components/Zoom/ZoomContext";
 
 function ManagerPage() {
+  const { zoomLevel } = useZoom();
   const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [user, setUser] = useState(null);
@@ -15,11 +17,14 @@ function ManagerPage() {
     { title: "Employee Schedule", description: "Employee work schedule." },
     { title: "Customer Feedback", description: "Recent customer reviews." },
     { title: "Revenue Analysis", description: "Monthly revenue breakdown." },
-    { title: "Product Performance", description: "Top-selling products." }
+    { title: "Product Performance", description: "Top-selling products." },
   ];
 
   return (
-    <div className="manager-page">
+    <div
+      className="manager-page"
+      style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top left" }}
+    >
       <Header />
 
       <main className="manager-content">

@@ -4,7 +4,7 @@ import Footer from "../components/Navigation/Footer";
 import MenuItemGrid from "../components/MenuItems/MenuItemGrid";
 import BackButton from "../components/Navigation/BackButton";
 import "../styles/default.css";
-import { ZoomProvider, useZoom } from "../components/Zoom/ZoomContext";
+import { useZoom } from "../components/Zoom/ZoomContext";
 
 function MenuPage() {
   const { zoomLevel } = useZoom();
