@@ -1,22 +1,25 @@
 // Header.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import logo from "../../images/panda-express-logo-1.svg";
 import Login from "../Modal/Login.js"; // Import the Modal component
 import { Link } from "react-router-dom";
 import CartIcon from "../Cart/CartIcon.js";
 import CartModal from "../Modal/CartModal.js";
+import { useZoom } from "../Zoom/ZoomContext";
+import "../../styles/Header.css";
 
 function Header() {
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const { zoomIn, zoomOut } = useZoom();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [user, setUser] = useState(null);
 
   const handleLoginClick = () => {
-    setIsModalOpen(true); 
+    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false); 
+    setIsModalOpen(false);
   };
 
   const parseJwt = (token) => {
@@ -127,6 +130,12 @@ function Header() {
           <img src={logo} alt="Panda Express Logo" />
         </Link>
       </div>
+      <button onClick={zoomIn} className="zoom-btn zoom-in-btn">
+        Zoom In
+      </button>
+      <button onClick={zoomOut} className="zoom-btn zoom-out-btn">
+        Zoom Out
+      </button>
       <h1>Panda Express</h1>
       <div className="header-buttons">
         <CartIcon />
@@ -136,26 +145,29 @@ function Header() {
             <img
               src={user.picture}
               alt="Profile"
-              style={{ width: "40px", borderRadius: "50%", marginRight: "10px" }}
+              style={{
+                width: "40px",
+                borderRadius: "50%",
+                marginRight: "10px",
+              }}
             />
-<button
-  className="logout-btn"
-  onClick={handleSignOut}
-  style={{
-    backgroundColor: "#dd0000",
-    color: "white",
-    outline: "1px solid white",
-    padding: "10px 15px",
-    border: "none",
-    borderRadius: "5px",
-    transition: "all 0.3s ease",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    cursor: "pointer",
-  }}
->
-  Logout
-</button>
-
+            <button
+              className="logout-btn"
+              onClick={handleSignOut}
+              style={{
+                backgroundColor: "#dd0000",
+                color: "white",
+                outline: "1px solid white",
+                padding: "10px 15px",
+                border: "none",
+                borderRadius: "5px",
+                transition: "all 0.3s ease",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                cursor: "pointer",
+              }}
+            >
+              Logout
+            </button>
           </>
         ) : (
           <>
@@ -163,7 +175,7 @@ function Header() {
           </>
         )}
       </div>
-      <Login isOpen={isModalOpen} onClose={handleCloseModal} /> 
+      <Login isOpen={isModalOpen} onClose={handleCloseModal} />
     </header>
   );
 }
