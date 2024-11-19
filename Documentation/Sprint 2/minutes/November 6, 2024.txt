@@ -16,4 +16,4 @@ WHat you are doing today:
     Joshua Abraham  - work on color contrast api
 
 Are we on track:
-    A little behind because we were not able to finish some of the APIs
+    A little behind because we were not able to finish some of the APIs.
