@@ -80,8 +80,6 @@ app.put("/api/menuitems/update/instock", async (req, res) => {
   try {
     const { id, inStock } = req.body;
     const updateInventory = await pool.query("UPDATE menuitems SET in_stock = $1 WHERE menuitems = $2", [inStock, id])
-    
-    
   } catch (error) {
     console.error(error)
   }
