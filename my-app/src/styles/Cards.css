@@ -8,6 +8,7 @@
     min-width: 90px;
     min-height: 250px;
     margin: 16px;
+    width: 250px;
 }
 
 .item-card:hover {
@@ -22,18 +23,18 @@
 
 .item-image {
     width: 70%;
-    height: 250px;
+    height: 150px;
     object-fit: cover;
 }
 
 .item-card h3 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     margin: 12px 0 4px;
     color: #333;
 }
 
 .item-card p {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: #555;
     margin-bottom: 12px;
 }
