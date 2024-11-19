@@ -24,8 +24,6 @@ app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
 
-
-
 /**
  *  Menu Items
  */
@@ -33,20 +31,35 @@ app.listen(port, () => {
 // Adds a Menu Item
 app.post("/api/menuItems", async (req, res) => {
   try {
-    const { menuItem_id, menuItem_name, price, foodItem_ids, inventoryItem_ids, in_stock } = req.body;
+    const {
+      menuItem_id,
+      menuItem_name,
+      price,
+      foodItem_ids,
+      inventoryItem_ids,
+      in_stock,
+    } = req.body;
 
     const result = await pool.query(
       "INSERT INTO MenuItems (menuItem_id, menuItem_name, price, foodItem_ids, inventoryitem_ids, in_stock) VALUES ($1,$2,$3,$4,$5,$6)",
-      [menuItem_id, menuItem_name, price, foodItem_ids, inventoryItem_ids, in_stock]
+      [
+        menuItem_id,
+        menuItem_name,
+        price,
+        foodItem_ids,
+        inventoryItem_ids,
+        in_stock,
+      ]
     );
 
     res.status(201).json(result.rows[0]); // Send back the inserted row as JSON
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "An error occurred while adding the menu item" });
+    res
+      .status(500)
+      .json({ error: "An error occurred while adding the menu item" });
   }
 });
-
 
 // Gets the Menu Items
 app.get("/api/menuItems", async (req, res) => {
@@ -57,10 +70,9 @@ app.get("/api/menuItems", async (req, res) => {
     res.json(result.rows);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to fetch menu items"})
+    res.status(500).json({ error: "Failed to fetch menu items" });
   }
-})
-
+});
 
 // Deletes a given Menu Item by id
 app.delete("/api/menuItems/:menuItem_id", async (req, res) => {
@@ -69,24 +81,24 @@ app.delete("/api/menuItems/:menuItem_id", async (req, res) => {
     const deleteMenuItem = await pool.query(
       "DELETE FROM MenuItems WHERE menuItem_id = $1",
       [menuItem_id]
-    )
-    res.json("Deleted Menu Item Successfully")
+    );
+    res.json("Deleted Menu Item Successfully");
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-})
+});
 
 app.put("/api/menuitems/update/instock", async (req, res) => {
   try {
     const { id, inStock } = req.body;
-    const updateInventory = await pool.query("UPDATE menuitems SET in_stock = $1 WHERE menuitems = $2", [inStock, id])
-    
-    
+    const updateInventory = await pool.query(
+      "UPDATE menuitems SET in_stock = $1 WHERE menuitems = $2",
+      [inStock, id]
+    );
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-})
-
+});
 
 /**
  *  Food Items
@@ -100,20 +112,21 @@ app.get("/api/foodItems", async (req, res) => {
     res.json(result.rows);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to fetch food items"})
+    res.status(500).json({ error: "Failed to fetch food items" });
   }
-})
+});
 
 app.put("/api/foodItems/update/instock", async (req, res) => {
   try {
     const { id, inStock } = req.body;
-    const updateInventory = await pool.query("UPDATE fooditems SET in_stock = $1 WHERE fooditem_id = $2", [inStock, id])
-
-    
+    const updateInventory = await pool.query(
+      "UPDATE fooditems SET in_stock = $1 WHERE fooditem_id = $2",
+      [inStock, id]
+    );
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-})
+});
 
 app.delete("/api/foodItems/:id", async (req, res) => {
   try {
@@ -121,13 +134,12 @@ app.delete("/api/foodItems/:id", async (req, res) => {
     const deleteFoodItem = await pool.query(
       "DELETE FROM FoodItems WHERE foodItem_id = $1",
       [id]
-    )
-    res.json("Deleted Food Item Successfully")
+    );
+    res.json("Deleted Food Item Successfully");
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-})
-
+});
 
 /**
  *  Orders
@@ -136,13 +148,28 @@ app.delete("/api/foodItems/:id", async (req, res) => {
 // inserting an order
 app.post("/api/orders", async (req, res) => {
   try {
-    const { employee_id, customer_id, menuitem_ids, total, tax, ordered_time, fooditem_ids } = req.body;
+    const {
+      employee_id,
+      customer_id,
+      menuitem_ids,
+      total,
+      tax,
+      ordered_time,
+      fooditem_ids,
+    } = req.body;
 
     const result = await pool.query(
       "INSERT INTO Orders (employee_id, customer_id, menuitem_ids, total, tax, ordered_time, fooditem_ids) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-      [employee_id, customer_id, menuitem_ids, total, tax, ordered_time, fooditem_ids]
+      [
+        employee_id,
+        customer_id,
+        menuitem_ids,
+        total,
+        tax,
+        ordered_time,
+        fooditem_ids,
+      ]
     );
-
 
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -150,7 +177,6 @@ app.post("/api/orders", async (req, res) => {
     res.status(500).json({ error: "An error occurred while adding the order" });
   }
 });
-
 
 // getting the orders
 app.get("/api/orders", async (req, res) => {
@@ -161,27 +187,27 @@ app.get("/api/orders", async (req, res) => {
     res.json(result.rows);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to fetch food items"})
+    res.status(500).json({ error: "Failed to fetch food items" });
   }
-})
+});
 
-
-/** 
+/**
  * Inventory Items
  */
 
 app.put("/api/inventoryItems/update/quantity/orders", async (req, res) => {
   try {
     const { quantity, id } = req.body;
-    console.log(quantity);
-    console.log(id);
-    const updateInventory = await pool.query("UPDATE inventoryitems SET quantity = quantity - $1 WHERE inventoryItem_id = $2", [quantity, id])
+    const updateInventory = await pool.query(
+      "UPDATE inventoryitems SET quantity = quantity - $1 WHERE inventoryItem_id = $2",
+      [quantity, id]
+    );
     res.json("Inventory item quantity updated");
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to fetch food items"})
+    res.status(500).json({ error: "Failed to fetch food items" });
   }
-})
+});
 
 app.get("/api/inventoryItems", async (req, res) => {
   try {
@@ -191,6 +217,6 @@ app.get("/api/inventoryItems", async (req, res) => {
     res.json(result.rows);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to inventory items"})
+    res.status(500).json({ error: "Failed to inventory items" });
   }
-})
+});

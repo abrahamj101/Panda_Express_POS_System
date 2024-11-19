@@ -1,7 +1,7 @@
 Scrum Meeting:
 
 What have you worked on:
-    Nathan Tserng   - created separate pages for cashier and manager
+    Nathan Tserng   - created separate pages for cashier
     Christopher Kim - added ability to select the different food items
     Robert Longo    - worked on manager page
     Roshan Sreedhar - work on translate api
