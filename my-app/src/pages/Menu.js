@@ -3,13 +3,16 @@ import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import MenuItemGrid from "../components/MenuItems/MenuItemGrid";
 import BackButton from "../components/Navigation/BackButton";
-import "../styles/default.css"
-
+import "../styles/default.css";
+import { useZoom } from "../components/Zoom/ZoomContext";
 
 function MenuPage() {
+  const { zoomLevel } = useZoom();
 
   return (
-    <div>
+    <div
+      style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top left" }}
+    >
       <Header />
       <div className="main-content">
         <BackButton location="/" />
