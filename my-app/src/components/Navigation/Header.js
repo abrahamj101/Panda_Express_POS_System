@@ -7,9 +7,10 @@ import CartIcon from "../Cart/CartIcon.js";
 import CartModal from "../Modal/CartModal.js";
 import { useZoom } from "../Zoom/ZoomContext";
 import "../../styles/Header.css";
+import { FaSearchPlus, FaSearchMinus } from "react-icons/fa";
 
 function Header() {
-  const { zoomIn, zoomOut } = useZoom();
+  const { zoomLevel, zoomIn, zoomOut } = useZoom();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [user, setUser] = useState(null);
@@ -131,11 +132,12 @@ function Header() {
         </Link>
       </div>
       <button onClick={zoomIn} className="zoom-btn zoom-in-btn">
-        Zoom In
+        <FaSearchPlus />
       </button>
       <button onClick={zoomOut} className="zoom-btn zoom-out-btn">
-        Zoom Out
+        <FaSearchMinus />
       </button>
+      <span className="zoom-level">{Math.round(zoomLevel * 100)}%</span>
       <h1>Panda Express</h1>
       <div className="header-buttons">
         <CartIcon />
