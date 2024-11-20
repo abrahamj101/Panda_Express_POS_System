@@ -14,6 +14,7 @@ import { CartContextProvider } from "../components/Cart/CartContext";
 import useWeather from "./api/weather/weatherApi";
 import WeatherWidget from "../components/weather/WeatherWidget";
 import { ZoomProvider, useZoom } from "../components/Zoom/ZoomContext";
+import AccessibilityButton from "../components/Navigation/AccessibilityButton";
 
 function LandingPage() {
   const { weather, error } = useWeather("College Station");
@@ -49,6 +50,7 @@ function App() {
             <Route path="/cashier" element={<CashierPage />} />
             <Route path="/manager" element={<ManagerPage />} />
           </Routes>
+          <AccessibilityButton />
         </Router>
       </CartContextProvider>
     </ZoomProvider>
