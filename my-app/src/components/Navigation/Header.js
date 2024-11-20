@@ -1,16 +1,13 @@
 // Header.js
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../images/panda-express-logo-1.svg";
-import Login from "../Modal/Login.js"; // Import the Modal component
+import Login from "../Modal/Login.js";
 import { Link } from "react-router-dom";
 import CartIcon from "../Cart/CartIcon.js";
 import CartModal from "../Modal/CartModal.js";
-import { useZoom } from "../Zoom/ZoomContext";
 import "../../styles/Header.css";
-import { FaSearchPlus, FaSearchMinus } from "react-icons/fa";
 
 function Header() {
-  const { zoomLevel, zoomIn, zoomOut } = useZoom();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [user, setUser] = useState(null);
@@ -131,13 +128,6 @@ function Header() {
           <img src={logo} alt="Panda Express Logo" />
         </Link>
       </div>
-      <button onClick={zoomIn} className="zoom-btn zoom-in-btn">
-        <FaSearchPlus />
-      </button>
-      <button onClick={zoomOut} className="zoom-btn zoom-out-btn">
-        <FaSearchMinus />
-      </button>
-      <span className="zoom-level">{Math.round(zoomLevel * 100)}%</span>
       <h1>Panda Express</h1>
       <div className="header-buttons">
         <CartIcon />
