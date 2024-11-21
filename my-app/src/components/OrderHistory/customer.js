@@ -13,7 +13,7 @@ const Customer = () => {
   useEffect(() => {
       const fetchOrders = async () => {
           try {
-              const ordersData = await getOrders(11);
+              const ordersData = await getOrders(0);
               setOrders(ordersData || []);
           } catch (err) {
               console.error("Error fetching orders:", err);
