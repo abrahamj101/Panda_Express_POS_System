@@ -11,7 +11,6 @@ function Header() {
   return (
     <header className="header">
       <HomeButton />
-      <h1 className="panda-name">Panda Express</h1>
       <div className="header-buttons">
         <OrderHistory/>
         {/* Place buttons above these divs for styling issues */}

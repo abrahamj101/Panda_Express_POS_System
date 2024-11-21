@@ -7,6 +7,7 @@ const HomeButton = () => {
         <div className="logo">
             <Link to="/">
             <img src={logo} alt="Panda Express Logo" />
+            <h1 className="panda-name">Panda Express</h1>
             </Link>
         </div>
     )
