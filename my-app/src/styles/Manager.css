@@ -1,0 +1,53 @@
+.manager-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .report-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    max-width: 1000px;
+    height: 69vh;
+    padding: 50px;
+  }
+  
+  .report-button {
+    background-color: #cc0000;
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1.2rem;
+    padding: 20px;
+    width: 30%;
+    height: 150px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    opacity: 90%;
+  }
+  
+  .report-button:hover {
+    transform: scale(1.01);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    opacity: 1;
+  }
+  
+  .report-button h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: white;
+  }
+  
+  .report-button p {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #dddddd;
+  }
+ .title {
+    font-size: 60px;
+ } 

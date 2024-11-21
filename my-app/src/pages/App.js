@@ -1,30 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
 import MenuPage from "./Menu";
 import FoodPage from "./Food";
-import OrderHistoryPage from "./OrderHistory";
+import CashierPage from "./Cashier";
 import ManagerPage from "./Manager";
-import "../styles/Pages/default.css";
-import "../styles/Accessibility/Weather.css";
+import EmployeePage from "./Employee";
+import FoodItemPage from "./Fooditem";
+import MenuItemPage from "./Menuitem";
+import OrderPage from "./Order";
+import InventoryPage from "./Inventory";
+import "../styles/default.css";
+import "../styles/Weather.css";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import ImageCarousel from "../components/Carosuel/ImageCarousel";
 import { CartContextProvider } from "../components/Cart/CartContext";
 import useWeather from "./api/weather/weatherApi";
 import WeatherWidget from "../components/weather/WeatherWidget";
-import { ZoomProvider, useZoom } from "../components/Zoom/ZoomContext";
-import AccessibilityButton from "../components/Navigation/AccessibilityButton";
+
 
 function LandingPage() {
-  const { weather, error } = useWeather("College Station");
-  const { zoomLevel } = useZoom();
+  const { weather, error } = useWeather("College Station"); // Using the custom hook
 
   return (
-    <div
-      className="App"
-      style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top left" }}
-    >
+    <div className="App">
       <Header />
       <div className="main-content">
         <WeatherWidget weather={weather} error={error} />
@@ -40,20 +40,24 @@ function LandingPage() {
 
 function App() {
   return (
-    <ZoomProvider>
-      <CartContextProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/menu" element={<MenuPage />} />
-            <Route path="/food" element={<FoodPage />} />
-            <Route path="/order-history" element={<OrderHistoryPage />} />
-            <Route path="/manager" element={<ManagerPage />} />
-          </Routes>
-          <AccessibilityButton />
-        </Router>
-      </CartContextProvider>
-    </ZoomProvider>
+    <CartContextProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/menu" element={<MenuPage />} />
+          <Route path="/food" element={<FoodPage />} />
+          <Route path="/cashier" element={<CashierPage />} />
+          <Route path="/manager" element={<ManagerPage />} />
+
+          {/* Manager pages */}
+          <Route path="/manager/employee" element={<EmployeePage />} />
+          <Route path="/manager/order" element={<OrderPage />} />
+          <Route path="/manager/fooditem" element={<FoodItemPage />} />
+          <Route path="/manager/menuitem" element={<MenuItemPage />} />
+          <Route path="/manager/inventory" element={<InventoryPage />} />
+        </Routes>
+      </Router>
+    </CartContextProvider>
   );
 }
 
