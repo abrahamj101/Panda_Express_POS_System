@@ -147,15 +147,16 @@ function Header() {
               className="logout-btn"
               onClick={handleSignOut}
               style={{
-                backgroundColor: "#dd0000",
-                color: "white",
+                backgroundColor: "white",
+                color: "#b02321",
                 outline: "1px solid white",
                 padding: "10px 15px",
                 border: "none",
-                borderRadius: "5px",
+                borderRadius: "15px",
                 transition: "all 0.3s ease",
                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                 cursor: "pointer",
+                fontSize: "20px"
               }}
             >
               Logout
