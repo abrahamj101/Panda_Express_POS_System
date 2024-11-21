@@ -48,6 +48,8 @@ body {
   font-weight: bold;
   user-select: none;
   color: white;
+  position: absolute;
+  right: 44.5%;
 }
 
 .header-buttons {
