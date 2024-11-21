@@ -149,3 +149,16 @@ a:hover {
   object-fit: cover;
   cursor: pointer;
 }
+
+.header-buttons {
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+  margin-top: 3px;
+  transition: all 0.3s ease;
+}
+
+.header-buttons:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
