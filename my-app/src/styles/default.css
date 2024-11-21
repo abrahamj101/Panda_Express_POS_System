@@ -3,6 +3,13 @@ body {
   height: 100%;
   margin: 0;
   font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
 }
 
 .App {
@@ -11,6 +18,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  padding-top: 70px;
 }
 
 .header {
@@ -20,28 +28,58 @@ body {
   background-color: #b02321;
   padding: 10px 20px;
   color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 90px
 }
 
 .logo img {
   height: 50px;
+  cursor: pointer;
 }
 
-.login-btn {
-  background-color: white;
-  border: none;
-  padding: 10px 20px;
-  color: #b02321;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
+.panda-name {
+  font-family: "Arial", sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  user-select: none;
+  color: white;
 }
 
 .header-buttons {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   align-items: center;
 }
 
+.logout-btn {
+  background-color: #dd0000;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.logout-btn:hover {
+  background-color: #b02321;
+}
+
+#googleSignInDiv {
+  display: inline-block;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  min-height: 100vh;
+}
 
 .footer {
   background-color: #b02321;
@@ -58,12 +96,14 @@ body {
   font-size: 18px;
   border-radius: 5px;
   cursor: pointer;
-  margin: 50px;
+  margin: 50px auto;
+  display: inline-block;
+  text-align: center;
+  transition: background-color 0.3s ease;
 }
 
-.main-content {
-  flex-grow: 1;
-  padding: 50px;
+.order-btn:hover {
+  background-color: #9a1e1a;
 }
 
 a {
@@ -73,29 +113,22 @@ a {
 
 a:hover {
   color: inherit;
-  transform: none;
-  box-shadow: none;
   text-decoration: none;
 }
 
-html {
-  overflow-y: scroll;
-}
-
-/* Center the back button */
 .button {
   background-color: #7e7e7e;
   color: white;
   border: none;
   padding: 10px 20px;
-  font-size: 32px;
+  font-size: 20px;
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: block;
-  margin: 5px auto;
-  padding: 1rem;
+  margin: 20px auto;
   width: 60%;
+  margin-top: 5%;
 }
 
 .button:hover {
@@ -105,4 +138,12 @@ html {
 .button:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
 }

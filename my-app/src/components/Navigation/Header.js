@@ -128,7 +128,7 @@ function Header() {
           <img src={logo} alt="Panda Express Logo" />
         </Link>
       </div>
-      <h1>Panda Express</h1>
+      <h1 className="panda-name">Panda Express</h1>
       <div className="header-buttons">
         <CartIcon />
         <CartModal />

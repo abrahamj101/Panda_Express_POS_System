@@ -13,6 +13,8 @@
     padding: 0.3rem 0.5rem;
     font-size: 2rem;
     cursor: pointer;
+    border-radius: 20px;
+    width: 50px;
   }
   
   .selection-controls button:disabled {
