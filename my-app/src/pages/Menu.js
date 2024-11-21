@@ -3,7 +3,7 @@ import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import MenuItemGrid from "../components/MenuItems/MenuItemGrid";
 import BackButton from "../components/Navigation/BackButton";
-import "../styles/default.css";
+import "../styles/Pages/default.css";
 import { useZoom } from "../components/Zoom/ZoomContext";
 
 function MenuPage() {

@@ -2,7 +2,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import getFoodItems from '../../pages/api/fooditems/getFooditems';
 import FoodItemCard from './FoodItemCard';
-import "../../styles/Grid.css";
+import "../../styles/FoodandMenu/Grid.css";
 
 function FoodItemGrid({ foodItemIds, onSelectionChange, menuItemId, onAddFoodItem, onRemoveFoodItem }) {
   const [foodItems, setFoodItems] = useState([]);

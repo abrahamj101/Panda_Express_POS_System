@@ -1,0 +1,92 @@
+.customer-orders-table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 100px;
+}
+
+.order-entry {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.order-entry:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.order-entry h3 {
+    cursor: pointer;
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.order-items {
+    display: none;
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.order-entry:hover .order-items {
+    display: block;
+}
+
+.menu-item {
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    gap: 10px;
+    background-color: #f7f7f7;
+    transition: background-color 0.2s ease;
+}
+
+.menu-item:hover {
+    background-color: #ececec;
+}
+
+.menu-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.menu-item h4 {
+    font-size: 1rem;
+    margin: 0;
+    color: #555;
+}
+
+.menu-item p {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.menu-item ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-item ul li {
+    font-size: 0.85rem;
+    color: #666;
+}

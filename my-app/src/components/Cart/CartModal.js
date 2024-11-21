@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
-import CartContext from "../Cart/CartContext";
-import "../../styles/cartStyle.css";
+import CartContext from "./CartContext";
+import "../../styles/Cart/cartStyle.css";
 
 const CartModal = () => {
   const { menuItems, isCartOpen, removeMenuItem, toggleCart, total, tax, completeOrder } = useContext(CartContext);

@@ -181,15 +181,54 @@ app.post("/api/orders", async (req, res) => {
 // getting the orders
 app.get("/api/orders", async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+    const pageSize = 50;
+    const offset = (page - 1) * pageSize; // Calculate the offset based on the page
+
+    // Fetch the orders with pagination
     const result = await pool.query(
-      "SELECT * FROM orders ORDER BY ordered_time DESC LIMIT 10"
+      "SELECT * FROM orders ORDER BY ordered_time DESC LIMIT $1 OFFSET $2",
+      [pageSize, offset]
     );
+
+    // Get the total count of orders to determine the total number of pages
+    const totalResult = await pool.query("SELECT COUNT(*) FROM orders");
+    const totalOrders = totalResult.rows[0].count;
+    const totalPages = Math.ceil(totalOrders / pageSize);
+
+    res.json({
+      orders: result.rows,
+      totalPages,
+      currentPage: page,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch orders" });
+  }
+});
+
+
+// getting orders for the specific customer
+app.get("/api/orders/customer", async (req, res) => {
+  try {
+    const { id } = req.query;
+    if (!id) {
+      return res.status(400).json({ error: "Customer ID is required" });
+    }
+
+    const result = await pool.query(
+      "SELECT * FROM orders WHERE customer_id = $1 ORDER BY ordered_time DESC LIMIT 10",
+      [id]
+    );
+
     res.json(result.rows);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to fetch food items" });
+    res.status(500).json({ error: "Failed to fetch orders" });
   }
 });
+
+
 
 /**
  * Inventory Items
