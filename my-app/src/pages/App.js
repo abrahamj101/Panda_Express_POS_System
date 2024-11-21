@@ -5,6 +5,11 @@ import MenuPage from "./Menu";
 import FoodPage from "./Food";
 import CashierPage from "./Cashier";
 import ManagerPage from "./Manager";
+import EmployeePage from "./Employee";
+import FoodItemPage from "./Fooditem";
+import MenuItemPage from "./Menuitem";
+import OrderPage from "./Order";
+import InventoryPage from "./Inventory";
 import "../styles/default.css";
 import "../styles/Weather.css";
 import Header from "../components/Navigation/Header";
@@ -43,6 +48,13 @@ function App() {
           <Route path="/food" element={<FoodPage />} />
           <Route path="/cashier" element={<CashierPage />} />
           <Route path="/manager" element={<ManagerPage />} />
+
+          {/* Manager pages */}
+          <Route path="/manager/employee" element={<EmployeePage />} />
+          <Route path="/manager/order" element={<OrderPage />} />
+          <Route path="/manager/fooditem" element={<FoodItemPage />} />
+          <Route path="/manager/menuitem" element={<MenuItemPage />} />
+          <Route path="/manager/inventory" element={<InventoryPage />} />
         </Routes>
       </Router>
     </CartContextProvider>

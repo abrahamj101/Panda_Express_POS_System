@@ -13,12 +13,12 @@ function ManagerPage() {
   const navigate = useNavigate();
 
   const reports = [
-    { title: "Generate Reports", description: "Generate sales reports.", path: "/reports" },
-    { title: "Order History", description: "View past orders.", path: "/orders" },
-    { title: "Inventory Status", description: "Current stock levels.", path: "/inventory" },
-    { title: "Employee Info", description: "Manage and edit employee information.", path: "/employee" },
-    { title: "Menu Items", description: "Manage and edit menu item information.", path: "/menuitems" },
-    { title: "Food Items", description: "Manage and edit food item information.", path: "/fooditems" },
+    { title: "Generate Reports", description: "Generate sales reports.", path: "/manager/report" },
+    { title: "Order History", description: "View past orders.", path: "/manager/order" },
+    { title: "Inventory Status", description: "Current stock levels.", path: "/manager/inventory" },
+    { title: "Employee Info", description: "Manage and edit employee information.", path: "/manager/employee" },
+    { title: "Menu Items", description: "Manage and edit menu item information.", path: "/manager/menuitem" },
+    { title: "Food Items", description: "Manage and edit food item information.", path: "/manager/fooditem" },
   ];
 
   return (
