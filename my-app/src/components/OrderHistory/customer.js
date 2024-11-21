@@ -11,50 +11,63 @@ const Customer = () => {
   const [menuItems, setMenuItems] = useState([]);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const ordersData = await getOrders(0);
-        setOrders(ordersData);
-      } catch (err) {
-        console.error("Error fetching orders:", err);
-      }
-    };
+      const fetchOrders = async () => {
+          try {
+              const ordersData = await getOrders(11);
+              setOrders(ordersData || []);
+          } catch (err) {
+              console.error("Error fetching orders:", err);
+              setOrders([]);
+          }
+      };
 
-    const fetchFoodItems = async () => {
-      try {
-        const foodItemsData = await getFoodItems();
-        setFoodItems(foodItemsData);
-      } catch (err) {
-        console.error("Error fetching food items:", err);
-      }
-    };
+      const fetchFoodItems = async () => {
+          try {
+              const foodItemsData = await getFoodItems();
+              setFoodItems(foodItemsData || []);
+          } catch (err) {
+              console.error("Error fetching food items:", err);
+              setFoodItems([]);
+          }
+      };
 
-    const fetchMenuItems = async () => {
-      try {
-        const menuItemsData = await getMenuItems();
-        setMenuItems(menuItemsData);
-      } catch (err) {
-        console.error("Error fetching menu items:", err);
-      }
-    };
+      const fetchMenuItems = async () => {
+          try {
+              const menuItemsData = await getMenuItems();
+              setMenuItems(menuItemsData || []);
+          } catch (err) {
+              console.error("Error fetching menu items:", err);
+              setMenuItems([]);
+          }
+      };
 
-    fetchOrders();
-    fetchFoodItems();
-    fetchMenuItems();
+      fetchOrders();
+      fetchFoodItems();
+      fetchMenuItems();
   }, []);
+
+  if (!orders.length) {
+      return <div>Loading orders...</div>;
+  }
 
   return (
     <div className="customer-orders-table">
-      {orders.map((order) => (
-        <OrderEntry
-          key={order.order_id}
-          order={order}
-          menuItems={menuItems}
-          foodItems={foodItems}
-        />
-      ))}
+      {orders && orders.length > 0 ? (
+        orders.map((order) => (
+          <OrderEntry
+            key={order.order_id}
+            order={order}
+            menuItems={menuItems}
+            foodItems={foodItems}
+          />
+        ))
+      ) : (
+        <p>No Orders Yet!</p>
+      )}
     </div>
   );
+  
 };
 
 export default Customer;
+
