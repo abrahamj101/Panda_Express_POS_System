@@ -11,6 +11,8 @@
     gap: 20px;
     justify-content: center;
     max-width: 1000px;
+    height: 68vh;
+    padding: 50px;
   }
   
   .report-button {
