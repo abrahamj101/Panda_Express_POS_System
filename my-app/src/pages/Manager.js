@@ -12,9 +12,9 @@ function ManagerPage() {
   const reports = [
     { title: "Sales Report", description: "Daily sales summary." },
     { title: "Inventory Status", description: "Current stock levels." },
-    { title: "Employee Schedule", description: "Employee work schedule." },
-    { title: "Customer Feedback", description: "Recent customer reviews." },
-    { title: "Revenue Analysis", description: "Monthly revenue breakdown." },
+    { title: "Employee Information", description: "Manage and edit employee information." },
+    { title: "Menu Item Analysis", description: "Manage and edit menu item information." },
+    { title: "Food Item Information", description: "Manage and edit food item information." },
     { title: "Product Performance", description: "Top-selling products." }
   ];
 
