@@ -1,13 +1,14 @@
-
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
+import ManagerTable from "../components/ManagerTable";
 
-function EmployeePage(){
+function EmployeePage() {
     return (
-
         <div className="employeePage">
-            <Header/>
-            <Footer/>
+            <Header />
+            <h1>Employee Data</h1>
+            <ManagerTable dataType="employee" />
+            <Footer />
         </div>
     );
 }
