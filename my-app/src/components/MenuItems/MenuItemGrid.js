@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import MenuItemCard from './MenuItemCard';
 import getMenuItems from '../../pages/api/menuItems/getMenuitem'
-import "../../styles/Grid.css"
+import "../../styles/FoodandMenu/Grid.css"
 
 function MenuItemGrid() {
   const [menuItems, setMenuItems] = useState([]);

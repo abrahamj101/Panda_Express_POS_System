@@ -1,6 +1,6 @@
 // ManagerPage.js
 import React, { useState } from "react";
-import "../styles/Manager.css";
+import "../styles/Pages/Manager.css";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import { useZoom } from "../components/Zoom/ZoomContext";

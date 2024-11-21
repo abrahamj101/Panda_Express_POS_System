@@ -182,7 +182,7 @@ app.post("/api/orders", async (req, res) => {
 app.get("/api/orders", async (req, res) => {
   try {
     const result = await pool.query(
-      "SELECT * FROM orders ORDER BY ordered_time DESC LIMIT 10"
+      "SELECT * FROM orders ORDER BY ordered_time DESC LIMIT 100"
     );
     res.json(result.rows);
   } catch (err) {

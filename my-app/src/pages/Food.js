@@ -5,7 +5,7 @@ import Footer from "../components/Navigation/Footer";
 import FoodItemGrid from "../components/FoodItems/FoodItemGrid";
 import BackButton from "../components/Navigation/BackButton";
 import AddToCartButton from "../components/Cart/AddToCartButton";
-import "../styles/default.css";
+import "../styles/Pages/default.css";
 import MenuItem from "../components/MenuItems/MenuItemClass";
 import CartContext from "../components/Cart/CartContext";
 import { useZoom } from "../components/Zoom/ZoomContext";

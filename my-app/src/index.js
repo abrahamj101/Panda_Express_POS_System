@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./styles/index.css";
+import "./styles/Pages/index.css";
 import App from "./pages/App";
 import "bootstrap/dist/css/bootstrap.min.css";
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useZoom } from "../Zoom/ZoomContext";
-import "../../styles/AccessibilityButton.css";
+import "../../styles/Accessibility/AccessibilityButton.css";
 import { FaUniversalAccess, FaSearchPlus, FaSearchMinus } from "react-icons/fa";
 
 const AccessibilityButton = () => {

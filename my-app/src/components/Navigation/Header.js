@@ -1,6 +1,6 @@
 // Header.js
 import CartIcon from "../Cart/CartIcon.js";
-import CartModal from "../Modal/CartModal.js";
+import CartModal from "../Cart/CartModal.js";
 import "../../styles/Header.css";
 import AuthButton from "./AuthButton.js";
 import HomeButton from "./homeButton.js";
