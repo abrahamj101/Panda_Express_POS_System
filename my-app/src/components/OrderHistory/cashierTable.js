@@ -18,7 +18,11 @@ const CashierTable = ({ data }) => {
         </thead>
         <tbody>
           {data.map((order) => {
-            const foodItems = order.fooditem_ids.flat().join(', ');
+            let foodItems;
+            if (order.fooditem_ids){
+              foodItems = order.fooditem_ids.flat().join(', ');
+            }
+
 
             // Format the ordered time in CST
             const orderedTime = new Date(order.ordered_time);

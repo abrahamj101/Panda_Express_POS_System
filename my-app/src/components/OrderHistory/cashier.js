@@ -5,24 +5,54 @@ import "../../styles/OrderHistory/cashier.css"
 
 const Cashier = () => {
   const [orders, setOrders] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (page) => {
     try {
-      const items = await getOrders();
-      setOrders(items);
+      const { orders, totalPages } = await getOrders(page);
+      setOrders(orders);
+      setTotalPages(totalPages);
     } catch (err) {
       console.error('Error fetching orders:', err);
     }
   };
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
+    fetchOrders(currentPage);
+  }, [currentPage]);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   return (
     <div className="cashier-page">
-      <h1>Cashier Orders</h1>
+      <div className="pagination-controls">
+        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+          Previous Page
+        </button>
+        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+          Next Page
+        </button>
+      </div>
       <CashierTable data={orders} />
+      <div className="pagination-controls">
+        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+          Previous Page
+        </button>
+        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+          Next Page
+        </button>
+      </div>
     </div>
   );
 };
