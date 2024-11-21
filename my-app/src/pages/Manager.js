@@ -4,6 +4,7 @@ import "../styles/Manager.css";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import { useNavigate } from "react-router-dom";
+import BackButton from "my-app/src/components/Navigation/BackButton.js";
 
 function ManagerPage() {
   const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -24,7 +25,9 @@ function ManagerPage() {
   return (
     <div className="manager-page">
       <Header />
-
+        <div className="back">
+        <BackButton location="/" />
+        </div>
       <main className="manager-content">
         <div className="report-grid">
           {reports.map((report, index) => (

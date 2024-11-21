@@ -32,6 +32,9 @@ function LandingPage() {
         <Link to="/menu">
           <button className="order-btn">ORDER NOW!</button>
         </Link>
+        <Link to="/manager">
+          <button className="order-btn">MANAGER BRUH!</button>
+        </Link>
       </div>
       <Footer />
     </div>
