@@ -23,8 +23,8 @@ body {
 }
 
 .header h1 {
+  left: 40%;
   position: absolute;
-  width: 100%;
   text-align: center;
 }
 
