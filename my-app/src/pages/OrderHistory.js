@@ -8,7 +8,7 @@ import Cashier from "../components/OrderHistory/cashier";
 
 function CashierPage() {
   const { zoomLevel } = useZoom();
-  const customer = false;
+  const customer = true;
 
   return (
     <div

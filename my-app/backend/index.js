@@ -217,7 +217,7 @@ app.get("/api/orders/customer", async (req, res) => {
     }
 
     const result = await pool.query(
-      "SELECT * FROM orders WHERE customer_id = $1 ORDER BY ordered_time DESC LIMIT 100",
+      "SELECT * FROM orders WHERE customer_id = $1 ORDER BY ordered_time DESC LIMIT 10",
       [id]
     );
 
