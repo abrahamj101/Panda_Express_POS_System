@@ -3,10 +3,12 @@ import getFoodItems from '../pages/api/fooditems/getFooditems';
 import getMenuItems from '../pages/api/menuItems/getMenuitem';
 import getOrders from '../pages/api/orders/getOrders';
 import "../styles/ManagerTable.css";
+import getInventory from "my-app/src/pages/api/inventory/getInventoryItems.js";
 
 function ManagerTable({ dataType }) {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null); // Add error state
+
 
   useEffect(() => {
     async function fetchData() {
@@ -16,10 +18,16 @@ function ManagerTable({ dataType }) {
           result = await getFoodItems();
         } else if (dataType === 'menuitem') {
           result = await getMenuItems();
-        } else if (dataType === 'order') {
-          result = await getOrders();
-        }
+        } 
+        // Fix, make paginated
+        else if (dataType === 'order') {
+          result = await getInventory();
+        } else if (dataType === 'inventory') {
+        result = await getInventory();
+      }
         setData(result);
+
+        console.log(result);
       } catch (error) {
         console.error('Error fetching data:', error);
         setError(error); // Set error state

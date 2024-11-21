@@ -5,12 +5,11 @@ import ManagerTable from "../components/ManagerTable";
 function FoodItemPage() {
     return (
         <div className="foodItemPage">
-            {/* <Header /> */}
+            <Header />
             <main>
-                <h1>Food Items</h1>
                 <ManagerTable dataType="fooditem" />
             </main>
-            {/* <Footer /> */}
+            <Footer />
         </div>
     );
 }
