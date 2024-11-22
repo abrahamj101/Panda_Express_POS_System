@@ -22,7 +22,7 @@ function FoodItemGrid({ foodItemIds, onSelectionChange, menuItemId, onAddFoodIte
   }, []);
 
   const getMaxCount = (type) => {
-    const id = parseInt(menuItemId, 10); // Ensure menuItemId is an integer
+    const id = parseInt(menuItemId, 10);
     if (type === "Side") return 2;
     if (type === "Entree") {
       switch (id) {

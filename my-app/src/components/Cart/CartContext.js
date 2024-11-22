@@ -103,4 +103,3 @@ export const CartContextProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
-

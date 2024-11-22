@@ -38,4 +38,3 @@ const OrderEntry = ({ order, menuItems, foodItems }) => {
 };
 
 export default OrderEntry;
-

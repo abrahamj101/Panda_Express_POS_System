@@ -77,19 +77,13 @@ class MenuItem {
 
         const inventoryIds = await this.getFoodItemInventoryItemIds();
         const inventoryAmounts = await this.getFoodItemInventoryAmounts();
-        // console.log(inventoryIds);
-        // console.log(inventoryAmounts);
         let foodItemIndex = 0;
         for (let i = 0; i < inventoryIds.length; i++){
             const amountToSubtractArray = inventoryAmounts[i]
             const inventoryIdArray = inventoryIds[i]
-            // console.log(amountToSubtractArray);
-            // console.log(inventoryIdArray);
             for (let j = 0; j < amountToSubtractArray.length; j++) {
                 const inventoryId = inventoryIdArray[j];
                 const amountToSubtract = amountToSubtractArray[j];
-                // console.log(inventoryId);
-                // console.log(amountToSubtract)
                 await this.updateInventoryQuantity(inventoryId, amountToSubtract);
                 await this.updateInStockFoodItem(this.foodItemIds[foodItemIndex], inventoryId, amountToSubtract);
             }
