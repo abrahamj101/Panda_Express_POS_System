@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useZoom } from "../Zoom/ZoomContext";
 import "../../styles/Accessibility/AccessibilityButton.css";
-import { FaUniversalAccess, FaSearchPlus, FaSearchMinus, FaLanguage } from "react-icons/fa"; // Import the translate icon
-import GoogleTranslate from "../Translation/TranslationComponent.js"; // Import the translation component
+import { FaUniversalAccess, FaSearchPlus, FaSearchMinus, FaLanguage } from "react-icons/fa"; 
+import GoogleTranslate from "../Translation/TranslationComponent.js"; 
+import TTSButton from "../TextToSpeech/TextToSpeechComponent.js"; // Import the TTSButton component
 
 const AccessibilityButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +28,6 @@ const AccessibilityButton = () => {
             <b>Accessibility Options</b>
           </h2>
           <div className="accessibility-option">
-            {/* Zoom Controls */}
             <button onClick={zoomIn} className="zoom-btn">
               <FaSearchPlus /> Zoom In
             </button>
@@ -38,7 +38,14 @@ const AccessibilityButton = () => {
               Zoom Level: {Math.round(zoomLevel * 100)}%
             </p>
           </div>
-          {/* Translation Feature */}
+          {/* Add TTS Button */}
+          <div className="accessibility-option">
+            <TTSButton
+              className="zoom-btn"
+              ttsEnabled={false} // Initial state
+              onToggle={(enabled) => console.log(`TTS is now ${enabled ? 'enabled' : 'disabled'}`)}
+            />
+          </div>
           <div className="accessibility-option">
             <button className="zoom-btn">
               <FaLanguage /> Translate
