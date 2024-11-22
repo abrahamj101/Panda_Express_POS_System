@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useZoom } from "../Zoom/ZoomContext";
 import "../../styles/Accessibility/AccessibilityButton.css";
-import { FaUniversalAccess, FaSearchPlus, FaSearchMinus } from "react-icons/fa";
+import { FaUniversalAccess, FaSearchPlus, FaSearchMinus, FaLanguage } from "react-icons/fa"; // Import the translate icon
+import GoogleTranslate from "../Translation/TranslationComponent.js"; // Import the translation component
 
 const AccessibilityButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +27,7 @@ const AccessibilityButton = () => {
             <b>Accessibility Options</b>
           </h2>
           <div className="accessibility-option">
+            {/* Zoom Controls */}
             <button onClick={zoomIn} className="zoom-btn">
               <FaSearchPlus /> Zoom In
             </button>
@@ -36,7 +38,15 @@ const AccessibilityButton = () => {
               Zoom Level: {Math.round(zoomLevel * 100)}%
             </p>
           </div>
-          {/* Add more accessibility features here */}
+          {/* Translation Feature */}
+          <div className="accessibility-option">
+            <button className="zoom-btn">
+              <FaLanguage /> Translate
+            </button>
+            <div id="google_translate_element" style={{ marginTop: "8px" }}>
+              <GoogleTranslate />
+            </div>
+          </div>
         </div>
       )}
     </div>
