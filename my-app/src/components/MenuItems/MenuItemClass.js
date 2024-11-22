@@ -74,25 +74,26 @@ class MenuItem {
 
     // Alters the inventory quantities based on the food items associated with this menu item
     async alterInventory() {
-        for (const foodItemId of this.foodItemIds) {
-            const inventoryIds = await this.getFoodItemInventoryItemIds(foodItemId);
-            const inventoryAmounts = await this.getFoodItemInventoryAmounts(foodItemId);
 
-            for (let i = 0; i < inventoryIds.length; i++){
-                const amountToSubtractArray = inventoryAmounts[i]
-                const inventoryIdArray = inventoryIds[i]
-                for (let j = 0; j < amountToSubtractArray.length; j++) {
-                    const inventoryId = inventoryIdArray[j];
-                    const amountToSubtract = amountToSubtractArray[j];
-                    await this.updateInventoryQuantity(inventoryId, amountToSubtract);
-                    
-                    await this.updateInStockFoodItem(foodItemId, inventoryId, amountToSubtract);
-                }
+        const inventoryIds = await this.getFoodItemInventoryItemIds();
+        const inventoryAmounts = await this.getFoodItemInventoryAmounts();
+        let foodItemIndex = 0;
+        for (let i = 0; i < inventoryIds.length; i++){
+            const amountToSubtractArray = inventoryAmounts[i]
+            const inventoryIdArray = inventoryIds[i]
+            for (let j = 0; j < amountToSubtractArray.length; j++) {
+                const inventoryId = inventoryIdArray[j];
+                const amountToSubtract = amountToSubtractArray[j];
+                await this.updateInventoryQuantity(inventoryId, amountToSubtract);
+                await this.updateInStockFoodItem(this.foodItemIds[foodItemIndex], inventoryId, amountToSubtract);
             }
-            
+            foodItemIndex++;
         }
+
+
         for (const inventoryId of this.inventoryItemIds) {
             await this.updateInventoryQuantity(inventoryId, 1);
+            
             await this.updateInStockMenuItem(this.menuitemId, inventoryId);
         }
     }

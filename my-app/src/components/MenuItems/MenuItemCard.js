@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "../../styles/Cards.css";
+import "../../styles/FoodandMenu/Cards.css";
 
 const MenuItemCard = ({ menuItem_name, price, image_link, foodItem_ids, menuItem_id, inventoryItemIds, inStock }) => {
     
@@ -26,4 +26,3 @@ const MenuItemCard = ({ menuItem_name, price, image_link, foodItem_ids, menuItem
 };
 
 export default MenuItemCard;
-

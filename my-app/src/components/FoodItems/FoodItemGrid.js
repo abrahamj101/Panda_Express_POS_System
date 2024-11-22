@@ -2,7 +2,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import getFoodItems from '../../pages/api/fooditems/getFooditems';
 import FoodItemCard from './FoodItemCard';
-import "../../styles/Grid.css";
+import "../../styles/FoodandMenu/Grid.css";
 
 function FoodItemGrid({ foodItemIds, onSelectionChange, menuItemId, onAddFoodItem, onRemoveFoodItem }) {
   const [foodItems, setFoodItems] = useState([]);
@@ -22,7 +22,7 @@ function FoodItemGrid({ foodItemIds, onSelectionChange, menuItemId, onAddFoodIte
   }, []);
 
   const getMaxCount = (type) => {
-    const id = parseInt(menuItemId, 10); // Ensure menuItemId is an integer
+    const id = parseInt(menuItemId, 10);
     if (type === "Side") return 2;
     if (type === "Entree") {
       switch (id) {

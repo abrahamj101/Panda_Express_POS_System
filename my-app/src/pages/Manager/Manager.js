@@ -1,11 +1,10 @@
 // ManagerPage.js
 import React, { useState } from "react";
-import "../styles/Manager.css";
-import Header from "../components/Navigation/Header";
-import Footer from "../components/Navigation/Footer";
+import "../../styles/Pages/Manager.css";
+import Header from "../../components/Navigation/Header";
+import Footer from "../../components/Navigation/Footer";
 import { useNavigate } from "react-router-dom";
-import BackButton from "my-app/src/components/Navigation/BackButton.js";
-
+import BackButton from "../../components/Navigation/BackButton";
 function ManagerPage() {
   const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const [isSignedIn, setIsSignedIn] = useState(false);

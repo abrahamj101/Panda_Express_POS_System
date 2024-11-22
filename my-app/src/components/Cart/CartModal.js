@@ -4,7 +4,7 @@ import "../../styles/Cart/cartStyle.css";
 
 const CartModal = () => {
   const { menuItems, isCartOpen, removeMenuItem, toggleCart, total, tax, completeOrder } = useContext(CartContext);
-  const [foodItemNames, setFoodItemNames] = useState({}); // Store food item names for each menu item
+  const [foodItemNames, setFoodItemNames] = useState({});
 
   useEffect(() => {
     const fetchFoodItemNames = async () => {

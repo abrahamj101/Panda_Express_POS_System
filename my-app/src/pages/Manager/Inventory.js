@@ -1,7 +1,7 @@
 
-import Header from "../components/Navigation/Header";
-import Footer from "../components/Navigation/Footer";
-import ManagerTable from "../components/ManagerTable";
+import Header from "../../components/Navigation/Header";
+import Footer from "../../components/Navigation/Footer";
+import ManagerTable from "../../components/ManagerTable";
 
 function InventoryPage(){
     return (

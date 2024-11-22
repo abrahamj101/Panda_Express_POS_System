@@ -1,6 +1,6 @@
 import React from "react";
-import "../../styles/Cards.css";
-import "../../styles/FoodCard.css"
+import "../../styles/FoodandMenu/Cards.css";
+import "../../styles/FoodandMenu/FoodCard.css"
 
 const FoodItemCard = ({ foodItem, onSelect, onDeselect, quantity, disableAdd }) => {
   return (
@@ -19,4 +19,3 @@ const FoodItemCard = ({ foodItem, onSelect, onDeselect, quantity, disableAdd }) 
 };
 
 export default FoodItemCard;
-

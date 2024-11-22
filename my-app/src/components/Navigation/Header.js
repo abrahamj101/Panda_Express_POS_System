@@ -1,169 +1,26 @@
 // Header.js
-import React, { useState, useEffect } from "react";
-import logo from "../../images/panda-express-logo-1.svg";
-import Login from "../Modal/Login.js"; // Import the Modal component
-import { Link } from "react-router-dom";
 import CartIcon from "../Cart/CartIcon.js";
-import CartModal from "../Modal/CartModal.js";
+import CartModal from "../Cart/CartModal.js";
+import "../../styles/Header.css";
+import AuthButton from "./AuthButton.js";
+import HomeButton from "./homeButton.js";
+import OrderHistory from "./orderHistory.js";
 
 function Header() {
-  const [isModalOpen, setIsModalOpen] = useState(false); 
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [user, setUser] = useState(null);
-
-  const handleLoginClick = () => {
-    setIsModalOpen(true); 
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false); 
-  };
-
-  const parseJwt = (token) => {
-    try {
-      const base64Url = token.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split("")
-          .map((c) => {
-            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-          })
-          .join("")
-      );
-      return JSON.parse(jsonPayload);
-    } catch (e) {
-      console.error("Failed to parse JWT:", e);
-      return null;
-    }
-  };
-
-  // Initialize Google Sign-In
-  const initializeGSI = () => {
-    /* global google */
-    window.google.accounts.id.initialize({
-      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-      callback: handleCredentialResponse,
-      auto_select: false,
-    });
-  };
-
-  // Render Google Sign-In button
-  const renderGoogleButton = () => {
-    if (document.getElementById("googleSignInDiv")) {
-      document.getElementById("googleSignInDiv").innerHTML = "";
-      window.google.accounts.id.renderButton(
-        document.getElementById("googleSignInDiv"),
-        { theme: "outline", size: "large" }
-      );
-    }
-  };
-
-  // Handle Google Sign-In response
-  const handleCredentialResponse = (response) => {
-    const userObject = parseJwt(response.credential);
-    if (userObject) {
-      setUser(userObject);
-      setIsSignedIn(true);
-      localStorage.setItem("authToken", response.credential);
-    }
-  };
-
-  useEffect(() => {
-    const loadGoogleScript = () => {
-      if (!window.google) {
-        const script = document.createElement("script");
-        script.src = "https://accounts.google.com/gsi/client";
-        script.async = true;
-        script.defer = true;
-        script.onload = () => {
-          initializeGSI();
-          renderGoogleButton();
-        };
-        document.body.appendChild(script);
-      } else {
-        initializeGSI();
-        renderGoogleButton();
-      }
-    };
-
-    loadGoogleScript();
-  }, []);
-
-  useEffect(() => {
-    if (!isSignedIn && window.google) {
-      initializeGSI();
-      renderGoogleButton();
-    }
-  }, [isSignedIn]);
-
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      const userObject = parseJwt(token);
-      const currentTime = Math.floor(Date.now() / 1000);
-      if (userObject && userObject.exp > currentTime) {
-        setUser(userObject);
-        setIsSignedIn(true);
-      } else {
-        // Token expired or invalid
-        localStorage.removeItem("authToken");
-      }
-    }
-  }, []);
-
-  const handleSignOut = () => {
-    window.google.accounts.id.disableAutoSelect();
-    setUser(null);
-    setIsSignedIn(false);
-    // Remove token from localStorage
-    localStorage.removeItem("authToken");
-  };
 
   return (
     <header className="header">
-      <div className="logo">
-        <Link to="/">
-          <img src={logo} alt="Panda Express Logo" />
-        </Link>
-      </div>
-      <h1>Panda Express</h1>
+      <HomeButton />
       <div className="header-buttons">
+        <OrderHistory/>
+        {/* Place buttons above these divs for styling issues */}
+        <div></div>
+        <div></div>
+        <div></div>
         <CartIcon />
         <CartModal />
-        {isSignedIn ? (
-          <>
-            <img
-              src={user.picture}
-              alt="Profile"
-              style={{ width: "40px", borderRadius: "50%", marginRight: "10px" }}
-            />
-<button
-  className="logout-btn"
-  onClick={handleSignOut}
-  style={{
-    backgroundColor: "#dd0000",
-    color: "white",
-    outline: "1px solid white",
-    padding: "10px 15px",
-    border: "none",
-    borderRadius: "5px",
-    transition: "all 0.3s ease",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    cursor: "pointer",
-  }}
->
-  Logout
-</button>
-
-          </>
-        ) : (
-          <>
-            <div id="googleSignInDiv"></div>
-          </>
-        )}
+        <AuthButton />
       </div>
-      <Login isOpen={isModalOpen} onClose={handleCloseModal} /> 
     </header>
   );
 }
