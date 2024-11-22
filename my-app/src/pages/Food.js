@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
@@ -9,10 +9,13 @@ import "../styles/Pages/default.css";
 import MenuItem from "../components/MenuItems/MenuItemClass";
 import CartContext from "../components/Cart/CartContext";
 import { useZoom } from "../components/Zoom/ZoomContext";
+import FoodRestriction from "../components/FoodItems/FoodItemRestrictions";
 
 function Food() {
   const { zoomLevel } = useZoom();
   const location = useLocation();
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState({});
   const {
     foodItem_ids,
     menuItem_id,
@@ -36,8 +39,26 @@ function Food() {
     setSelectedItems(newSelectedItems);
   };
 
-  const handleAddToCart = () => {
+  
+
+  const handleAddToCart = async () => {
+    const restriction_ids = await menuItemObject.checkRestriction();
+    console.log(restriction_ids);
+    
+    if (Object.keys(restriction_ids).length > 0) {
+      console.log("Setting modal data and showing modal");
+      setModalData(() => restriction_ids);
+      setShowModal(() => true);
+    } else {
+      console.log("No restrictions found. Adding menu item to cart.");
+      addMenuItem(menuItemObject);
+    }
+  };
+  
+
+  const handleConfirm = () => {
     addMenuItem(menuItemObject);
+    setShowModal(false);
   };
 
   const addFoodItemToMenu = (foodItemId) => {
@@ -63,6 +84,12 @@ function Food() {
           onRemoveFoodItem={removeFoodItemFromMenu}
         />
         <AddToCartButton onClick={handleAddToCart} />
+        <FoodRestriction
+        isOpen={showModal}
+        restrictions={modalData}
+        onClose={() => setShowModal(false)}
+        onConfirm={handleConfirm}
+      />
       </div>
       <Footer />
     </div>

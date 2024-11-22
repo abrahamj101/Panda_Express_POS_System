@@ -86,7 +86,7 @@ function FoodItemGrid({ foodItemIds, onSelectionChange, menuItemId, onAddFoodIte
         foodItem.in_stock &&
         foodItem.seasonal.includes(currentMonth)
     )
-    .sort((a, b) => a.type.localeCompare(b.type));
+    .sort((a, b) => a.type.localeCompare(b.type)).reverse();
 
   const groupedFoodItems = filteredFoodItems.reduce((acc, foodItem) => {
     const { type } = foodItem;
