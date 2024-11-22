@@ -1,16 +1,21 @@
 import Header from "../../components/Navigation/Header";
 import Footer from "../../components/Navigation/Footer";
 import ManagerTable from "../../components/ManagerTable";
+import { useZoom } from "../../components/Zoom/ZoomContext";
 
 function EmployeePage() {
-    return (
-        <div className="employeePage">
-            <Header />
-            <h1>Employee Data</h1>
-            <ManagerTable dataType="employee" />
-            <Footer />
-        </div>
-    );
+  const { zoomLevel } = useZoom();
+  return (
+    <div
+      className="employeePage"
+      style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top left" }}
+    >
+      <Header />
+      <h1>Employee Data</h1>
+      <ManagerTable dataType="employee" />
+      <Footer />
+    </div>
+  );
 }
 
 export default EmployeePage;
