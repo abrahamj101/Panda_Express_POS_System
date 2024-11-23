@@ -8,6 +8,7 @@
     text-align: center;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     max-width: 300px;
+    z-index: 10;
   }
   
   .item-card:hover {

@@ -267,12 +267,14 @@ app.get("/api/inventoryItems", async (req, res) => {
 
 app.get("/api/nutrition", async (req, res) => {
   try {
-    // const { id } = req.query;
-    // if (!id) {
-    //   return res.status(400).json({ error: "Food Item ID is required" });
-    // }
+    const { id } = req.query;
+    if (!id) {
+      return res.status(400).json({ error: "Food Item ID is required" });
+    }
+    
     const result = await pool.query(
-      "SELECT * FROM Nutrition WHERE fooditem_id = 1"
+      "SELECT * FROM Nutrition WHERE fooditem_id = $1",
+      [id]
     );
 
     res.json(result.rows);
