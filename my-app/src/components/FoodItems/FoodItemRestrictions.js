@@ -1,32 +1,36 @@
-import React from "react";
 import "../../styles/FoodandMenu/FoodRestriction.css";
+import React, { useState } from "react";
 
-const FoodRestriction = ({ isOpen, restrictions, onClose, onConfirm }) => {
-  if (!isOpen) return null;
+function FoodRestrictions({ restrictionMap, onConfirm, onCancel }) {
+  if (!restrictionMap || Object.keys(restrictionMap).length === 0) return null;
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>Food Item Restrictions</h2>
+      <div className="modal">
+        <h2>Food Restrictions</h2>
+        <p>
+          The following food items have restrictions. Please confirm to proceed.
+        </p>
         <ul>
-          {Object.entries(restrictions).map(([foodName, restriction], index) => (
+          {Object.entries(restrictionMap).map(([foodItem, restriction], index) => (
             <li key={index}>
-              <strong>{foodName}:</strong> {restriction}
+              <strong>{foodItem}:</strong> {restriction}
             </li>
           ))}
         </ul>
-        <div className="modal-actions">
-          <button onClick={onClose} className="close-button">
+        <div className="modal-buttons">
+          <button className="cancel-button" onClick={onCancel}>
             Cancel
           </button>
-          <button onClick={onConfirm} className="confirm-button">
+          <button className="confirm-button" onClick={onConfirm}>
             Confirm
           </button>
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default FoodRestriction;
+export default FoodRestrictions;
+
 

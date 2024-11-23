@@ -14,8 +14,9 @@ import FoodRestriction from "../components/FoodItems/FoodItemRestrictions";
 function Food() {
   const { zoomLevel } = useZoom();
   const location = useLocation();
-  const [showModal, setShowModal] = useState(false);
-  const [modalData, setModalData] = useState({});
+  const [restrictionMap, setRestrictionMap] = useState({});
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const {
     foodItem_ids,
     menuItem_id,
@@ -41,25 +42,22 @@ function Food() {
 
   
 
+
+
   const handleAddToCart = async () => {
     const restriction_ids = await menuItemObject.checkRestriction();
-    console.log(restriction_ids);
-    
     if (Object.keys(restriction_ids).length > 0) {
-      console.log("Setting modal data and showing modal");
-      setModalData(() => restriction_ids);
-      setShowModal(() => true);
-    } else {
-      console.log("No restrictions found. Adding menu item to cart.");
-      addMenuItem(menuItemObject);
+      const messages = Object.entries(restriction_ids).map(
+          ([foodItemName, restriction]) => `${foodItemName}: ${restriction}`
+      );
+      const alertMessage = `Some restrictions apply to the following items:\n\n${messages.join("\n")}`;
+
+      alert(alertMessage);
     }
+    addMenuItem(menuItemObject);
   };
   
 
-  const handleConfirm = () => {
-    addMenuItem(menuItemObject);
-    setShowModal(false);
-  };
 
   const addFoodItemToMenu = (foodItemId) => {
     menuItemObject.addFoodItem(foodItemId);
@@ -84,12 +82,6 @@ function Food() {
           onRemoveFoodItem={removeFoodItemFromMenu}
         />
         <AddToCartButton onClick={handleAddToCart} />
-        <FoodRestriction
-        isOpen={showModal}
-        restrictions={modalData}
-        onClose={() => setShowModal(false)}
-        onConfirm={handleConfirm}
-      />
       </div>
       <Footer />
     </div>
