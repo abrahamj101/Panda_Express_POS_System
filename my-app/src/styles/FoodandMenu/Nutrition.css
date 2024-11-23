@@ -1,0 +1,56 @@
+.nutrition-icon-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  z-index: 10000000;
+}
+
+.info-icon {
+  font-size: 1.2rem;
+  color: #007bff;
+}
+
+.nutrition-tooltip {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  z-index: 11000000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  width: 300px;
+  overflow-y: auto;
+  max-height: 250px; 
+}
+
+.nutrition-tooltip table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.nutrition-tooltip th,
+.nutrition-tooltip td {
+  text-align: left;
+  padding: 5px;
+}
+
+.nutrition-tooltip th {
+  background-color: #f4f4f4;
+}
+
+.nutrition-tooltip td {
+  border-bottom: 1px solid #ddd;
+}
+
+.nutrition-tooltip tr:last-child td {
+  border-bottom: none;
+}
+
+.item-card {
+  position: relative;
+  overflow: visible;
+}
