@@ -193,6 +193,23 @@ class MenuItem {
     }
     
     
+    async checkRestriction() {
+        const restrictions = await this.extractFoodItemData("restriction");
+        const foodItemNames = await this.extractFoodItemData("fooditem_name");
+        let restrictionMap = {};
+    
+        for (let i = 0; i < this.foodItemIds.length; ++i) {
+            const restriction = restrictions[i];
+            const foodItemName = foodItemNames[i];
+    
+            if (restriction) {
+                restrictionMap[foodItemName] = restriction;
+            }
+        }
+    
+        return restrictionMap;
+    }
+    
     
 
 }

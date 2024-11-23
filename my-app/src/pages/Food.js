@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
@@ -9,10 +9,14 @@ import "../styles/Pages/default.css";
 import MenuItem from "../components/MenuItems/MenuItemClass";
 import CartContext from "../components/Cart/CartContext";
 import { useZoom } from "../components/Zoom/ZoomContext";
+import FoodRestriction from "../components/FoodItems/FoodItemRestrictions";
 
 function Food() {
   const { zoomLevel } = useZoom();
   const location = useLocation();
+  const [restrictionMap, setRestrictionMap] = useState({});
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const {
     foodItem_ids,
     menuItem_id,
@@ -36,9 +40,24 @@ function Food() {
     setSelectedItems(newSelectedItems);
   };
 
-  const handleAddToCart = () => {
+  
+
+
+
+  const handleAddToCart = async () => {
+    const restriction_ids = await menuItemObject.checkRestriction();
+    if (Object.keys(restriction_ids).length > 0) {
+      const messages = Object.entries(restriction_ids).map(
+          ([foodItemName, restriction]) => `${foodItemName}: ${restriction}`
+      );
+      const alertMessage = `Some restrictions apply to the following items:\n\n${messages.join("\n")}`;
+
+      alert(alertMessage);
+    }
     addMenuItem(menuItemObject);
   };
+  
+
 
   const addFoodItemToMenu = (foodItemId) => {
     menuItemObject.addFoodItem(foodItemId);

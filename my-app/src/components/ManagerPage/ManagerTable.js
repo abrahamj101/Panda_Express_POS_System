@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import getFoodItems from "../pages/api/fooditems/getFooditems";
-import getMenuItems from "../pages/api/menuItems/getMenuitem";
-import getOrders from "../pages/api/orders/getOrders";
-import getInventory from "../pages/api/inventory/getInventoryItems";
-import "../styles/ManagerTable.css";
+import getFoodItems from "../../pages/api/fooditems/getFooditems";
+import getMenuItems from "../../pages/api/menuItems/getMenuitem";
+import getOrders from "../../pages/api/orders/getOrders";
+import getInventory from "../../pages/api/inventory/getInventoryItems";
+import "../../styles/ManagerTable.css";
 
 function ManagerTable({ dataType }) {
   const [data, setData] = useState([]); // Default value as an empty array
