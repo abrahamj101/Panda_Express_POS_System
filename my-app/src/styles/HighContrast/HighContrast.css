@@ -1,0 +1,38 @@
+/* HighContrast.css */
+.high-contrast {
+    background-color: black !important;
+    color: white !important;
+    border-color: white !important;
+  }
+  
+  .high-contrast a {
+    color: cyan !important;
+  }
+  
+  .high-contrast .header,
+  .high-contrast .footer {
+    background-color: black !important;
+    color: white !important;
+  }
+  
+  .high-contrast .button,
+  .high-contrast .order-btn {
+    background-color: yellow !important;
+    color: black !important;
+  }
+  
+  .high-contrast .zoom-btn {
+    background-color: white !important;
+    color: black !important;
+  }
+  .high-contrast .weather-widget {
+    background-color: white !important;
+    color: black !important;
+    border: 3px solid black !important;
+    box-shadow: none !important;
+  }
+  
+  .high-contrast .weather-description {
+    color: black !important;
+  }
+  

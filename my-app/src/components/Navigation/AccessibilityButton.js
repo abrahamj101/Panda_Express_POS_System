@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 import { useZoom } from "../Zoom/ZoomContext";
 import "../../styles/Accessibility/AccessibilityButton.css";
-import { FaUniversalAccess, FaSearchPlus, FaSearchMinus } from "react-icons/fa";
+import { FaUniversalAccess, FaSearchPlus, FaSearchMinus, FaLanguage, FaAdjust } from "react-icons/fa";
+import GoogleTranslate from "../Translation/TranslationComponent.js"; 
+import TTSButton from "../TextToSpeech/TextToSpeechComponent.js"; // Import the TTSButton component
+import "../../styles/HighContrast/HighContrast.css";
 
 const AccessibilityButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { zoomIn, zoomOut, zoomLevel } = useZoom();
+  const [isHighContrast, setIsHighContrast] = useState(false);
 
   const toggleAccessibilityMenu = () => {
     setIsOpen(!isOpen);
+  };
+  const toggleHighContrast = () => {
+    setIsHighContrast(!isHighContrast);
+    document.body.classList.toggle("high-contrast", !isHighContrast);
   };
 
   return (
@@ -36,7 +44,27 @@ const AccessibilityButton = () => {
               Zoom Level: {Math.round(zoomLevel * 100)}%
             </p>
           </div>
-          {/* Add more accessibility features here */}
+          {/* Add TTS Button */}
+          <div className="accessibility-option">
+            <TTSButton
+              className="zoom-btn"
+              ttsEnabled={false} // Initial state
+              onToggle={(enabled) => console.log(`TTS is now ${enabled ? 'enabled' : 'disabled'}`)}
+            />
+          </div>
+          <div className="accessibility-option">
+            <button className="zoom-btn">
+              <FaLanguage /> Translate
+            </button>
+            <div id="google_translate_element" style={{ marginTop: "8px" }}>
+              <GoogleTranslate />
+            </div>
+          </div>
+          <div className="accessibility-option">
+            <button onClick={toggleHighContrast} className="zoom-btn">
+              <FaAdjust /> {isHighContrast ? "Disable High Contrast" : "Enable High Contrast"}
+            </button>
+          </div>
         </div>
       )}
     </div>
