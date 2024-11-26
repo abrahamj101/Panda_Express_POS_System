@@ -10,12 +10,13 @@ import MenuItem from "../components/MenuItems/MenuItemClass";
 import CartContext from "../components/Cart/CartContext";
 import { useZoom } from "../components/Zoom/ZoomContext";
 import FoodRestriction from "../components/FoodItems/FoodItemRestrictions";
+import Favorites from "../components/FoodItems/Favorites";
 
 function Food() {
   const { zoomLevel } = useZoom();
   const location = useLocation();
-  const [restrictionMap, setRestrictionMap] = useState({});
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const isLoggedIn = true;
+
 
   const {
     foodItem_ids,
@@ -74,6 +75,14 @@ function Food() {
       <Header />
       <div className="main-content">
         <BackButton location="/menu" />
+        {isLoggedIn ? (
+                <>
+                <Favorites />
+                </>
+                ) :(
+                <>
+                </>
+              )}
         <FoodItemGrid
           foodItemIds={foodItem_ids}
           menuItemId={menuItem_id}

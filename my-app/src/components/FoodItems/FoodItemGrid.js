@@ -8,6 +8,7 @@ function FoodItemGrid({ foodItemIds, onSelectionChange, menuItemId, onAddFoodIte
   const [foodItems, setFoodItems] = useState([]);
   const [itemCounts, setItemCounts] = useState({});
 
+
   const fetchFoodItems = async () => {
     try {
       const items = await getFoodItems();
