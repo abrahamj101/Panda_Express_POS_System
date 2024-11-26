@@ -1,0 +1,19 @@
+Scrum Meeting:
+
+What have you worked on:
+    Nathan Tserng   - accessibility button
+    Christopher Kim - ordering functionality
+    Robert Longo    - worked on manager page
+    Roshan Sreedhar - work on translate api
+    Joshua Abraham  - worked on color contrast
+
+
+WHat you are doing today:
+    Nathan Tserng   - adding zoom functionality
+    Christopher Kim - work on cashier page and order history for both cashier and customer
+    Robert Longo    - Finish manager page with functionality
+    Roshan Sreedhar - work on translate api
+    Joshua Abraham  - work on TTS
+
+Are we on track:
+    We are back on track, we have most of the functionality of the page done, we just need to finish manager and get the accessibility stuff down

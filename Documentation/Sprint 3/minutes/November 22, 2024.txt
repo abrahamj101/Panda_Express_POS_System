@@ -1,0 +1,19 @@
+Scrum Meeting:
+
+What have you worked on:
+    Nathan Tserng   - Helped robert with manager page
+    Christopher Kim - finish the nutrition and allergen stuff
+    Robert Longo    - worked on manager page
+    Roshan Sreedhar - finished translate, TTS, and color contrast
+    Joshua Abraham  - worked on color contrast
+
+
+WHat you are doing today:
+    Nathan Tserng   - Help robert with manager page
+    Christopher Kim - be able to show the customers their favorite dishes when ordering
+    Robert Longo    - Finish manager page with functionality
+    Roshan Sreedhar - work on other accessibility things
+    Joshua Abraham  - work on other accessibility things
+
+Are we on track:
+    The cashier and customer side is almost done to completetion including all the extra special functionality. We should be close to finished

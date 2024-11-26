@@ -1,0 +1,19 @@
+Scrum Meeting:
+
+What have you worked on:
+    Nathan Tserng   - added zoom buttons to the accessibility modal
+    Christopher Kim - finshed adding order history stuff
+    Robert Longo    - worked on manager page
+    Roshan Sreedhar - work on translate api
+    Joshua Abraham  - worked on color contrast
+
+
+WHat you are doing today:
+    Nathan Tserng   - Help robert with manager page
+    Christopher Kim - work on adding nutrtion and allergen info to the food items
+    Robert Longo    - Finish manager page with functionality
+    Roshan Sreedhar - work on translate api
+    Joshua Abraham  - work on TTS
+
+Are we on track:
+    Again, the manager page is taking some time, but now nathan is helping out with it so we should be able to finish it before the sprint
