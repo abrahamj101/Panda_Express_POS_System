@@ -1,20 +1,20 @@
-// FoodItemGrid.js
-import React, { Fragment, useState, useEffect } from 'react';
-import getFoodItems from '../../pages/api/fooditems/getFooditems';
-import FoodItemCard from './FoodItemCard';
+import React, { Fragment, useState, useEffect } from "react";
+import getFoodItems from "../../pages/api/fooditems/getFooditems";
+import FoodItemCard from "./FoodItemCard";
+import Favorites from "./Favorites";
 import "../../styles/FoodandMenu/Grid.css";
 
-function FoodItemGrid({ foodItemIds, onSelectionChange, menuItemId, onAddFoodItem, onRemoveFoodItem }) {
+function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId }) {
   const [foodItems, setFoodItems] = useState([]);
   const [itemCounts, setItemCounts] = useState({});
-
+  const isLoggedIn = true;
 
   const fetchFoodItems = async () => {
     try {
       const items = await getFoodItems();
       setFoodItems(items);
     } catch (err) {
-      console.error('Error fetching food items:', err);
+      console.error("Error fetching food items:", err);
     }
   };
 
@@ -43,41 +43,38 @@ function FoodItemGrid({ foodItemIds, onSelectionChange, menuItemId, onAddFoodIte
     const { fooditem_id, type } = foodItem;
     const maxCount = getMaxCount(type);
 
-    // Calculate the current total count for this type
     const currentTypeCount = Object.values(itemCounts).reduce(
-      (count, { type: itemType, quantity }) => 
+      (count, { type: itemType, quantity }) =>
         itemType === type ? count + quantity : count,
       0
     );
 
     if (currentTypeCount < maxCount) {
-      setItemCounts(prevCounts => ({
+      setItemCounts((prevCounts) => ({
         ...prevCounts,
         [fooditem_id]: {
           type,
           quantity: (prevCounts[fooditem_id]?.quantity || 0) + 1,
         },
       }));
-      
+
       onAddFoodItem(fooditem_id);
     }
   };
 
   const handleDeselectItem = (foodItem) => {
     const { fooditem_id, type } = foodItem;
-    
-    setItemCounts(prevCounts => ({
+
+    setItemCounts((prevCounts) => ({
       ...prevCounts,
       [fooditem_id]: {
         type,
-        quantity: (prevCounts[fooditem_id]?.quantity) - 1,
+        quantity: (prevCounts[fooditem_id]?.quantity || 0) - 1,
       },
     }));
-  
+
     onRemoveFoodItem(fooditem_id);
   };
-  
-  
 
   const currentMonth = new Date().getMonth() + 1;
   const filteredFoodItems = foodItems
@@ -87,7 +84,8 @@ function FoodItemGrid({ foodItemIds, onSelectionChange, menuItemId, onAddFoodIte
         foodItem.in_stock &&
         foodItem.seasonal.includes(currentMonth)
     )
-    .sort((a, b) => a.type.localeCompare(b.type)).reverse();
+    .sort((a, b) => a.type.localeCompare(b.type))
+    .reverse();
 
   const groupedFoodItems = filteredFoodItems.reduce((acc, foodItem) => {
     const { type } = foodItem;
@@ -98,10 +96,22 @@ function FoodItemGrid({ foodItemIds, onSelectionChange, menuItemId, onAddFoodIte
 
   return (
     <Fragment>
+      {isLoggedIn ? (<Favorites
+        menuItemId={menuItemId}
+        customerId={0}
+        onAddFoodItem={handleSelectItem}
+        onRemoveFoodItem={handleDeselectItem}
+        itemCounts={itemCounts}
+        getMaxCount={getMaxCount}
+      />
+      ) : (
+        <></>
+      )}
+      
       {Object.keys(groupedFoodItems).map((type) => {
         const maxCount = getMaxCount(type);
         const currentTypeCount = Object.values(itemCounts).reduce(
-          (count, { type: itemType, quantity }) => 
+          (count, { type: itemType, quantity }) =>
             itemType === type ? count + quantity : count,
           0
         );
@@ -109,7 +119,7 @@ function FoodItemGrid({ foodItemIds, onSelectionChange, menuItemId, onAddFoodIte
 
         return (
           <div key={type}>
-            <h1 className='type'>{type}</h1>
+            <h1 className="type">{type}</h1>
             <div className="item-grid">
               {groupedFoodItems[type].map((foodItem) => (
                 <FoodItemCard
