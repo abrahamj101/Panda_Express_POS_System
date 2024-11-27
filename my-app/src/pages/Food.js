@@ -9,13 +9,12 @@ import "../styles/Pages/default.css";
 import MenuItem from "../components/MenuItems/MenuItemClass";
 import CartContext from "../components/Cart/CartContext";
 import { useZoom } from "../components/Zoom/ZoomContext";
-import FoodRestriction from "../components/FoodItems/FoodItemRestrictions";
+
 
 function Food() {
   const { zoomLevel } = useZoom();
   const location = useLocation();
-  const [restrictionMap, setRestrictionMap] = useState({});
-  const [isModalVisible, setIsModalVisible] = useState(false);
+
 
   const {
     foodItem_ids,
