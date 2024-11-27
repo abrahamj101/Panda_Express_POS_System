@@ -84,6 +84,11 @@
     color: #000 !important;
 }
 
+/* High Contrast Mode */
+.high-contrast .App {
+  background-color: #fba3aa; /* Light red background for high contrast mode */
+}
+
 /* Input Fields */
 .high-contrast input,
 .high-contrast textarea,
