@@ -31,7 +31,7 @@ const addOrders = async (menuItems, total, tax) => {
     };
 
     // Send the POST request
-    const response = await fetch("http://localhost:5001/api/orders", {
+    const response = await fetch("https://project-3-team-3-b-backend.vercel.app/api/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

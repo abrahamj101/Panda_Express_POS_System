@@ -1,6 +1,6 @@
 const removeMenuItem = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5001/api/menuItems/${id}`, {
+      const response = await fetch(`https://project-3-team-3-b-backend.vercel.app/api/menuItems/${id}`, {
         method: "DELETE",
       });
   

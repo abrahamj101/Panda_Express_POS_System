@@ -7,7 +7,7 @@ const updateMenuItemInStock = async (id, inStock) => {
       };
   
       // Send the POST request
-      const response = await fetch(`http://localhost:5001/api/menuitems/update/instock`, {
+      const response = await fetch(`https://project-3-team-3-b-backend.vercel.app/api/menuitems/update/instock`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

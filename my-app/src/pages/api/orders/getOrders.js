@@ -1,6 +1,6 @@
 const getOrders = async (page) => {
   try {
-    const response = await fetch(`http://localhost:5001/api/orders?page=${page}`);
+    const response = await fetch(`https://project-3-team-3-b-backend.vercel.app/api/orders?page=${page}`);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
