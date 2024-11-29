@@ -7,7 +7,7 @@ function MenuItemPage() {
   const { zoomLevel } = useZoom();
   return (
     <div
-      className="employeePage"
+      className="menuitemPage"//"employeePage"
       style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top left" }}
     >
       <Header />
