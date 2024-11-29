@@ -283,3 +283,22 @@ app.get("/api/nutrition", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch orders" });
   }
 });
+
+
+/**
+ * Employees
+ */
+
+// Endpoint to get all employees
+app.get("/api/employees", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM employees ORDER BY employee_id"
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch employee data" });
+  }
+});
+

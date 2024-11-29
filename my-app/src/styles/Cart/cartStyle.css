@@ -1,6 +1,6 @@
 /* Cart Icon */
 .cart-icon {
-  position: fixed;
+  position: static;
   top: 22px;
   right: 210px;
   cursor: pointer;

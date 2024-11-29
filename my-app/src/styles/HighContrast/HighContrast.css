@@ -1,4 +1,4 @@
-/* HighContrast.css */
+/* HighContrast.css
 .high-contrast {
     background-color: black !important;
     color: white !important;
@@ -35,4 +35,127 @@
   .high-contrast .weather-description {
     color: black !important;
   }
-  
+   */
+
+
+   /* HighContrast.css - WCAG Compliant */
+
+.high-contrast {
+    background-color: #000 !important; /* Black for maximum contrast */
+    color: #FFF !important; /* White text for readability */
+    border-color: #FFF !important;
+}
+
+/* Links */
+.high-contrast a {
+    color: #00FFFF !important; /* Cyan for contrast against black */
+    text-decoration: underline; /* Add underline for visual clarity */
+}
+.high-contrast a:focus,
+.high-contrast a:hover {
+    color: #FFFF00 !important; /* Yellow on hover or focus for distinction */
+}
+
+/* Headers and Footers */
+.high-contrast .header,
+.high-contrast .footer {
+    background-color: #000 !important;
+    color: #FFF !important;
+    border-bottom: 2px solid #FFF;
+    box-shadow: none; /* Remove shadows for simplicity */
+}
+
+/* Buttons */
+.high-contrast .button,
+.high-contrast .order-btn {
+    background-color: #FFFF00 !important; /* Bright yellow for visibility */
+    color: #000 !important; /* Black text for readability */
+    border: 2px solid #000 !important; /* Visible border */
+    font-weight: bold; /* Enhance text readability */
+}
+.high-contrast .button:focus,
+.high-contrast .order-btn:focus {
+    outline: 3px solid #00FFFF; /* Cyan outline for keyboard navigation */
+    outline-offset: 2px;
+}
+.high-contrast .button:hover,
+.high-contrast .order-btn:hover {
+    background-color: #FFA500 !important; /* Orange hover effect for clarity */
+    color: #000 !important;
+}
+
+/* High Contrast Mode */
+.high-contrast .App {
+  background-color: #fba3aa; /* Light red background for high contrast mode */
+}
+
+/* Input Fields */
+.high-contrast input,
+.high-contrast textarea,
+.high-contrast select {
+    background-color: #000 !important;
+    color: #FFF !important;
+    border: 2px solid #FFF !important;
+    padding: 10px;
+}
+.high-contrast input:focus,
+.high-contrast textarea:focus,
+.high-contrast select:focus {
+    outline: 3px solid #00FFFF; /* Cyan outline for focus state */
+    outline-offset: 2px;
+}
+
+/* Form Labels */
+.high-contrast label {
+    color: #FFF !important; /* White labels for maximum contrast */
+    font-weight: bold;
+}
+
+/* Tables */
+.high-contrast table {
+    background-color: #000 !important;
+    color: #FFF !important;
+    border-collapse: collapse;
+    width: 100%;
+}
+.high-contrast th,
+.high-contrast td {
+    border: 2px solid #FFF;
+    padding: 8px;
+    text-align: left;
+}
+.high-contrast th {
+    background-color: #333;
+    color: #FFF;
+    font-weight: bold;
+}
+
+/* Weather Widget */
+.high-contrast .weather-widget {
+    background-color: #FFF !important;
+    color: #000 !important;
+    border: 2px solid #000 !important;
+}
+.high-contrast .weather-description {
+    color: #000 !important;
+}
+
+/* Accessible Focus States */
+.high-contrast :focus {
+    outline: 3px dashed #00FFFF; /* Universal focus indicator for all elements */
+    outline-offset: 2px;
+}
+
+/* Links Without Text (Icons) */
+.high-contrast a[aria-label] {
+    border: 2px solid transparent; /* Ensure focusable links without text are identifiable */
+}
+.high-contrast a[aria-label]:focus {
+    border-color: #00FFFF;
+}
+
+/* General Adjustments */
+.high-contrast * {
+    font-size: 2rem;
+    line-height: 1.5;
+}

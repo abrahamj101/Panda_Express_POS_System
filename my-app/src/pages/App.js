@@ -34,12 +34,14 @@ function LandingPage() {
       <div className="main-content">
         <WeatherWidget weather={weather} error={error} />
         <ImageCarousel />
-        <Link to="/menu">
-          <button className="order-btn">ORDER NOW!</button>
-        </Link>
-        <Link to="/manager">
-          <button className="order-btn">MANAGER BRUH!</button>
-        </Link>
+        <div className="button-container">
+          <Link to="/menu">
+            <button className="order-btn">ORDER NOW!</button>
+          </Link>
+          <Link to="/manager">
+            <button className="order-btn">MANAGER BRUH!</button>
+          </Link>
+          </div>
       </div>
       <Footer />
     </div>

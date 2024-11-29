@@ -84,6 +84,13 @@ body {
   min-height: 100vh;
 }
 
+/* Add this to your existing CSS */
+.button-container {
+  display: flex;
+  justify-content: center; /* Center the buttons horizontally */
+  gap: 50px; /* Horizontal space between the buttons */
+}
+
 .footer {
   background-color: #b02321;
   color: white;
@@ -103,6 +110,11 @@ body {
   display: inline-block;
   text-align: center;
   transition: background-color 0.3s ease;
+}
+
+/* Add space between the two buttons */
+.order-btn + .order-btn {
+  margin-left: 300px;  /* Horizontal space between the buttons */
 }
 
 .order-btn:hover {

@@ -3,6 +3,7 @@ import getFoodItems from "../../pages/api/fooditems/getFooditems";
 import getMenuItems from "../../pages/api/menuItems/getMenuitem";
 import getOrders from "../../pages/api/orders/getOrders";
 import getInventory from "../../pages/api/inventory/getInventoryItems";
+import getEmployees from "../../pages/api/employees/getEmployees";
 import "../../styles/ManagerTable.css";
 
 function ManagerTable({ dataType }) {
@@ -30,6 +31,10 @@ function ManagerTable({ dataType }) {
           case "inventory":
             result = await getInventory();
             setTitle("Inventory List");
+            break;
+          case "employee":
+            result = await getEmployees();
+            setTitle("Employee List");
             break;
           default:
             throw new Error("Invalid data type");
