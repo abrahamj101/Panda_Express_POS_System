@@ -108,6 +108,8 @@ function AuthButton() {
       localStorage.removeItem("authToken");
     };
 
+    console.log(user)
+
   return (
     <div className="auth-button-container">
       {isSignedIn ? (
