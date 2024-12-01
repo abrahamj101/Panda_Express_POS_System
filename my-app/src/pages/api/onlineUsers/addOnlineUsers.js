@@ -11,7 +11,7 @@ const addOnlineUsers = async (firstName, lastName, email, role, customerId = nul
       };
   
       // Send the POST request to the backend
-      const response = await fetch("http://localhost:5001/api/online-users", {
+      const response = await fetch("https://project-3-team-3-b-backend.vercel.app/api/online-users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

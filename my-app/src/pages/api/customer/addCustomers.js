@@ -9,7 +9,7 @@ const addCustomer = async (firstName, lastName, paymentMethod, paymentInformatio
       };
   
       // Send the POST request
-      const response = await fetch("http://localhost:5001/api/customers", {
+      const response = await fetch("https://project-3-team-3-b-backend.vercel.app/api/customers", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -6,7 +6,7 @@ const getOnlineUsersEmail = async (email) => {
       }
   
       // Call the backend endpoint to check if the user exists
-      const response = await fetch(`http://localhost:5001/api/online-users/exists?email=${encodeURIComponent(email)}`);
+      const response = await fetch(`https://project-3-team-3-b-backend.vercel.app/api/online-users/exists?email=${encodeURIComponent(email)}`);
   
       // If the user is not found, return null
       if (response.status === 404) {
