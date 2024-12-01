@@ -48,6 +48,7 @@ function ImageCarousel() {
         useKeyboardArrows={true}
         aria-roledescription="carousel"
         stopOnHover={true}
+        aria-live="polite"
       >
         {carouselItems.map((item, index) => (
           <div className="image-box" key={index}>
