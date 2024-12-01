@@ -1,7 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const BackButton = ({location}) => {
-  const navigate = useNavigate();
 
   return (
     <Link to={location} style={{ textDecoration: 'none' }}>

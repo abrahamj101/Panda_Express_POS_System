@@ -1,8 +1,13 @@
+html {
+  overflow-y: scroll;
+}
+
 .manager-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
+    height: 100vh;
   }
   
   .report-grid {
