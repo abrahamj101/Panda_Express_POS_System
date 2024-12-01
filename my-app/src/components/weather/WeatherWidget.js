@@ -11,7 +11,7 @@ function WeatherWidget({ weather, error }) {
 
   return (
     <div className="weather-widget">
-      <h3 className="weather-city">{weather.name}</h3>
+      <p className="weather-city">{weather.name}</p>
       <div className="weather-info">
         <img
           className="weather-icon"
