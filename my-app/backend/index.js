@@ -302,3 +302,65 @@ app.get("/api/employees", async (req, res) => {
   }
 });
 
+
+/**
+ * Online Users
+ */
+
+// Add an online user
+app.post("/api/online-users", async (req, res) => {
+  try {
+    const { first_name, last_name, email, role, customer_id, employee_id } = req.body;
+    const result = await pool.query(
+      "INSERT INTO onlineusers (first_name, last_name, email, role, customer_id, employee_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      [first_name, last_name, email, role, customer_id, employee_id]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "An error occurred while adding the online user" });
+  }
+});
+
+app.get("/api/online-users", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM onlineusers ORDER BY user_id");
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "Failed to fetch customer data" });
+  }
+});
+
+
+/**
+ * Customers
+ */
+// Get all customers
+app.get("/api/customers", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM customers ORDER BY customer_id");
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "Failed to fetch customer data" });
+  }
+});
+
+// Add a customer
+app.post("/api/customers", async (req, res) => {
+  try {
+    const { customer_first_name, customer_last_name, payment_method, payment_information } = req.body;
+
+    const result = await pool.query(
+      "INSERT INTO customers (customer_first_name, customer_last_name, payment_method, payment_information) VALUES ($1, $2, $3, $4) RETURNING *",
+      [customer_first_name, customer_last_name, payment_method, payment_information]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "An error occurred while adding the customer" });
+  }
+});
