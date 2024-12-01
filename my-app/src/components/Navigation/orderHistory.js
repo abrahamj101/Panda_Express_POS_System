@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
+import LoginContext from "../Login/LoginContext";
+import { useContext } from "react";
 
 const OrderHistory = () => {
-  const x = true;
+  const {isLoggedIn} = useContext(LoginContext)
   return (
     <div>
-      {x ? (
+      {isLoggedIn ? (
         <>
           <Link to="/order-history" className="header-buttons">
             <p>Order History</p>

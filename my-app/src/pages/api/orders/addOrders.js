@@ -1,4 +1,4 @@
-const addOrders = async (menuItems, total, tax) => {
+const addOrders = async (customerId, menuItems, total, tax) => {
   try {
     // Build the request body
     const now = new Date();
@@ -18,11 +18,9 @@ const addOrders = async (menuItems, total, tax) => {
     // Format the date as "YYYY-MM-DD HH:mm:ss.mmmuuu"
     const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}.${millisecond}${microsecond}`;
 
-    console.log(formattedDate);
-
     const body = {
       employee_id: 0,
-      customer_id: 0,
+      customer_id: customerId,
       menuitem_ids: menuItems.map(item => item.getMenuItemId()),
       total,
       tax,

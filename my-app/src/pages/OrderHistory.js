@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../styles/Pages/default.css";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";
 import { useZoom } from "../components/Zoom/ZoomContext";
 import Customer from "../components/OrderHistory/customer";
 import Cashier from "../components/OrderHistory/cashier";
+import LoginContext from "../components/Login/LoginContext";
 
 function CashierPage() {
   const { zoomLevel } = useZoom();
-  const customer = true;
+  const { role } = useContext(LoginContext);
 
   return (
     <div
@@ -17,7 +18,7 @@ function CashierPage() {
     >
       <Header />
       <div className="main-content">
-      {customer ? (
+      {role === "customer" ? (
         <Customer />
       ) : (
         <Cashier/> 

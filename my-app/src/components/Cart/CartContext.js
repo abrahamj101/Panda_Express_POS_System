@@ -42,10 +42,10 @@ export const CartContextProvider = ({ children }) => {
     setTax(0);
   };
 
-  const completeOrder = async () => {
+  const completeOrder = async (customerId=0) => {
     if (menuItems.length > 0) {
       try {
-        await addOrders(menuItems, total, tax);
+        await addOrders(customerId, menuItems, total, tax);
         for (let menuItem of menuItems) {
           await menuItem.alterInventory();
         }

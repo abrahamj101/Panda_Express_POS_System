@@ -2,7 +2,7 @@
 import CartIcon from "../Cart/CartIcon.js";
 import CartModal from "../Cart/CartModal.js";
 import "../../styles/Header.css";
-import AuthButton from "./AuthButton.js";
+import AuthButton from "../Login/AuthButton.js";
 import HomeButton from "./homeButton.js";
 import OrderHistory from "./orderHistory.js";
 
