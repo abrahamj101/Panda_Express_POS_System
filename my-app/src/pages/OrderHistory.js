@@ -6,6 +6,7 @@ import { useZoom } from "../components/Zoom/ZoomContext";
 import Customer from "../components/OrderHistory/customer";
 import Cashier from "../components/OrderHistory/cashier";
 import LoginContext from "../components/Login/LoginContext";
+import BackButton from "../components/Navigation/BackButton";
 
 function CashierPage() {
   const { zoomLevel } = useZoom();
@@ -18,6 +19,7 @@ function CashierPage() {
     >
       <Header />
       <div className="main-content">
+      <BackButton location='/'/>
       {role === "customer" ? (
         <Customer />
       ) : (

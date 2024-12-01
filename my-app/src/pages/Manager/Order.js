@@ -24,12 +24,11 @@ import "../../styles/Pages/default.css";
 import Header from "../../components/Navigation/Header";
 import Footer from "../../components/Navigation/Footer";
 import { useZoom } from "../../components/Zoom/ZoomContext";
-import Customer from "../../components/OrderHistory/customer";
 import Cashier from "../../components/OrderHistory/cashier";
+import BackButton from "../../components/Navigation/BackButton";
 
 function OrderPage() {
   const { zoomLevel } = useZoom();
-  const customer = true; // Adjust this based on logic to identify the user's role.
 
   return (
     <div
@@ -38,7 +37,8 @@ function OrderPage() {
     >
       <Header />
       <div className="main-content">
-        {customer ? <Customer /> : <Cashier />}
+        <BackButton location='/manager'/>
+        <Cashier />
       </div>
       <Footer />
     </div>
