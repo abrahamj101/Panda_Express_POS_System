@@ -1,13 +1,14 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useContext } from "react";
 import getFoodItems from "../../pages/api/fooditems/getFooditems";
 import FoodItemCard from "./FoodItemCard";
 import Favorites from "./Favorites";
 import "../../styles/FoodandMenu/Grid.css";
+import LoginContext from "../Login/LoginContext";
 
 function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId }) {
   const [foodItems, setFoodItems] = useState([]);
   const [itemCounts, setItemCounts] = useState({});
-  const isLoggedIn = true;
+  const { isLoggedIn, customerId } = useContext(LoginContext)
 
   const fetchFoodItems = async () => {
     try {
@@ -98,7 +99,7 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
     <Fragment>
       {isLoggedIn ? (<Favorites
         menuItemId={menuItemId}
-        customerId={0}
+        customerId={customerId}
         onAddFoodItem={handleSelectItem}
         onRemoveFoodItem={handleDeselectItem}
         itemCounts={itemCounts}
