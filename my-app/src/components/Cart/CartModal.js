@@ -1,10 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import CartContext from "./CartContext";
 import "../../styles/Cart/cartStyle.css";
+import LoginContext from "../Login/LoginContext";
 
 const CartModal = () => {
   const { menuItems, isCartOpen, removeMenuItem, toggleCart, total, tax, completeOrder } = useContext(CartContext);
   const [foodItemNames, setFoodItemNames] = useState({});
+  const { isLoggedIn, customerId } = useContext(LoginContext);
 
   useEffect(() => {
     const fetchFoodItemNames = async () => {
@@ -20,6 +22,16 @@ const CartModal = () => {
       fetchFoodItemNames();
     }
   }, [menuItems, isCartOpen]);
+
+
+  const finishOrder = () => {
+    if (isLoggedIn && customerId) {
+      completeOrder(customerId);
+    } else {
+      completeOrder();
+    }
+  }
+  
 
   if (!isCartOpen) return null;
 
@@ -50,7 +62,7 @@ const CartModal = () => {
           <span className="totals"><strong>Total: </strong><span className="right-justified">${(total + tax).toFixed(2)}</span></span>
         </div>
       </div>
-      <button className="checkout-button" onClick={completeOrder}>Checkout</button>
+      <button className="checkout-button" onClick={finishOrder}>Checkout</button>
       <button className="close-button" onClick={toggleCart}>Close</button>
     </div>
   );

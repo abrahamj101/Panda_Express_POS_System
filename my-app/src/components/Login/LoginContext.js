@@ -8,12 +8,14 @@ const LoginContext = createContext();
 export const LoginProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState("");
+  const [customerId, setCustomerId] = useState(0);
 
   const checkOnlineUser = async (googleUser) => {
 
     const user = await getOnlineUsersEmail(googleUser.email);
     if (user){
         setRole(user.role);
+        setCustomerId(user.customer_id);
     } else {
         createOnlineUser(googleUser)
     }
@@ -23,6 +25,7 @@ export const LoginProvider = ({ children }) => {
 
   const createOnlineUser = async (googleUser) => {
     const customer = await addCustomer(googleUser.given_name, googleUser.family_name, "online", null);
+    setCustomerId(customer.customer_id);
     await addOnlineUsers(googleUser.given_name, googleUser.family_name, googleUser.email, "customer", customer.customer_id);
   };
 
@@ -38,7 +41,9 @@ export const LoginProvider = ({ children }) => {
         role,
         setRole,
         checkOnlineUser,
-        logOut
+        logOut,
+        customerId,
+        setCustomerId,
         }}>
       {children}
     </LoginContext.Provider>
