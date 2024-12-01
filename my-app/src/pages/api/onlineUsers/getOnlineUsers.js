@@ -1,6 +1,6 @@
 const getOnlineUsers = async () => {
     try {
-      const response = await fetch("http://localhost:5001/api/customers");
+      const response = await fetch("http://localhost:5001/api/online-users");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }

@@ -2,18 +2,20 @@ import getOrders from "../../pages/api/orders/getCustomerOrders";
 import getFoodItems from "../../pages/api/fooditems/getFooditems";
 import getMenuItems from "../../pages/api/menuItems/getMenuitem";
 import OrderEntry from "./orderEntry";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "../../styles/OrderHistory/customer.css"
+import LoginContext from "../Login/LoginContext";
 
 const Customer = () => {
   const [orders, setOrders] = useState([]);
   const [foodItems, setFoodItems] = useState([]);
   const [menuItems, setMenuItems] = useState([]);
+  const {customerId} = useContext(LoginContext)
 
   useEffect(() => {
       const fetchOrders = async () => {
           try {
-              const ordersData = await getOrders(0);
+              const ordersData = await getOrders(customerId);
               setOrders(ordersData || []);
           } catch (err) {
               console.error("Error fetching orders:", err);

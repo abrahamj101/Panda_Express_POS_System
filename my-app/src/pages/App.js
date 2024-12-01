@@ -19,11 +19,15 @@ import useWeather from "./api/weather/weatherApi";
 import WeatherWidget from "../components/weather/WeatherWidget";
 import { ZoomProvider, useZoom } from "../components/Zoom/ZoomContext";
 import AccessibilityButton from "../components/Navigation/AccessibilityButton";
+import { LoginProvider } from "../components/Login/LoginContext";
+import LoginContext from "../components/Login/LoginContext";
+import { useContext } from "react";
 
 
 function LandingPage() {
   const { weather, error } = useWeather("College Station");
   const { zoomLevel } = useZoom();
+  const { isLoggedIn, role} = useContext(LoginContext);
 
   return (
     <div
@@ -38,9 +42,13 @@ function LandingPage() {
           <Link to="/menu">
             <button className="order-btn">ORDER NOW!</button>
           </Link>
-          <Link to="/manager">
-            <button className="order-btn">MANAGER BRUH!</button>
-          </Link>
+          { isLoggedIn && (role === "manager" || role === "admin") ? (
+            <Link to="/manager">
+              <button className="order-btn">MANAGER BRUH!</button>
+            </Link>
+            ) : (
+              <></>
+            )}
           </div>
       </div>
       <Footer />
@@ -50,27 +58,29 @@ function LandingPage() {
 
 function App() {
   return (
-    <ZoomProvider>
-      <CartContextProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/menu" element={<MenuPage />} />
-            <Route path="/food" element={<FoodPage />} />
-            <Route path="/order-history" element={<OrderHistoryPage />} />
-            <Route path="/manager" element={<ManagerPage />} />
+    <LoginProvider>
+      <ZoomProvider>
+        <CartContextProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/menu" element={<MenuPage />} />
+              <Route path="/food" element={<FoodPage />} />
+              <Route path="/order-history" element={<OrderHistoryPage />} />
+              <Route path="/manager" element={<ManagerPage />} />
 
-            {/* Manager pages */}
-            <Route path="/manager/employee" element={<EmployeePage />} />
-            <Route path="/manager/order" element={<OrderPage />} />
-            <Route path="/manager/fooditem" element={<FoodItemPage />} />
-            <Route path="/manager/menuitem" element={<MenuItemPage />} />
-            <Route path="/manager/inventory" element={<InventoryPage />} />
-          </Routes>
-          <AccessibilityButton />
-        </Router>
-      </CartContextProvider>
-    </ZoomProvider>
+              {/* Manager pages */}
+              <Route path="/manager/employee" element={<EmployeePage />} />
+              <Route path="/manager/order" element={<OrderPage />} />
+              <Route path="/manager/fooditem" element={<FoodItemPage />} />
+              <Route path="/manager/menuitem" element={<MenuItemPage />} />
+              <Route path="/manager/inventory" element={<InventoryPage />} />
+            </Routes>
+            <AccessibilityButton />
+          </Router>
+        </CartContextProvider>
+      </ZoomProvider>
+    </LoginProvider>
   );
 }
 
