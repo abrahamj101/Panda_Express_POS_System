@@ -19,6 +19,7 @@ import useWeather from "./api/weather/weatherApi";
 import WeatherWidget from "../components/weather/WeatherWidget";
 import { ZoomProvider, useZoom } from "../components/Zoom/ZoomContext";
 import AccessibilityButton from "../components/Navigation/AccessibilityButton";
+import { LoginProvider } from "../components/Login/LoginContext";
 
 
 function LandingPage() {
@@ -50,27 +51,29 @@ function LandingPage() {
 
 function App() {
   return (
-    <ZoomProvider>
-      <CartContextProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/menu" element={<MenuPage />} />
-            <Route path="/food" element={<FoodPage />} />
-            <Route path="/order-history" element={<OrderHistoryPage />} />
-            <Route path="/manager" element={<ManagerPage />} />
+    <LoginProvider>
+      <ZoomProvider>
+        <CartContextProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/menu" element={<MenuPage />} />
+              <Route path="/food" element={<FoodPage />} />
+              <Route path="/order-history" element={<OrderHistoryPage />} />
+              <Route path="/manager" element={<ManagerPage />} />
 
-            {/* Manager pages */}
-            <Route path="/manager/employee" element={<EmployeePage />} />
-            <Route path="/manager/order" element={<OrderPage />} />
-            <Route path="/manager/fooditem" element={<FoodItemPage />} />
-            <Route path="/manager/menuitem" element={<MenuItemPage />} />
-            <Route path="/manager/inventory" element={<InventoryPage />} />
-          </Routes>
-          <AccessibilityButton />
-        </Router>
-      </CartContextProvider>
-    </ZoomProvider>
+              {/* Manager pages */}
+              <Route path="/manager/employee" element={<EmployeePage />} />
+              <Route path="/manager/order" element={<OrderPage />} />
+              <Route path="/manager/fooditem" element={<FoodItemPage />} />
+              <Route path="/manager/menuitem" element={<MenuItemPage />} />
+              <Route path="/manager/inventory" element={<InventoryPage />} />
+            </Routes>
+            <AccessibilityButton />
+          </Router>
+        </CartContextProvider>
+      </ZoomProvider>
+    </LoginProvider>
   );
 }
 

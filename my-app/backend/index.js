@@ -334,6 +334,30 @@ app.get("/api/online-users", async (req, res) => {
 });
 
 
+app.get("/api/online-users/exists", async (req, res) => {
+  try {
+    const { email } = req.query;
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+
+    const result = await pool.query(
+      "SELECT * FROM onlineusers WHERE email = $1",
+      [email]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch user" });
+  }
+});
+
+
 /**
  * Customers
  */

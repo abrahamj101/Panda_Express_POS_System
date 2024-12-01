@@ -1,9 +1,11 @@
 // AuthButton.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import LoginContext from "./LoginContext";
 
 function AuthButton() {
     const [isSignedIn, setIsSignedIn] = useState(false);
     const [user, setUser] = useState(null);
+    const {checkOnlineUser, logOut} = useContext(LoginContext)
   
     
   
@@ -55,6 +57,8 @@ function AuthButton() {
         setIsSignedIn(true);
         localStorage.setItem("authToken", response.credential);
       }
+      checkOnlineUser(userObject);
+      
     };
   
     useEffect(() => {
@@ -106,9 +110,8 @@ function AuthButton() {
       setIsSignedIn(false);
       // Remove token from localStorage
       localStorage.removeItem("authToken");
+      logOut();
     };
-
-    console.log(user)
 
   return (
     <div className="auth-button-container">
