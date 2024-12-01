@@ -57,6 +57,7 @@ function AuthButton() {
         setIsSignedIn(true);
         localStorage.setItem("authToken", response.credential);
       }
+      console.log(userObject)
       checkOnlineUser(userObject);
       
     };
