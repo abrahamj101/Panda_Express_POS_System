@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "../components/Navigation/Header";
 import Footer from "../components/Navigation/Footer";

@@ -5,9 +5,9 @@ import updateFoodItemInStock from "../../pages/api/fooditems/updateInStock";
 import updateMenuItemInStock from "../../pages/api/menuItems/updateInStock";
 
 class MenuItem {
-    constructor(menuitemId, menuItemName, price, imgLink, inventoryItemIds, inStock) {
+    constructor(menuitemId, menuItemName, price, imgLink, inventoryItemIds, inStock, foodItemIds=[]) {
         this.menuitemId = menuitemId;
-        this.foodItemIds = [];
+        this.foodItemIds = foodItemIds;
         this.total = price;
         this.name = menuItemName;
         this.imgLink = imgLink;
