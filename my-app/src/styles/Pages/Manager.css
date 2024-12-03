@@ -39,7 +39,7 @@ html {
     width: 30%;
     height: 150px;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.19);
     transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
     opacity: 90%;
