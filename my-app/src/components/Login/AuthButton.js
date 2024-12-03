@@ -8,6 +8,7 @@ function AuthButton() {
     const [user, setUser] = useState(null);
     const {checkOnlineUser, logOut} = useContext(LoginContext)
     const { emptyCart } = useContext(CartContext);
+    const {isLoggedin, role} = useContext(LoginContext)
     
   
     const parseJwt = (token) => {
