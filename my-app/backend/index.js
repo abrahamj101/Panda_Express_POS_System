@@ -1,3 +1,5 @@
+// index.js
+
 const express = require("express");
 const { Pool } = require("pg");
 const cors = require("cors");
@@ -28,39 +30,6 @@ app.listen(port, () => {
  *  Menu Items
  */
 
-// Adds a Menu Item
-app.post("/api/menuItems", async (req, res) => {
-  try {
-    const {
-      menuItem_id,
-      menuItem_name,
-      price,
-      foodItem_ids,
-      inventoryItem_ids,
-      in_stock,
-    } = req.body;
-
-    const result = await pool.query(
-      "INSERT INTO MenuItems (menuItem_id, menuItem_name, price, foodItem_ids, inventoryitem_ids, in_stock) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
-      [
-        menuItem_id,
-        menuItem_name,
-        price,
-        foodItem_ids,
-        inventoryItem_ids,
-        in_stock,
-      ]
-    );
-
-    res.status(201).json(result.rows[0]); // Send back the inserted row as JSON
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while adding the menu item" });
-  }
-});
-
 // Gets the Menu Items
 app.get("/api/menuItems", async (req, res) => {
   try {
@@ -74,48 +43,9 @@ app.get("/api/menuItems", async (req, res) => {
   }
 });
 
-// Deletes a given Menu Item by id
-app.delete("/api/menuItems/:menuItem_id", async (req, res) => {
-  try {
-    const { menuItem_id } = req.params;
-    await pool.query("DELETE FROM MenuItems WHERE menuItem_id = $1", [
-      menuItem_id,
-    ]);
-    res.json("Deleted Menu Item Successfully");
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to delete menu item" });
-  }
-});
-
 /**
  *  Food Items
  */
-
-// Adds a Food Item
-app.post("/api/foodItems", async (req, res) => {
-  try {
-    const {
-      foodItem_id,
-      foodItem_name,
-      price,
-      inventoryItem_ids,
-      in_stock,
-    } = req.body;
-
-    const result = await pool.query(
-      "INSERT INTO FoodItems (foodItem_id, foodItem_name, price, inventoryitem_ids, in_stock) VALUES ($1,$2,$3,$4,$5) RETURNING *",
-      [foodItem_id, foodItem_name, price, inventoryItem_ids, in_stock]
-    );
-
-    res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while adding the food item" });
-  }
-});
 
 // Gets Food Items
 app.get("/api/foodItems", async (req, res) => {
@@ -130,42 +60,9 @@ app.get("/api/foodItems", async (req, res) => {
   }
 });
 
-// Deletes a Food Item by id
-app.delete("/api/foodItems/:foodItem_id", async (req, res) => {
-  try {
-    const { foodItem_id } = req.params;
-    await pool.query("DELETE FROM FoodItems WHERE foodItem_id = $1", [
-      foodItem_id,
-    ]);
-    res.json("Deleted Food Item Successfully");
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to delete food item" });
-  }
-});
-
 /**
  *  Inventory Items
  */
-
-// Adds an Inventory Item
-app.post("/api/inventoryItems", async (req, res) => {
-  try {
-    const { inventoryItem_id, item_name, quantity, unit } = req.body;
-
-    const result = await pool.query(
-      "INSERT INTO InventoryItems (inventoryItem_id, item_name, quantity, unit) VALUES ($1,$2,$3,$4) RETURNING *",
-      [inventoryItem_id, item_name, quantity, unit]
-    );
-
-    res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while adding the inventory item" });
-  }
-});
 
 // Gets Inventory Items
 app.get("/api/inventoryItems", async (req, res) => {
@@ -180,41 +77,9 @@ app.get("/api/inventoryItems", async (req, res) => {
   }
 });
 
-// Deletes an Inventory Item by id
-app.delete("/api/inventoryItems/:inventoryItem_id", async (req, res) => {
-  try {
-    const { inventoryItem_id } = req.params;
-    await pool.query("DELETE FROM InventoryItems WHERE inventoryItem_id = $1", [
-      inventoryItem_id,
-    ]);
-    res.json("Deleted Inventory Item Successfully");
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to delete inventory item" });
-  }
-});
-
 /**
  *  Employees
  */
-
-// Adds an Employee
-app.post("/api/employees", async (req, res) => {
-  try {
-    const { first_name, last_name, position, salary } = req.body;
-
-    const result = await pool.query(
-      "INSERT INTO Employees (first_name, last_name, position, salary) VALUES ($1, $2, $3, $4) RETURNING *",
-      [first_name, last_name, position, salary]
-    );
-
-    res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "An error occurred while adding the employee" });
-  }
-});
-
 
 // Gets all employees
 app.get("/api/employees", async (req, res) => {
@@ -229,67 +94,9 @@ app.get("/api/employees", async (req, res) => {
   }
 });
 
-// Deletes an Employee by id
-app.delete("/api/employees/:employee_id", async (req, res) => {
-  try {
-    const { employee_id } = req.params;
-    const id = parseInt(employee_id, 10);
-
-    // Check if the employee exists
-    const employee = await pool.query("SELECT * FROM Employees WHERE employee_id = $1", [id]);
-
-    if (employee.rows.length === 0) {
-      return res.status(404).json({ error: "Employee not found" });
-    }
-
-    // Delete the employee
-    await pool.query("DELETE FROM Employees WHERE employee_id = $1", [id]);
-    res.json({ message: "Deleted Employee Successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to delete employee" });
-  }
-});
-
-
 /**
  *  Orders
  */
-
-// inserting an order
-app.post("/api/orders", async (req, res) => {
-  try {
-    const {
-      employee_id,
-      customer_id,
-      menuitem_ids,
-      total,
-      tax,
-      ordered_time,
-      fooditem_ids,
-    } = req.body;
-
-    const result = await pool.query(
-      "INSERT INTO Orders (employee_id, customer_id, menuitem_ids, total, tax, ordered_time, fooditem_ids) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-      [
-        employee_id,
-        customer_id,
-        menuitem_ids,
-        total,
-        tax,
-        ordered_time,
-        fooditem_ids,
-      ]
-    );
-
-    res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while adding the order" });
-  }
-});
 
 // getting the orders
 app.get("/api/orders", async (req, res) => {
@@ -364,33 +171,25 @@ app.get("/api/nutrition", async (req, res) => {
 });
 
 /**
- * Online Users
+ * Customers
  */
 
-// Add an online user
-app.post("/api/online-users", async (req, res) => {
+// Get all customers
+app.get("/api/customers", async (req, res) => {
   try {
-    const {
-      first_name,
-      last_name,
-      email,
-      role,
-      customer_id,
-      employee_id,
-    } = req.body;
     const result = await pool.query(
-      "INSERT INTO onlineusers (first_name, last_name, email, role, customer_id, employee_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [first_name, last_name, email, role, customer_id, employee_id]
+      "SELECT * FROM customers ORDER BY customer_id"
     );
-
-    res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error(error.message);
-    res
-      .status(500)
-      .json({ error: "An error occurred while adding the online user" });
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch customer data" });
   }
 });
+
+/**
+ * Online Users
+ */
 
 app.get("/api/online-users", async (req, res) => {
   try {
@@ -424,51 +223,5 @@ app.get("/api/online-users/exists", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch user" });
-  }
-});
-
-/**
- * Customers
- */
-
-// Get all customers
-app.get("/api/customers", async (req, res) => {
-  try {
-    const result = await pool.query(
-      "SELECT * FROM customers ORDER BY customer_id"
-    );
-    res.json(result.rows);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: "Failed to fetch customer data" });
-  }
-});
-
-// Add a customer
-app.post("/api/customers", async (req, res) => {
-  try {
-    const {
-      customer_first_name,
-      customer_last_name,
-      payment_method,
-      payment_information,
-    } = req.body;
-
-    const result = await pool.query(
-      "INSERT INTO customers (customer_first_name, customer_last_name, payment_method, payment_information) VALUES ($1, $2, $3, $4) RETURNING *",
-      [
-        customer_first_name,
-        customer_last_name,
-        payment_method,
-        payment_information,
-      ]
-    );
-
-    res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error(error.message);
-    res
-      .status(500)
-      .json({ error: "An error occurred while adding the customer" });
   }
 });
