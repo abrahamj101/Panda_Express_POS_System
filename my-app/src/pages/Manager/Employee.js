@@ -2,6 +2,7 @@ import Header from "../../components/Navigation/Header";
 import Footer from "../../components/Navigation/Footer";
 import ManagerTable from "../../components/ManagerPage/ManagerTable";
 import { useZoom } from "../../components/Zoom/ZoomContext";
+import BackButton from "../../components/Navigation/BackButton";
 
 function EmployeePage() {
   const { zoomLevel } = useZoom();
@@ -11,8 +12,10 @@ function EmployeePage() {
       style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top left" }}
     >
       <Header />
-      <h1>Employee Data</h1>
-      <ManagerTable dataType="employee" />
+      <div className="main-content">
+        <BackButton location="/manager" />
+        <ManagerTable dataType="employee" />
+      </div>
       <Footer />
     </div>
   );
