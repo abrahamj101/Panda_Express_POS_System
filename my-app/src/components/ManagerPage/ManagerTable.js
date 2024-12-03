@@ -6,17 +6,15 @@ import getInventory from "../../pages/api/inventory/getInventoryItems";
 import getEmployees from "../../pages/api/employees/getEmployees";
 import "../../styles/ManagerTable.css";
 
-// Import a modal component or create one
-import Modal from "./Form"; 
+import Form from "./Form"; 
 
 function ManagerTable({ dataType }) {
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
   const [error, setError] = useState(null);
 
-  // State for modals
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showRemoveForm, setShowRemoveForm] = useState(false);
   const [formData, setFormData] = useState({});
   const [removeId, setRemoveId] = useState("");
 
@@ -71,7 +69,7 @@ function ManagerTable({ dataType }) {
         const newItem = await response.json();
         setData((prevData) => [...prevData, newItem]);
         setFormData({});
-        setShowAddModal(false);
+        setShowAddForm(false);
       } else {
         throw new Error("Failed to add item");
       }
@@ -93,7 +91,7 @@ function ManagerTable({ dataType }) {
       if (response.ok) {
         setData((prevData) => prevData.filter((item) => item[idField] !== parseInt(idValue)));
         setRemoveId("");
-        setShowRemoveModal(false);
+        setShowRemoveForm(false);
       } else {
         throw new Error("Failed to remove item");
       }
@@ -168,13 +166,13 @@ function ManagerTable({ dataType }) {
 
       {/* Add and Remove Buttons */}
       <div className="form-actions">
-        <button onClick={() => setShowAddModal(true)}>Add {dataType}</button>
-        <button onClick={() => setShowRemoveModal(true)}>Remove {dataType}</button>
+        <button onClick={() => setShowAddForm(true)}>Add {dataType}</button>
+        <button onClick={() => setShowRemoveForm(true)}>Remove {dataType}</button>
       </div>
 
-      {/* Add Modal */}
-      {showAddModal && (
-        <Modal onClose={() => setShowAddModal(false)}>
+      {/* Add Form */}
+      {showAddForm && (
+        <Form onClose={() => setShowAddForm(false)}>
           <h3>Add {dataType}</h3>
           {tableHeaders
             .filter((header) => !excludedFields.includes(header))
@@ -190,13 +188,13 @@ function ManagerTable({ dataType }) {
                 />
               </div>
             ))}
-          <button onClick={handleAdd}>Submit</button>
-        </Modal>
+          <button onClick={handleAdd} styleClass="submit">Submit</button>
+        </Form>
       )}
 
-      {/* Remove Modal */}
-      {showRemoveModal && (
-        <Modal onClose={() => setShowRemoveModal(false)}>
+      {/* Remove Form */}
+      {showRemoveForm && (
+        <Form onClose={() => setShowRemoveForm(false)}>
           <h3>Remove {dataType}</h3>
           <label>ID</label>
           <input
@@ -205,7 +203,7 @@ function ManagerTable({ dataType }) {
             onChange={(e) => setRemoveId(e.target.value)}
           />
           <button onClick={handleRemove}>Remove</button>
-        </Modal>
+        </Form>
       )}
     </div>
   );

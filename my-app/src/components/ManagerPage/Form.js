@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/Form.css";
+import "my-app/src/styles/Pages/Form.css";
 
 function Form({ children, onClose }) {
   return (
