@@ -1,7 +1,28 @@
+/**
+ * ImageCarousel component.
+ * Displays an interactive carousel of menu items with images, alt text, and legends.
+ *
+ * @file ImageCarousel.js
+ * @module components/ImageCarousel
+ * @requires react-responsive-carousel
+ * @requires react-responsive-carousel/lib/styles/carousel.min.css
+ * @requires ../../styles/carousel.css
+ */
+
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "../../styles/carousel.css";
 
+/**
+ * Array of carousel items containing image data.
+ * Each item includes the image source, alternative text, and legend.
+ * 
+ * @constant
+ * @type {Array<Object>}
+ * @property {string} src - URL of the image to display.
+ * @property {string} alt - Alternative text for accessibility.
+ * @property {string} legend - Caption for the image.
+ */
 const carouselItems = [
   {
     src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/Chicken_OrangeChicken.png",
@@ -70,6 +91,13 @@ const carouselItems = [
   },
 ];
 
+/**
+ * ImageCarousel functional component.
+ * Renders an accessible image carousel with autoplay, infinite looping, and keyboard navigation.
+ * 
+ * @component
+ * @returns {JSX.Element} JSX element representing the carousel.
+ */
 function ImageCarousel() {
   return (
     <div
