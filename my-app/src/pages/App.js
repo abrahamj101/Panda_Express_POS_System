@@ -9,7 +9,7 @@ import MenuItemPage from "./Manager/Menuitem";
 import OrderPage from "./Manager/Order";
 import CheckoutPage from "./Checkout";
 import InventoryPage from "./Manager/Inventory";
-import EmployeePage from "./Manager/Employee"
+import EmployeePage from "./Manager/Employee";
 import "../styles/Pages/default.css";
 import "../styles/Accessibility/Weather.css";
 import Header from "../components/Navigation/Header";
@@ -24,11 +24,10 @@ import { LoginProvider } from "../components/Login/LoginContext";
 import LoginContext from "../components/Login/LoginContext";
 import { useContext } from "react";
 
-
 function LandingPage() {
   const { weather, error } = useWeather("College Station");
   const { zoomLevel } = useZoom();
-  const { isLoggedIn, role} = useContext(LoginContext);
+  const { isLoggedIn, role } = useContext(LoginContext);
 
   return (
     <div
@@ -41,16 +40,16 @@ function LandingPage() {
         <ImageCarousel />
         <div className="button-container">
           <Link to="/menu">
-            <button className="order-btn">ORDER NOW!</button>
+            <button className="order-btn">ORDER NOW</button>
           </Link>
-          { isLoggedIn && (role === "manager" || role === "admin") ? (
+          {isLoggedIn && (role === "manager" || role === "admin") ? (
             <Link to="/manager">
-              <button className="order-btn">MANAGER BRUH!</button>
+              <button className="order-btn">MANAGER</button>
             </Link>
-            ) : (
-              <></>
-            )}
-          </div>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
       <Footer />
     </div>
