@@ -42,9 +42,9 @@ function LandingPage() {
           <Link to="/menu">
             <button className="order-btn">ORDER NOW</button>
           </Link>
-          <Link to="/manager">
+          {/* <Link to="/manager">
             <button className="order-btn">ADMIN</button>
-          </Link>
+          </Link> */}
           {isLoggedIn && (role === "manager" || role === "admin") ? (
             <Link to="/manager">
               <button className="order-btn">MANAGER</button>

@@ -5,6 +5,7 @@ import "../../styles/Header.css";
 import AuthButton from "../Login/AuthButton.js";
 import HomeButton from "./homeButton.js";
 import OrderHistory from "./orderHistory.js";
+import ManagerButton from "./ManagerButton.js";
 
 function Header() {
 
@@ -12,8 +13,8 @@ function Header() {
     <header className="header">
       <HomeButton />
       <div className="header-buttons">
-        <OrderHistory/>
-        {/* Place buttons above these divs for styling issues */}
+        {/* <OrderHistory/> */}
+        <ManagerButton/>
         <div></div>
         <div></div>
         <div></div>
