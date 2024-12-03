@@ -186,9 +186,15 @@ function ManagerTable({ dataType }) {
           throw new Error("Invalid data type");
       }
 
-      setData((prevData) => [...prevData, newItem]);
-      setFormData({});
-      setShowAddForm(false);
+      if (dataType === "employee") {
+        // Refresh the page after adding an employee
+        window.location.reload();
+      } else {
+        // For other data types, update the state without refreshing
+        setData((prevData) => [...prevData, newItem]);
+        setFormData({});
+        setShowAddForm(false);
+      }
     } catch (error) {
       console.error("Error adding item:", error);
       setError(error);
