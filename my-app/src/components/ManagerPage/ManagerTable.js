@@ -300,6 +300,7 @@ function ManagerTable({ dataType }) {
         </button>
       </div>
 
+
       {/* Add Form */}
       {showAddForm && (
         <Form onClose={() => setShowAddForm(false)}>
@@ -307,9 +308,9 @@ function ManagerTable({ dataType }) {
           {(() => {
             const randomItem = getRandomItem();
             return tableHeaders
-              .filter((header) => !excludedFields.includes(header))
-              .map((header) => (
-                <div key={header}>
+            .filter((header) => !excludedFields.includes(header))
+            .map((header) => (
+              <div key={header}>
                   <label>{header.replace(/_/g, " ")}</label>
                   <input
                     type="text"
@@ -319,15 +320,15 @@ function ManagerTable({ dataType }) {
                     }
                     placeholder={
                       fieldsToParseAsArray.includes(header)
-                        ? "e.g., 1,2,3"
-                        : randomItem[header] !== undefined
-                        ? String(randomItem[header])
-                        : ""
+                      ? "e.g., 1,2,3"
+                      : randomItem[header] !== undefined
+                      ? String(randomItem[header])
+                      : ""
                     }
-                  />
+                    />
                 </div>
               ));
-          })()}
+            })()}
           <button onClick={handleAdd}>Submit</button>
         </Form>
       )}
@@ -341,7 +342,7 @@ function ManagerTable({ dataType }) {
             type="text"
             value={removeId}
             onChange={(e) => setRemoveId(e.target.value)}
-          />
+            />
           <button onClick={handleRemove}>Remove</button>
         </Form>
       )}
