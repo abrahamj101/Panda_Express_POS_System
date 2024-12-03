@@ -58,7 +58,7 @@ function ManagerPage() {
 
 
       <main className="manager-content">
-        {/* Move the BackButton inside the main content */}
+        {}
         <div className="back-button-container">
           <BackButton location="/" />
         </div>
