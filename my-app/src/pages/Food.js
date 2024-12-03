@@ -9,11 +9,13 @@ import "../styles/Pages/default.css";
 import MenuItem from "../components/MenuItems/MenuItemClass";
 import CartContext from "../components/Cart/CartContext";
 import { useZoom } from "../components/Zoom/ZoomContext";
+import LoginContext from "../components/Login/LoginContext";
 
 
 function Food() {
   const { zoomLevel } = useZoom();
   const location = useLocation();
+  const { role, isLoggedIn } = useContext(LoginContext)
 
 
   const {
@@ -45,7 +47,7 @@ function Food() {
 
   const handleAddToCart = async () => {
     const restriction_ids = await menuItemObject.checkRestriction();
-    if (Object.keys(restriction_ids).length > 0) {
+    if ((role === "customer" || !isLoggedIn) && Object.keys(restriction_ids).length > 0) {
       const messages = Object.entries(restriction_ids).map(
           ([foodItemName, restriction]) => `${foodItemName}: ${restriction}`
       );

@@ -7,6 +7,7 @@ import ManagerPage from "./Manager/Manager";
 import FoodItemPage from "./Manager/Fooditem";
 import MenuItemPage from "./Manager/Menuitem";
 import OrderPage from "./Manager/Order";
+import CheckoutPage from "./Checkout";
 import InventoryPage from "./Manager/Inventory";
 import EmployeePage from "./Manager/Employee"
 import "../styles/Pages/default.css";
@@ -68,6 +69,7 @@ function App() {
               <Route path="/food" element={<FoodPage />} />
               <Route path="/order-history" element={<OrderHistoryPage />} />
               <Route path="/manager" element={<ManagerPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
 
               {/* Manager pages */}
               <Route path="/manager/employee" element={<EmployeePage />} />
