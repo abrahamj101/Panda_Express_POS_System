@@ -18,6 +18,9 @@ function ManagerTable({ dataType }) {
   const [formData, setFormData] = useState({});
   const [removeId, setRemoveId] = useState("");
 
+  // State for existing items
+  const [existingItems, setExistingItems] = useState([]);
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -56,6 +59,46 @@ function ManagerTable({ dataType }) {
 
     fetchData();
   }, [dataType]);
+
+  // Fetch existing items when the add form is opened
+  useEffect(() => {
+    if (showAddForm) {
+      fetchExistingItems();
+    }
+  }, [showAddForm]);
+
+  const fetchExistingItems = async () => {
+    try {
+      let result = [];
+      switch (dataType) {
+        case "fooditem":
+          result = await getFoodItems();
+          break;
+        case "menuitem":
+          result = await getMenuItems();
+          break;
+        case "inventory":
+          result = await getInventory();
+          break;
+        case "employee":
+          result = await getEmployees();
+          break;
+        default:
+          result = [];
+      }
+      setExistingItems(Array.isArray(result) ? result : []);
+    } catch (error) {
+      console.error("Error fetching existing items:", error);
+    }
+  };
+
+  const getRandomItem = () => {
+    if (existingItems.length > 0) {
+      const randomIndex = Math.floor(Math.random() * existingItems.length);
+      return existingItems[randomIndex];
+    }
+    return {};
+  };
 
   // Function to handle adding a new item
   const handleAdd = async () => {
@@ -174,20 +217,24 @@ function ManagerTable({ dataType }) {
       {showAddForm && (
         <Form onClose={() => setShowAddForm(false)}>
           <h3>Add {dataType}</h3>
-          {tableHeaders
-            .filter((header) => !excludedFields.includes(header))
-            .map((header) => (
-              <div key={header}>
-                <label>{header.replace(/_/g, " ")}</label>
-                <input
-                  type="text"
-                  value={formData[header] || ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, [header]: e.target.value })
-                  }
-                />
-              </div>
-            ))}
+          {(() => {
+            const randomItem = getRandomItem();
+            return tableHeaders
+              .filter((header) => !excludedFields.includes(header))
+              .map((header) => (
+                <div key={header}>
+                  <label>{header.replace(/_/g, " ")}</label>
+                  <input
+                    type="text"
+                    value={formData[header] || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, [header]: e.target.value })
+                    }
+                    placeholder={randomItem[header] || ""}
+                  />
+                </div>
+              ));
+          })()}
           <button onClick={handleAdd} styleClass="submit">Submit</button>
         </Form>
       )}
