@@ -8,7 +8,7 @@ import LoginContext from "../Login/LoginContext";
 function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId }) {
   const [foodItems, setFoodItems] = useState([]);
   const [itemCounts, setItemCounts] = useState({});
-  const { isLoggedIn, customerId } = useContext(LoginContext)
+  const { isLoggedIn, customerId, role } = useContext(LoginContext)
 
   const fetchFoodItems = async () => {
     try {
@@ -97,7 +97,7 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
 
   return (
     <Fragment>
-      {isLoggedIn ? (<Favorites
+      {isLoggedIn &&  role === 'customer' ? (<Favorites
         menuItemId={menuItemId}
         customerId={customerId}
         onAddFoodItem={handleSelectItem}

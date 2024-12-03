@@ -2,11 +2,13 @@ import React, { useContext, useState, useEffect } from "react";
 import CartContext from "./CartContext";
 import "../../styles/Cart/cartStyle.css";
 import LoginContext from "../Login/LoginContext";
+import { useNavigate } from "react-router-dom";
 
 const CartModal = () => {
   const { menuItems, isCartOpen, removeMenuItem, toggleCart, total, tax, completeOrder } = useContext(CartContext);
   const [foodItemNames, setFoodItemNames] = useState({});
-  const { isLoggedIn, customerId } = useContext(LoginContext);
+  const { isLoggedIn, customerId, role } = useContext(LoginContext);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchFoodItemNames = async () => {
@@ -25,10 +27,12 @@ const CartModal = () => {
 
 
   const finishOrder = () => {
-    if (isLoggedIn && customerId) {
-      completeOrder(customerId);
-    } else {
+    if (isLoggedIn && (role === "cashier" || role === "admin" || role === "manager")) {
       completeOrder();
+    }
+    else {
+      navigate("/checkout");
+      toggleCart();
     }
   }
   

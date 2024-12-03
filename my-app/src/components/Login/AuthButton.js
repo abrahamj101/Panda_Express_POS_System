@@ -1,12 +1,13 @@
 // AuthButton.js
 import React, { useEffect, useState, useContext } from "react";
 import LoginContext from "./LoginContext";
+import CartContext from "../Cart/CartContext";
 
 function AuthButton() {
     const [isSignedIn, setIsSignedIn] = useState(false);
     const [user, setUser] = useState(null);
     const {checkOnlineUser, logOut} = useContext(LoginContext)
-  
+    const { emptyCart } = useContext(CartContext);
     
   
     const parseJwt = (token) => {
@@ -112,6 +113,7 @@ function AuthButton() {
       // Remove token from localStorage
       localStorage.removeItem("authToken");
       logOut();
+      emptyCart()
     };
 
   return (
