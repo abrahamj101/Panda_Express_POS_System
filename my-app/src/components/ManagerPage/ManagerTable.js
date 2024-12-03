@@ -11,8 +11,27 @@ import "../../styles/ManagerTable.css";
 import Form from "./Form";
 import { useNavigate } from "react-router-dom";
 
-// Set the API base URL to your backend URL
-const API_BASE_URL = "https://project-3-team-3-b-backend.vercel.app";
+// Import the create and delete functions
+import {
+  createEmployee,
+  deleteEmployee,
+  createFoodItem,
+  deleteFoodItem,
+  createMenuItem,
+  deleteMenuItem,
+  createInventoryItem,
+  deleteInventoryItem,
+} from "../../pages/api/createDelete";
+
+// Fields that need to be parsed as arrays
+const fieldsToParseAsArray = [
+  "foodItem_ids",
+  "inventoryItem_ids",
+  "menuitem_ids",
+  "fooditem_ids",
+  "inventoryitem_ids",
+  "item_sub_ids",
+];
 
 function ManagerTable({ dataType }) {
   const [data, setData] = useState([]);
@@ -28,16 +47,6 @@ function ManagerTable({ dataType }) {
 
   // State for existing items
   const [existingItems, setExistingItems] = useState([]);
-
-  // Fields that need to be parsed as arrays
-  const fieldsToParseAsArray = [
-    "foodItem_ids",
-    "inventoryItem_ids",
-    "menuitem_ids",
-    "fooditem_ids",
-    "inventoryitem_ids",
-    "item_sub_ids",
-  ];
 
   useEffect(() => {
     async function fetchData() {
@@ -159,29 +168,27 @@ function ManagerTable({ dataType }) {
         }
       });
 
-      // Remove any extra slashes in the URL
-      const endpoint = `${API_BASE_URL}/api/${dataType}s`.replace(/\/{2,}/g, "/");
-
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(processedFormData),
-      });
-
-      if (response.ok) {
-        const newItem = await response.json();
-        setData((prevData) => [...prevData, newItem]);
-        setFormData({});
-        setShowAddForm(false);
-      } else {
-        let errorData = { error: "Failed to add item" };
-        try {
-          errorData = await response.json();
-        } catch (parseError) {
-          errorData.error = response.statusText;
-        }
-        throw new Error(errorData.error || "Failed to add item");
+      let newItem;
+      switch (dataType) {
+        case "fooditem":
+          newItem = await createFoodItem(processedFormData);
+          break;
+        case "menuitem":
+          newItem = await createMenuItem(processedFormData);
+          break;
+        case "inventory":
+          newItem = await createInventoryItem(processedFormData);
+          break;
+        case "employee":
+          newItem = await createEmployee(processedFormData);
+          break;
+        default:
+          throw new Error("Invalid data type");
       }
+
+      setData((prevData) => [...prevData, newItem]);
+      setFormData({});
+      setShowAddForm(false);
     } catch (error) {
       console.error("Error adding item:", error);
       setError(error);
@@ -191,34 +198,31 @@ function ManagerTable({ dataType }) {
   // Function to handle removing an item
   const handleRemove = async () => {
     try {
-      const idField = getIdField();
       const idValue = removeId;
 
-      // Construct the endpoint without extra slashes
-      const endpoint = `${API_BASE_URL}/api/${dataType}s/${idValue}`.replace(
-        /\/{2,}/g,
-        "/"
-      );
-
-      const response = await fetch(endpoint, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        setData((prevData) =>
-          prevData.filter((item) => item[idField] !== parseInt(idValue))
-        );
-        setRemoveId("");
-        setShowRemoveForm(false);
-      } else {
-        let errorData = { error: "Failed to remove item" };
-        try {
-          errorData = await response.json();
-        } catch (parseError) {
-          errorData.error = response.statusText;
-        }
-        throw new Error(errorData.error || "Failed to remove item");
+      switch (dataType) {
+        case "fooditem":
+          await deleteFoodItem(idValue);
+          break;
+        case "menuitem":
+          await deleteMenuItem(idValue);
+          break;
+        case "inventory":
+          await deleteInventoryItem(idValue);
+          break;
+        case "employee":
+          await deleteEmployee(idValue);
+          break;
+        default:
+          throw new Error("Invalid data type");
       }
+
+      const idField = getIdField();
+      setData((prevData) =>
+        prevData.filter((item) => item[idField] !== parseInt(idValue))
+      );
+      setRemoveId("");
+      setShowRemoveForm(false);
     } catch (error) {
       console.error("Error removing item:", error);
       setError(error);
