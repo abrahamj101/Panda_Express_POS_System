@@ -1,5 +1,3 @@
-// server.js
-
 const express = require("express");
 const { Pool } = require("pg");
 const cors = require("cors");
@@ -203,21 +201,20 @@ app.delete("/api/inventoryItems/:inventoryItem_id", async (req, res) => {
 // Adds an Employee
 app.post("/api/employees", async (req, res) => {
   try {
-    const { employee_id, first_name, last_name, position, salary } = req.body;
+    const { first_name, last_name, position, salary } = req.body;
 
     const result = await pool.query(
-      "INSERT INTO Employees (employee_id, first_name, last_name, position, salary) VALUES ($1,$2,$3,$4,$5) RETURNING *",
-      [employee_id, first_name, last_name, position, salary]
+      "INSERT INTO Employees (first_name, last_name, position, salary) VALUES ($1, $2, $3, $4) RETURNING *",
+      [first_name, last_name, position, salary]
     );
 
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while adding the employee" });
+    res.status(500).json({ error: "An error occurred while adding the employee" });
   }
 });
+
 
 // Gets all employees
 app.get("/api/employees", async (req, res) => {
@@ -236,15 +233,24 @@ app.get("/api/employees", async (req, res) => {
 app.delete("/api/employees/:employee_id", async (req, res) => {
   try {
     const { employee_id } = req.params;
-    await pool.query("DELETE FROM Employees WHERE employee_id = $1", [
-      employee_id,
-    ]);
-    res.json("Deleted Employee Successfully");
+    const id = parseInt(employee_id, 10);
+
+    // Check if the employee exists
+    const employee = await pool.query("SELECT * FROM Employees WHERE employee_id = $1", [id]);
+
+    if (employee.rows.length === 0) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    // Delete the employee
+    await pool.query("DELETE FROM Employees WHERE employee_id = $1", [id]);
+    res.json({ message: "Deleted Employee Successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to delete employee" });
   }
 });
+
 
 /**
  *  Orders
