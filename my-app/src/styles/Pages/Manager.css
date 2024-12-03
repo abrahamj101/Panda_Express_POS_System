@@ -71,7 +71,3 @@ html {
   margin-top: 200px;
   font-size: 10px;
  }
-
- .back:hover {
-  transform: scale(1.05); /* added zoom on hover */
-}
