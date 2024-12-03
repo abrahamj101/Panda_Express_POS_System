@@ -32,23 +32,23 @@ app.listen(port, () => {
 app.post("/api/menuItems", async (req, res) => {
   try {
     const {
-      menuItem_id,
-      menuItem_name,
+      menuitem_name,
       price,
-      foodItem_ids,
-      inventoryItem_ids,
+      fooditem_ids,
+      inventoryitem_ids,
       in_stock,
+      image_link
     } = req.body;
 
     const result = await pool.query(
-      "INSERT INTO MenuItems (menuItem_id, menuItem_name, price, foodItem_ids, inventoryitem_ids, in_stock) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
+      "INSERT INTO MenuItems (menuitem_name, price, fooditem_ids, inventoryitem_ids, in_stock, image_link) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
       [
-        menuItem_id,
-        menuItem_name,
-        price,
-        foodItem_ids,
-        inventoryItem_ids,
-        in_stock,
+        menuitem_name,
+      price,
+      fooditem_ids,
+      inventoryitem_ids,
+      in_stock,
+      image_link
       ]
     );
 
@@ -96,16 +96,28 @@ app.delete("/api/menuItems/:menuItem_id", async (req, res) => {
 app.post("/api/foodItems", async (req, res) => {
   try {
     const {
-      foodItem_id,
       foodItem_name,
-      price,
-      inventoryItem_ids,
+      type,
+      inventoryitem_ids,
+      inventory_amounts,
       in_stock,
+      seasonal,
+      image_link,
+      premium,
+      restriction,
     } = req.body;
 
     const result = await pool.query(
-      "INSERT INTO FoodItems (foodItem_id, foodItem_name, price, inventoryitem_ids, in_stock) VALUES ($1,$2,$3,$4,$5) RETURNING *",
-      [foodItem_id, foodItem_name, price, inventoryItem_ids, in_stock]
+      "INSERT INTO FoodItems (fooditem_name, type, inventoryitem_ids, inventory_amounts, in_stock, seasonal, image_link, premium, restriction) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
+      [foodItem_name,
+        type,
+        inventoryitem_ids,
+        inventory_amounts,
+        in_stock,
+        seasonal,
+        image_link,
+        premium,
+        restriction,]
     );
 
     res.status(201).json(result.rows[0]);
@@ -151,11 +163,11 @@ app.delete("/api/foodItems/:foodItem_id", async (req, res) => {
 // Adds an Inventory Item
 app.post("/api/inventoryItems", async (req, res) => {
   try {
-    const { inventoryItem_id, item_name, quantity, unit } = req.body;
+    const { inventoryitem_name, quantity, last_restocked } = req.body;
 
     const result = await pool.query(
-      "INSERT INTO InventoryItems (inventoryItem_id, item_name, quantity, unit) VALUES ($1,$2,$3,$4) RETURNING *",
-      [inventoryItem_id, item_name, quantity, unit]
+      "INSERT INTO InventoryItems (item_name, quantity, last_restocked) VALUES ($1,$2,$3) RETURNING *",
+      [inventoryitem_name, quantity, last_restocked]
     );
 
     res.status(201).json(result.rows[0]);
@@ -201,11 +213,11 @@ app.delete("/api/inventoryItems/:inventoryItem_id", async (req, res) => {
 // Adds an Employee
 app.post("/api/employees", async (req, res) => {
   try {
-    const { first_name, last_name, position, salary } = req.body;
-
+    const { employee_first_name, employee_last_name, hours_worked, schedule } = req.body;
+    
     const result = await pool.query(
-      "INSERT INTO Employees (first_name, last_name, position, salary) VALUES ($1, $2, $3, $4) RETURNING *",
-      [first_name, last_name, position, salary]
+      "INSERT INTO Employees (employee_first_name, employee_last_name, hours_worked, schedule) VALUES ($1, $2, $3, $4) RETURNING *",
+      [employee_first_name, employee_last_name, hours_worked, schedule]
     );
 
     res.status(201).json(result.rows[0]);

@@ -1,9 +1,17 @@
 // my-app/src/pages/api/createDelete.js
 
-const API_BASE_URL = "https://project-3-team-3-b-backend.vercel.app";
+const API_BASE_URL = "http://localhost:5001";
 
 // Function to create an employee
 export async function createEmployee(employeeData) {
+  // Ensure hours_worked is a float, defaulting to 0 if invalid
+  employeeData["hours_worked"] = employeeData["hours_worked"] ? parseFloat(employeeData["hours_worked"]) : 0;
+
+  // Ensure schedule is an array of valid time strings or default to an empty array if invalid
+  employeeData["schedule"] = Array.isArray(employeeData["schedule"])
+    ? employeeData["schedule"]
+    : [];
+
   try {
     const response = await fetch(`${API_BASE_URL}/api/employees`, {
       method: "POST",
@@ -25,6 +33,7 @@ export async function createEmployee(employeeData) {
     throw error;
   }
 }
+
 
 // Function to delete an employee
 export async function deleteEmployee(employeeId) {
@@ -50,11 +59,24 @@ export async function deleteEmployee(employeeId) {
 
 // Function to create a food item
 export async function createFoodItem(foodItemData) {
+  // Formatting the foodItemData
+  const formattedData = {
+    foodItem_name: foodItemData["fooditem_name"] || null,
+    type: foodItemData["type"] || null,
+    inventoryitem_ids: foodItemData["inventoryitem_ids"] ? foodItemData["inventoryitem_ids"].split(',').map(Number) : [], 
+    inventory_amounts: foodItemData["inventory_amounts"] ? foodItemData[3].split(',').map(Number) : [], 
+    in_stock: foodItemData["in_stock"] === "true",
+    seasonal: foodItemData["seasonal"] ? foodItemData["seasonal"].split(',').map(Number) : [], 
+    image_link: foodItemData["image_link"] || null,
+    premium: foodItemData["premium"] === "true",
+    restriction: foodItemData["restriction"] || null,
+  };
+
   try {
     const response = await fetch(`${API_BASE_URL}/api/foodItems`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(foodItemData),
+      body: JSON.stringify(formattedData),
     });
 
     if (!response.ok) {
@@ -71,6 +93,7 @@ export async function createFoodItem(foodItemData) {
     throw error;
   }
 }
+
 
 // Function to delete a food item
 export async function deleteFoodItem(foodItemId) {
@@ -96,11 +119,25 @@ export async function deleteFoodItem(foodItemId) {
 
 // Function to create a menu item
 export async function createMenuItem(menuItemData) {
+  // Formatting the menuItemData
+  const formattedData = {
+    menuitem_name: menuItemData.menuitem_name || null, // Use null if the value is an empty string
+    price: isNaN(parseFloat(menuItemData.price)) ? null : parseFloat(menuItemData.price), // Convert to number or null if invalid
+    fooditem_ids: menuItemData.fooditem_ids && menuItemData.fooditem_ids.length > 0
+      ? menuItemData.fooditem_ids.map(id => parseInt(id, 10)) // Ensure integers
+      : [], // Default to empty array if invalid
+    inventoryitem_ids: menuItemData.inventoryitem_ids && menuItemData.inventoryitem_ids.length > 0
+      ? menuItemData.inventoryitem_ids.map(id => parseInt(id, 10)) // Ensure integers
+      : [], // Default to empty array if invalid
+    in_stock: menuItemData.in_stock === "true", // Convert to boolean
+    image_link: menuItemData.image_link || null, // Use null if the value is an empty string
+  };
+
   try {
     const response = await fetch(`${API_BASE_URL}/api/menuItems`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(menuItemData),
+      body: JSON.stringify(formattedData),
     });
 
     if (!response.ok) {
@@ -117,6 +154,7 @@ export async function createMenuItem(menuItemData) {
     throw error;
   }
 }
+
 
 // Function to delete a menu item
 export async function deleteMenuItem(menuItemId) {

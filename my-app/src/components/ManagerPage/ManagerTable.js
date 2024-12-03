@@ -167,6 +167,7 @@ function ManagerTable({ dataType }) {
             .map((item) => item.trim());
         }
       });
+      console.log(processedFormData);
 
       let newItem;
       switch (dataType) {
@@ -263,7 +264,6 @@ function ManagerTable({ dataType }) {
       </h2>
       <div className="table-wrapper">
         <table>
-          <caption>{title}</caption>
           <thead>
             <tr>
               {tableHeaders.map((key) => (
