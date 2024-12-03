@@ -1,5 +1,4 @@
-// ManagerPage.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/Pages/Manager.css";
 import Header from "../../components/Navigation/Header";
 import Footer from "../../components/Navigation/Footer";
@@ -14,6 +13,13 @@ function ManagerPage() {
   const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
+
+  // Redirect to "/" if not signed in
+  useEffect(() => {
+    if (!isSignedIn) {
+      navigate("/");
+    }
+  }, [isSignedIn, navigate]);
 
   const reports = [
     {
@@ -55,10 +61,7 @@ function ManagerPage() {
     >
       <Header />
 
-
-
       <main className="manager-content">
-        {}
         <div className="back-button-container">
           <BackButton location="/" />
         </div>
