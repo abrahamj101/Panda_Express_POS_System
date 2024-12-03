@@ -143,6 +143,7 @@ export async function deleteMenuItem(menuItemId) {
 // Function to create an inventory item
 export async function createInventoryItem(inventoryItemData) {
   try {
+    console.log(inventoryItemData);
     const response = await fetch(`${API_BASE_URL}/api/inventoryItems`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
