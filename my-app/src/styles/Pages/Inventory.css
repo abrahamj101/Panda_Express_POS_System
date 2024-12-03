@@ -6,13 +6,6 @@
     position: relative;
 }
 
-.inventory-header h2 {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0;
-    text-align: center;
-}
 
 .add-item-button {
     background-color: #ff4500; 
