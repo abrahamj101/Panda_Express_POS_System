@@ -108,9 +108,11 @@ export const CartContextProvider = ({ children }) => {
     if (menuItems.length > 0) {
       try {
         await addOrders(customerId, menuItems, total, tax);
+        console.log("Altering inventory")
         for (let menuItem of menuItems) {
           await menuItem.alterInventory();
         }
+        console.log("finished altering")
         emptyCart();
       } catch (error) {
         console.error("Failed to complete order:", error.message);

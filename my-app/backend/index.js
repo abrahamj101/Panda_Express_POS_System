@@ -160,6 +160,20 @@ app.delete("/api/foodItems/:foodItem_id", async (req, res) => {
  *  Inventory Items
  */
 
+app.put("/api/inventoryItems/update/quantity/orders", async (req, res) => {
+  try {
+    const { quantity, id } = req.body;
+    const updateInventory = await pool.query(
+      "UPDATE inventoryitems SET quantity = quantity - $1 WHERE inventoryItem_id = $2",
+      [quantity, id]
+    );
+    res.json("Inventory item quantity updated");
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch food items" });
+  }
+});
+
 // Adds an Inventory Item
 app.post("/api/inventoryItems", async (req, res) => {
   try {
