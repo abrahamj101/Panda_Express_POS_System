@@ -7,14 +7,12 @@ import "../styles/Pages/default.css";
 import CartContext from "../components/Cart/CartContext";
 import { useZoom } from "../components/Zoom/ZoomContext";
 import "../styles/Pages/Checkout.css";
-import LoginContext from "../components/Login/LoginContext";
 
 function Checkout() {
   const navigate = useNavigate(); // Initialize navigation
   const { zoomLevel } = useZoom();
   const [foodItemNames, setFoodItemNames] = useState({});
   const { menuItems, removeMenuItem, total, tax, completeOrder } = useContext(CartContext);
-  const { isLoggedIn, customerId } = useContext(LoginContext)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -51,11 +49,7 @@ function Checkout() {
 
   const handlePlaceOrder = async () => {
     if (validateForm()) {
-      if (isLoggedIn) {
-        await completeOrder(customerId);
-      } else {
-        await completeOrder();
-      }
+      await completeOrder();
       navigate("/");
     }
   };
