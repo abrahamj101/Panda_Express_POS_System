@@ -14,12 +14,11 @@ function ManagerPage() {
 
   const navigate = useNavigate();
 
-  // Redirect to "/" if not signed in
-  useEffect(() => {
-    if (!isSignedIn) {
-      navigate("/");
-    }
-  }, [isSignedIn, navigate]);
+  // useEffect(() => {
+  //   if (!isSignedIn) {
+  //     navigate("/");
+  //   }
+  // }, [isSignedIn, navigate]);
 
   const reports = [
     {
