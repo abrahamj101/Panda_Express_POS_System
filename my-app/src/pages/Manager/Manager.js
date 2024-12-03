@@ -54,10 +54,12 @@ function ManagerPage() {
       style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top left" }}
     >
       <Header />
-      <div className="back">
-        <BackButton location="/" />
-      </div>
       <main className="manager-content">
+        {/* Move the BackButton inside the main content */}
+        <div className="back-button-container">
+          <BackButton location="/" />
+        </div>
+
         <div className="report-grid">
           {reports.map((report, index) => (
             <button

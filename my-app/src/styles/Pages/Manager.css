@@ -20,6 +20,13 @@ html {
     height: 69vh;
     padding: 50px;
   }
+
+  .back-button-container {
+    width: 100%;
+    margin-bottom: -5%;
+  }
+
+  
   
   .report-button {
     background-color: #cc0000;
