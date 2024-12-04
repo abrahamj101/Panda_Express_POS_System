@@ -31,6 +31,41 @@ const MenuPage = () => {
         </div>
       </div>
 
+      {/* Appetizers Section */}
+      <div className="menu-section">
+        <h2 className="section-title">Appetizer Choices</h2>
+        <div className="menu-grid">
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/52/524bbb9023e2409b8d3fceae944a808f.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=4f4cc30df356786bbe3968181f8c5160"
+              alt="Chicken Egg Roll"
+            />
+            <h3>Chicken Egg Roll</h3>
+          </div>
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/18/183834b8a35a4737a73a28421f68b4f0.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=0d4be7c417ec1998251da41d5bfe13fb"
+              alt="Veggie Spring Roll"
+            />
+            <h3>Veggie Spring Roll</h3>
+          </div>
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/fe/fef7db209d7d41e6ae065af16afa1577.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=f14d518edf4e7ee0fd22b4d3cddc59b8"
+              alt="Cream Cheese Rangoon"
+            />
+            <h3>Cream Cheese Rangoon</h3>
+          </div>
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/ab/ab4e688dea2b4b56b79fa2ff42a31f24.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=4b9d93576ba69591523a4c60034d54d3"
+              alt="Apple Pie Roll"
+            />
+            <h3>Apple Pie Roll</h3>
+          </div>
+        </div>
+      </div>
+
       {/* Side Choices Section */}
       <div className="menu-section">
         <h2 className="section-title">Side Choices</h2>
