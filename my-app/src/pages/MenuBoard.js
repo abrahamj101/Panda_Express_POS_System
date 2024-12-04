@@ -1,7 +1,5 @@
 import React from "react";
 import "../styles/Pages/MenuBoard.css";
-import Header from "../components/Navigation/Header";
-import Footer from "../components/Navigation/Footer";
 import BackButton from "../components/Navigation/BackButton";
 import { useZoom } from "../components/Zoom/ZoomContext";
 
