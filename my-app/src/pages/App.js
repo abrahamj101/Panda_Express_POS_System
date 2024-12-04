@@ -11,6 +11,7 @@ import OrderPage from "./Manager/Order";
 import CheckoutPage from "./Checkout";
 import InventoryPage from "./Manager/Inventory";
 import EmployeePage from "./Manager/Employee";
+import MenuBoard from "./MenuBoard";
 import "../styles/Pages/default.css";
 import "../styles/Accessibility/Weather.css";
 import Header from "../components/Navigation/Header";
@@ -43,9 +44,9 @@ function LandingPage() {
           <Link to="/menu">
             <button className="order-btn">ORDER NOW</button>
           </Link>
-          {/* <Link to="/manager">
-            <button className="order-btn">ADMIN</button>
-          </Link> */}
+          <Link to="/menu-board">
+            <button className="order-btn">SEE MENU</button>
+          </Link>
           {isLoggedIn && (role === "manager" || role === "admin") ? (
             <Link to="/manager">
               <button className="order-btn">MANAGER</button>
@@ -73,6 +74,7 @@ function App() {
               <Route path="/order-history" element={<OrderHistoryPage />} />
               <Route path="/manager" element={<ProtectedPage requiredRole="Manager"><ManagerPage /></ProtectedPage>} />
               <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/menu-board" element={<MenuBoard />} />
 
               {/* Manager pages */}
               <Route path="/manager/employee" element={<EmployeePage />} />
