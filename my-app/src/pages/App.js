@@ -10,6 +10,7 @@ import OrderPage from "./Manager/Order";
 import CheckoutPage from "./Checkout";
 import InventoryPage from "./Manager/Inventory";
 import EmployeePage from "./Manager/Employee";
+import MenuBoard from "./MenuBoard";
 import "../styles/Pages/default.css";
 import "../styles/Accessibility/Weather.css";
 import Header from "../components/Navigation/Header";
@@ -72,6 +73,7 @@ function App() {
               <Route path="/order-history" element={<OrderHistoryPage />} />
               <Route path="/manager" element={<ManagerPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/menu-board" element={<MenuBoard />} />
 
               {/* Manager pages */}
               <Route path="/manager/employee" element={<EmployeePage />} />
