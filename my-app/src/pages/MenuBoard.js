@@ -215,6 +215,83 @@ const MenuPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Drink Choices Section */}
+      <div className="menu-section">
+        <h2 className="section-title">Drink Choices</h2>
+        <div className="menu-grid">
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/30/30391bd46a144cedb219c0471be498fe.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=e821e1c6b612c6a431714fef0d0bb172"
+              alt="Dr Pepper"
+            />
+            <h3>Dr Pepper</h3>
+          </div>
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/5f/5f490aede80f4d1a99ae402bf4b76c33.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=0ae5ed7d2c52bedfbe887592b09ebc9c"
+              alt="Sweet Tea"
+            />
+            <h3>Sweet Tea</h3>
+          </div>
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/2a/2a10ad1b282741839242b728d48fae1c.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=94a12b75b2e805caa712a84259aab899"
+              alt="Pepsi"
+            />
+            <h3>Pepsi</h3>
+          </div>
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/07/07eec18462d34cd28a20e764a7c9a3f5.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=4dabda64016c0558aa782d5ffacef48a"
+              alt="Diet Pepsi"
+            />
+            <h3>Diet Pepsi</h3>
+          </div>
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/08/08fa5bd920b24cef821b992c39dc66d6.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=5fee84f8d0a73a623d4b1540f715dc44"
+              alt="Mountain Dew"
+            />
+            <h3>Mountain Dew</h3>
+          </div>
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/9f/9f95a6ded6ee426d99ce700b48f2bc14.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=dc4ec80e3034a7bd132dc2990149603a"
+              alt="Lipton Brisk Raspberry Iced Tea"
+            />
+            <h3>Lipton Brisk Raspberry Iced Tea</h3>
+          </div>
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/e5/e5aa259f1e0a41fc8fbbec970b523190.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=5a937bd6dbe226fbda87b3489827ec16"
+              alt="Sierra Mist"
+            />
+            <h3>Sierra Mist</h3>
+          </div>
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/25/25422dfbe7b340f8884288c075692b2f.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=9cbb80d268521946e202b5a34dd791f9"
+              alt="Tropicana Lemonade"
+            />
+            <h3>Tropicana Lemonade</h3>
+          </div>
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/02/02c37c0783f44e95bb99e3df9d8a33dc.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=b45bf71487256a41c2b36b012a33cd4a"
+              alt="Aquafina"
+            />
+            <h3>Aquafina</h3>
+          </div>
+          <div className="menu-item">
+            <img
+              src="https://olo-images-live.imgix.net/57/5717db5694df4f66801ae23057a4f238.png?auto=format%2Ccompress&q=60&cs=tinysrgb&w=810&h=540&fit=crop&fm=png32&s=1596b46ff8a0c14560eb8b52345b58b6"
+              alt="Gatorade Lemon Lime"
+            />
+            <h3>Gatorade Lemon Lime</h3>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
