@@ -1,9 +1,19 @@
 import React from "react";
 import "../styles/Pages/MenuBoard.css";
+import Header from "../components/Navigation/Header";
+import Footer from "../components/Navigation/Footer";
+import BackButton from "../components/Navigation/BackButton";
+import { useZoom } from "../components/Zoom/ZoomContext";
 
 const MenuPage = () => {
+  const { zoomLevel } = useZoom();
+
   return (
-    <div className="menu-page">
+    <div
+      className="menu-page"
+      style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top left" }}
+    >
+      <BackButton location="/" />
       {/* Menu Items Meals Section */}
       <div className="menu-section">
         <h2 className="section-title">Menu Items</h2>
