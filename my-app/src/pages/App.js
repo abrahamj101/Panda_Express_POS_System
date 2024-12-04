@@ -6,6 +6,7 @@ import OrderHistoryPage from "./OrderHistory";
 import ManagerPage from "./Manager/Manager";
 import FoodItemPage from "./Manager/Fooditem";
 import MenuItemPage from "./Manager/Menuitem";
+import ProtectedPage from "../components/Login/ProtectedPages";
 import OrderPage from "./Manager/Order";
 import CheckoutPage from "./Checkout";
 import InventoryPage from "./Manager/Inventory";
@@ -71,7 +72,7 @@ function App() {
               <Route path="/menu" element={<MenuPage />} />
               <Route path="/food" element={<FoodPage />} />
               <Route path="/order-history" element={<OrderHistoryPage />} />
-              <Route path="/manager" element={<ManagerPage />} />
+              <Route path="/manager" element={<ProtectedPage requiredRole="Manager"><ManagerPage /></ProtectedPage>} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/menu-board" element={<MenuBoard />} />
 
