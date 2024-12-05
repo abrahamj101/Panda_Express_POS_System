@@ -34,7 +34,7 @@ body {
   width: 100%;
   z-index: 1000;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  height: 90px
+  height: 90px;
 }
 
 .logo img {
@@ -103,18 +103,19 @@ body {
   color: white;
   border: none;
   padding: 15px 40px;
-  font-size: 18px;
+  font-size: 25px;
   border-radius: 5px;
   cursor: pointer;
   margin: 50px auto;
   display: inline-block;
   text-align: center;
   transition: background-color 0.3s ease;
+  font-weight: 800;
 }
 
 /* Add space between the two buttons */
 .order-btn + .order-btn {
-  margin-left: 300px;  /* Horizontal space between the buttons */
+  margin-left: 300px; /* Horizontal space between the buttons */
 }
 
 .order-btn:hover {
@@ -170,4 +171,3 @@ a:hover {
   margin-top: 3px;
   transition: all 0.3s ease;
 }
-
