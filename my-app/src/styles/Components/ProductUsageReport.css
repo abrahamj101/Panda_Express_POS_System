@@ -1,0 +1,19 @@
+.product-usage-report {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.date-inputs {
+  margin-bottom: 20px;
+}
+
+.date-inputs input {
+  margin-right: 10px;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}

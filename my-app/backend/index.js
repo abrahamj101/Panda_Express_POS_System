@@ -3,6 +3,9 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config(); // Load environment variables from .env file
 
+// Initialize the Express app
+const app = express();
+
 // Import custom modules
 const db = require("./db"); // Database connection (from db.js)
 const reportRoutes = require("./routes/report"); // Report routes (from routes/report.js)
@@ -14,9 +17,7 @@ const onlineUserRoutes = require("./routes/onlineUser"); // Online user routes
 const nutritionRoutes = require("./routes/nutrition"); // Nutrition routes
 const employeeRoutes = require("./routes/employees"); // Employee routes
 const orderRoutes = require("./routes/orders"); // Order routes
-
-// Initialize the Express app
-const app = express();
+const productUsageRoutes = require('./routes/productUsageRoutes');
 
 // Middleware setup
 app.use(cors()); // Enable Cross-Origin Resource Sharing
@@ -32,6 +33,7 @@ app.use("/api/online-users", onlineUserRoutes);
 app.use("/api/nutrition", nutritionRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/orders", orderRoutes);
+app.use('/api', productUsageRoutes);
 
 // Root endpoint
 app.get("/", (req, res) => {

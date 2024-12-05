@@ -10,6 +10,8 @@ import OrderPage from "./Manager/Order";
 import CheckoutPage from "./Checkout";
 import InventoryPage from "./Manager/Inventory";
 import EmployeePage from "./Manager/Employee";
+import ReportPage from "./Manager/Report";
+import ProductUsageReport from '../components/Report/ProductUsageReport';
 import "../styles/Pages/default.css";
 import "../styles/Accessibility/Weather.css";
 import Header from "../components/Navigation/Header";
@@ -76,6 +78,8 @@ function App() {
               <Route path="/manager/fooditem" element={<FoodItemPage />} />
               <Route path="/manager/menuitem" element={<MenuItemPage />} />
               <Route path="/manager/inventory" element={<InventoryPage />} />
+              <Route path="/manager/report" element={<ReportPage />} />
+              <Route path="/manager/report/product-usage" element={<ProductUsageReport />} />
             </Routes>
             <AccessibilityButton />
           </Router>
