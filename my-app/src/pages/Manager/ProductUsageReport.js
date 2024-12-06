@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Navigation/Header';
 import Footer from '../../components/Navigation/Footer';
-import '../../styles/Pages/ReportPage.css'; // Make sure the styling is set up as needed
+import '../../styles/Pages/ReportPage.css';
 import Chart from 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
 
@@ -13,30 +13,40 @@ const ProductUsageReport = () => {
   const [chartData, setChartData] = useState(null);
 
   const handleGenerateReport = async () => {
-    const response = await fetch('/api/product-usage', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ startDate, endDate }),
-    });
-    if (response.ok) {
-      const data = await response.json();
-      setChartData({
-        labels: data.map(item => item.inventoryItem_name),
-        datasets: [{
-          label: 'Total Usage',
-          data: data.map(item => item.total_used),
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1,
-        }],
+    console.log('Generating report with startDate:', startDate, 'endDate:', endDate);
+
+    try {
+      const response = await fetch('/api/product-usage', {
+        method: 'GET', // Ensure this matches the backend method (use POST if needed)
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ startDate, endDate }),
       });
-    } else {
-      console.error('Failed to fetch data:', response.statusText);
+
+      console.log('Response status:', response.status);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Response JSON data:', data);
+
+        setChartData({
+          labels: data.map(item => item.inventoryItem_name),
+          datasets: [{
+            label: 'Total Usage',
+            data: data.map(item => item.total_orders),
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+          }],
+        });
+      } else {
+        console.error('Failed to fetch data:', response.statusText);
+        console.log('Response body:', await response.text()); // Logs response body as text for debugging
+      }
+    } catch (err) {
+      console.error('Error fetching data:', err);
     }
   };
-  
 
   return (
     <div className="report">

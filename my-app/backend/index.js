@@ -17,7 +17,7 @@ const onlineUserRoutes = require("./routes/onlineUser"); // Online user routes
 const nutritionRoutes = require("./routes/nutrition"); // Nutrition routes
 const employeeRoutes = require("./routes/employees"); // Employee routes
 const orderRoutes = require("./routes/orders"); // Order routes
-const productUsageRoutes = require('./routes/productUsageRoutes');
+const productUsageRoutes = require("./routes/productUsageRoutes"); // Product usage routes
 
 // Middleware setup
 app.use(cors()); // Enable Cross-Origin Resource Sharing
@@ -33,7 +33,7 @@ app.use("/api/online-users", onlineUserRoutes);
 app.use("/api/nutrition", nutritionRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/orders", orderRoutes);
-app.use('/api', productUsageRoutes);
+app.use('/api', productUsageRoutes); // Product usage route
 
 // Root endpoint
 app.get("/", (req, res) => {

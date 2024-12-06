@@ -12,6 +12,7 @@ const ProductUsageReport = () => {
   const [endDate, setEndDate] = useState('');
   const [reportData, setReportData] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     if (!startDate || !endDate) {
@@ -19,22 +20,31 @@ const ProductUsageReport = () => {
       return;
     }
 
+    setLoading(true); // Show a loading state during the fetch
+    setError(null);
+
     try {
-      const response = await fetch(`/api/reports/product-usage?startDate=${startDate}&endDate=${endDate}`);
-      if (!response.ok) throw new Error('Failed to fetch report data');
+      const response = await fetch(`http://localhost:5001/api/product-usage?startDate=${startDate}&endDate=${endDate}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error fetching data: ${response.status} - ${errorText}`);
+      }
       const data = await response.json();
+      if (!Array.isArray(data)) throw new Error('Invalid response format');
       setReportData(data);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'An unknown error occurred.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const chartData = {
-    labels: reportData.map(item => item.inventoryitem_name),
+    labels: reportData.map((item) => item.inventoryitem_name || 'Unknown'),
     datasets: [
       {
-        label: 'Total Usage',
-        data: reportData.map(item => item.total_used),
+        label: 'Total Orders',
+        data: reportData.map((item) => parseInt(item.total_orders, 10) || 0),
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
@@ -58,13 +68,16 @@ const ProductUsageReport = () => {
           onChange={(e) => setEndDate(e.target.value)}
           placeholder="End Date"
         />
-        <button onClick={handleSubmit}>Submit</button>
+        <button onClick={handleSubmit} disabled={loading}>
+          {loading ? 'Loading...' : 'Submit'}
+        </button>
       </div>
-      {error && <p className="error">{error}</p>}
+      {error && <p className="error">Error: {error}</p>}
+      {loading && <p>Loading data...</p>}
       {reportData.length > 0 ? (
         <Bar data={chartData} />
       ) : (
-        <p>No data available. Please submit dates to generate a report.</p>
+        !loading && <p>No data available. Please submit dates to generate a report.</p>
       )}
     </div>
   );

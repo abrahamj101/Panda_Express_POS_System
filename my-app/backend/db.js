@@ -9,4 +9,12 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
-module.exports = pool;
+pool.on('connect', () => {
+  console.log('Connected to the database');
+});
+
+module.exports = {
+  query: (text, params) => pool.query(text, params),
+};
+
+//module.exports = pool;

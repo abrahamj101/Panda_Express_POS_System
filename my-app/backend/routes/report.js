@@ -40,19 +40,30 @@ router.get('/product-usage', async (req, res) => {
     const { startDate, endDate } = req.query;
   
     try {
+      // const query = `
+      //   SELECT ii.inventoryItem_name, SUM(t.inventory_amount) AS total_used
+      //   FROM orders o
+      //   JOIN UNNEST(o.menuitem_ids) WITH ORDINALITY AS oi(menuitem_id, ord_m) ON TRUE
+      //   JOIN menuitems mi ON mi.menuitem_id = oi.menuitem_id
+      //   JOIN UNNEST(mi.fooditem_ids) WITH ORDINALITY AS fo(fooditem_id, ord_f) ON TRUE
+      //   JOIN fooditems fi ON fi.fooditem_id = fo.fooditem_id
+      //   JOIN UNNEST(fi.inventoryitem_ids, fi.inventory_amounts) WITH ORDINALITY AS t(inventoryItem_id, inventory_amount, ord_i) ON TRUE
+      //   JOIN inventoryitems ii ON ii.inventoryitem_id = t.inventoryItem_id
+      //   WHERE o.ordered_time BETWEEN $1 AND $2
+      //   GROUP BY ii.inventoryItem_name
+      //   ORDER BY total_used DESC;
+      // `;
       const query = `
-        SELECT ii.inventoryItem_name, SUM(t.inventory_amount) AS total_used
+        SELECT ii.inventoryItem_name, COUNT(o.order_id) AS total_orders
         FROM orders o
         JOIN UNNEST(o.menuitem_ids) WITH ORDINALITY AS oi(menuitem_id, ord_m) ON TRUE
         JOIN menuitems mi ON mi.menuitem_id = oi.menuitem_id
-        JOIN UNNEST(mi.fooditem_ids) WITH ORDINALITY AS fo(fooditem_id, ord_f) ON TRUE
-        JOIN fooditems fi ON fi.fooditem_id = fo.fooditem_id
-        JOIN UNNEST(fi.inventoryitem_ids, fi.inventory_amounts) WITH ORDINALITY AS t(inventoryItem_id, inventory_amount, ord_i) ON TRUE
+        JOIN UNNEST(mi.inventoryitem_ids) WITH ORDINALITY AS t(inventoryItem_id, ord_i) ON TRUE
         JOIN inventoryitems ii ON ii.inventoryitem_id = t.inventoryItem_id
-        WHERE o.ordered_time BETWEEN $1 AND $2
+        WHERE o.ordered_time BETWEEN ? AND ?
         GROUP BY ii.inventoryItem_name
-        ORDER BY total_used DESC;
-      `;
+        ORDER BY total_orders DESC;
+        `;
   
       const result = await pool.query(query, [startDate, endDate]);
       res.json(result.rows);
