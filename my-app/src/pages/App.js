@@ -6,12 +6,14 @@ import OrderHistoryPage from "./OrderHistory";
 import ManagerPage from "./Manager/Manager";
 import FoodItemPage from "./Manager/Fooditem";
 import MenuItemPage from "./Manager/Menuitem";
+import ProtectedPage from "../components/Login/ProtectedPages";
 import OrderPage from "./Manager/Order";
 import CheckoutPage from "./Checkout";
 import InventoryPage from "./Manager/Inventory";
 import EmployeePage from "./Manager/Employee";
 import ReportPage from "./Manager/Report";
 import ProductUsageReport from '../components/Report/ProductUsageReport';
+import MenuBoard from "./MenuBoard";
 import "../styles/Pages/default.css";
 import "../styles/Accessibility/Weather.css";
 import Header from "../components/Navigation/Header";
@@ -44,6 +46,9 @@ function LandingPage() {
           <Link to="/menu">
             <button className="order-btn">ORDER NOW</button>
           </Link>
+          <Link to="/menu-board">
+            <button className="order-btn">SEE MENU</button>
+          </Link>
           {isLoggedIn && (role === "manager" || role === "admin") ? (
             <Link to="/manager">
               <button className="order-btn">MANAGER</button>
@@ -69,8 +74,9 @@ function App() {
               <Route path="/menu" element={<MenuPage />} />
               <Route path="/food" element={<FoodPage />} />
               <Route path="/order-history" element={<OrderHistoryPage />} />
-              <Route path="/manager" element={<ManagerPage />} />
+              <Route path="/manager" element={<ProtectedPage requiredRole="Manager"><ManagerPage /></ProtectedPage>} />
               <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/menu-board" element={<MenuBoard />} />
 
               {/* Manager pages */}
               <Route path="/manager/employee" element={<EmployeePage />} />

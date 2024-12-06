@@ -20,7 +20,7 @@ const addOrders = async (customerId, menuItems, total, tax) => {
 
     const body = {
       employee_id: 0,
-      customer_id: customerId,
+      customer_id: parseInt(customerId),
       menuitem_ids: menuItems.map(item => item.getMenuItemId()),
       total,
       tax,

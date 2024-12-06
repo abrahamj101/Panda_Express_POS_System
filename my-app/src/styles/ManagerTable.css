@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 85vh;
+    height: 70vh;
     margin: 0 auto;
     padding: 20px;
     box-sizing: border-box;
@@ -11,6 +11,7 @@
   }
   
   .manager-table-container h2 {
+    margin-top: -25px;
     margin-bottom: 20px;
     font-size: 1.5rem;
     color: #333;
@@ -59,4 +60,27 @@
     font-size: 1.2rem;
     color: #888;
   }
+
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: -10px;
+  }
   
+  .form-actions button {
+    padding: 10px 15px;
+    border: none;
+    font-weight: 800;
+    background-color: #cc0000;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    text-transform: uppercase;
+  }
+  
+  .form-actions button:hover {
+    background-color: #aa0000;
+  }

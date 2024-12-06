@@ -15,6 +15,7 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    text-transform: uppercase;
   }
   
   .modal-content {
@@ -79,4 +80,4 @@
   .modal-content button:hover {
     transform: scale(1.04);
   }
-  
+ 

@@ -5,15 +5,27 @@ import "../../styles/Header.css";
 import AuthButton from "../Login/AuthButton.js";
 import HomeButton from "./homeButton.js";
 import OrderHistory from "./orderHistory.js";
+import ManagerButton from "./ManagerButton.js";
+import LoginContext from "../Login/LoginContext.js";
+import { useContext } from "react";
 
 function Header() {
+  const { isLoggedIn, role } = useContext(LoginContext);
 
   return (
     <header className="header">
       <HomeButton />
       <div className="header-buttons">
-        <OrderHistory/>
-        {/* Place buttons above these divs for styling issues */}
+        {isLoggedIn ? (
+          role === "manager" || role === "admin" ? (
+            <ManagerButton />
+          ) : (
+            <OrderHistory />
+          )
+        ) : (
+          <></>
+        )}
+
         <div></div>
         <div></div>
         <div></div>
@@ -24,5 +36,6 @@ function Header() {
     </header>
   );
 }
+
 
 export default Header;
