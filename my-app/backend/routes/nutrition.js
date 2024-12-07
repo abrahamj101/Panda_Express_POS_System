@@ -4,13 +4,22 @@ const router = express.Router();
 const pool = require('../db');
 
 // Route to get all nutrition data
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM nutrition ORDER BY item_id');
+    const { id } = req.query;
+    if (!id) {
+      return res.status(400).json({ error: "Food Item ID is required" });
+    }
+
+    const result = await pool.query(
+      "SELECT * FROM Nutrition WHERE fooditem_id = $1",
+      [id]
+    );
+
     res.json(result.rows);
-  } catch (error) {
-    console.error('Error fetching nutrition data:', error);
-    res.status(500).send('Error fetching nutrition data');
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch nutrition data" });
   }
 });
 

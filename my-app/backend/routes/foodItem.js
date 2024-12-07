@@ -5,10 +5,12 @@ const pool = require("../db"); // Import the database connection
 // Endpoint to fetch all food items
 router.get("/", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM fooditems");
+    const result = await pool.query(
+      "SELECT * FROM FoodItems ORDER BY foodItem_id"
+    );
     res.json(result.rows);
-  } catch (error) {
-    console.error(error.message);
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Failed to fetch food items" });
   }
 });
@@ -26,21 +28,6 @@ router.get("/:id", async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: "Failed to fetch food item" });
-  }
-});
-
-// Endpoint to add a new food item
-router.post("/", async (req, res) => {
-  const { name, description, price } = req.body; // Example fields
-  try {
-    const result = await pool.query(
-      "INSERT INTO fooditems (name, description, price) VALUES ($1, $2, $3) RETURNING *",
-      [name, description, price]
-    );
-    res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: "Failed to create food item" });
   }
 });
 
@@ -66,19 +53,64 @@ router.put("/:id", async (req, res) => {
 
 // Endpoint to delete a food item by ID
 router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
   try {
-    const result = await pool.query("DELETE FROM fooditems WHERE id = $1 RETURNING *", [id]);
-    if (result.rows.length > 0) {
-      res.json({ message: "Food item deleted" });
-    } else {
-      res.status(404).json({ error: "Food item not found" });
-    }
+    const { foodItem_id } = req.params;
+    await pool.query("DELETE FROM FoodItems WHERE foodItem_id = $1", [
+      foodItem_id,
+    ]);
+    res.json("Deleted Food Item Successfully");
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
     res.status(500).json({ error: "Failed to delete food item" });
   }
 });
 
+router.put("/update/instock", async (req, res) => {
+  try {
+    const { id, inStock } = req.body;
+    const updateInventory = await pool.query(
+      "UPDATE fooditems SET in_stock = $1 WHERE fooditem_id = $2",
+      [inStock, id]
+    );
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+router.post("/api/foodItems", async (req, res) => {
+  try {
+    const {
+      foodItem_name,
+      type,
+      inventoryitem_ids,
+      inventory_amounts,
+      in_stock,
+      seasonal,
+      image_link,
+      premium,
+      restriction,
+    } = req.body;
+
+    const result = await pool.query(
+      "INSERT INTO FoodItems (fooditem_name, type, inventoryitem_ids, inventory_amounts, in_stock, seasonal, image_link, premium, restriction) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
+      [foodItem_name,
+        type,
+        inventoryitem_ids,
+        inventory_amounts,
+        in_stock,
+        seasonal,
+        image_link,
+        premium,
+        restriction,]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while adding the food item" });
+  }
+});
 // Export the router
 module.exports = router;
