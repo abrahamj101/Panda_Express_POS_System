@@ -180,12 +180,21 @@ export async function deleteMenuItem(menuItemId) {
 
 // Function to create an inventory item
 export async function createInventoryItem(inventoryItemData) {
+  // Format the inventoryItemData
+  const formattedData = {
+    inventoryitem_name: inventoryItemData.inventoryitem_name || null, // Default to null if invalid
+    quantity: parseInt(inventoryItemData.quantity, 10) || 0, // Parse as integer, default to 0 if invalid
+    last_restocked: isNaN(Date.parse(inventoryItemData.last_restocked))
+      ? null // Default to null if invalid
+      : new Date(inventoryItemData.last_restocked).toISOString(), // Convert to ISO format
+  };
+
   try {
-    console.log(inventoryItemData);
+    console.log("Formatted Inventory Item Data:", formattedData);
     const response = await fetch(`${API_BASE_URL}/api/inventoryItems`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(inventoryItemData),
+      body: JSON.stringify(formattedData),
     });
 
     if (!response.ok) {
@@ -203,6 +212,7 @@ export async function createInventoryItem(inventoryItemData) {
     throw error;
   }
 }
+
 
 // Function to delete an inventory item
 export async function deleteInventoryItem(inventoryItemId) {

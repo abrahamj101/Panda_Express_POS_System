@@ -77,7 +77,7 @@ router.put("/update/instock", async (req, res) => {
   }
 });
 
-router.post("/api/foodItems", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const {
       foodItem_name,

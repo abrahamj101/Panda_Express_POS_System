@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
     const { inventoryitem_name, quantity, last_restocked } = req.body;
 
     const result = await pool.query(
-      "INSERT INTO InventoryItems (item_name, quantity, last_restocked) VALUES ($1,$2,$3) RETURNING *",
+      "INSERT INTO InventoryItems (inventoryitem_name, quantity, last_restocked) VALUES ($1,$2,$3) RETURNING *",
       [inventoryitem_name, quantity, last_restocked]
     );
 
@@ -49,6 +49,7 @@ router.post("/", async (req, res) => {
       .json({ error: "An error occurred while adding the inventory item" });
   }
 });
+
 
 // Endpoint to update an inventory item by ID
 router.put("/:id", async (req, res) => {
