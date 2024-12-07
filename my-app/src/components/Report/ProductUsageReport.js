@@ -24,7 +24,7 @@ const ProductUsageReport = () => {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:5001/api/product-usage?startDate=${startDate}&endDate=${endDate}`);
+      const response = await fetch(`https://project-3-team-3-b-backend.vercel.app/api/product-usage?startDate=${startDate}&endDate=${endDate}`);
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Error fetching data: ${response.status} - ${errorText}`);
