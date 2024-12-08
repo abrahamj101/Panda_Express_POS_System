@@ -13,18 +13,20 @@ const ZReport = () => {
                 return;
             }
 
-            
+            console.log("Before API Call"); // Log before the API call
             const url = `http://localhost:5001/api/zreport?date=${date}`; //`/api/zreports/zreport?date=${date}`
             console.log("Fetching Z Report with URL:", url); // Log for API URL
             const response = await fetch(url);
+            console.log("After API Call"); // Log after the API call
             const data = await response.json();
+            console.log("Data received:", data); // Log for received data
 
             if (data.error) {
                 console.error("API Error:", data.error); // Log for API error
                 setError(data.error);
                 setReportData([]);
             } else {
-                console.log("Z Report Data Received:", data); // Log for received data
+                console.log("Z Report Data Received:", data); // Log for Z report data received
                 setError("");
                 setReportData(data);
             }
