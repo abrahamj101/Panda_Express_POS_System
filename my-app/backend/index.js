@@ -19,6 +19,7 @@ const employeeRoutes = require("./routes/employees"); // Employee routes
 const orderRoutes = require("./routes/orders"); // Order routes
 const productUsageRoutes = require("./routes/productUsageRoutes"); // Product usage routes
 const xreportRoutes = require("./routes/xreportRoutes"); // X report routes
+const zreportRoutes = require("./routes/zreportRoutes"); // Z report routes
 
 // Middleware setup
 app.use(cors()); // Enable Cross-Origin Resource Sharing
@@ -36,6 +37,7 @@ app.use("/api/employees", employeeRoutes);
 app.use("/api/orders", orderRoutes);
 app.use('/api', productUsageRoutes); // Product usage route
 app.use('/api', xreportRoutes); // X route
+app.use('/api', zreportRoutes); // X route
 
 // Root endpoint
 app.get("/", (req, res) => {
