@@ -14,7 +14,7 @@ const ZReport = () => {
             }
 
             console.log("Before API Call"); // Log before the API call
-            const url = `http://localhost:5001/api/zreport?date=${date}`; //`/api/zreports/zreport?date=${date}`
+            const url = `https://project-3-team-3-b-backend.vercel.app/api/zreport?date=${date}`; //`/api/zreports/zreport?date=${date}`
             console.log("Fetching Z Report with URL:", url); // Log for API URL
             const response = await fetch(url);
             console.log("After API Call"); // Log after the API call
