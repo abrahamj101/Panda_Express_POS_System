@@ -13,6 +13,7 @@ import InventoryPage from "./Manager/Inventory";
 import EmployeePage from "./Manager/Employee";
 import ReportPage from "./Manager/Report";
 import ProductUsageReport from '../components/Report/ProductUsageReport';
+import XReport from '../components/Report/XReport';
 import MenuBoard from "./MenuBoard";
 import "../styles/Pages/default.css";
 import "../styles/Accessibility/Weather.css";
@@ -86,6 +87,7 @@ function App() {
               <Route path="/manager/inventory" element={<InventoryPage />} />
               <Route path="/manager/report" element={<ReportPage />} />
               <Route path="/manager/report/product-usage" element={<ProductUsageReport />} />
+              <Route path="/manager/report/xreport" element={<XReport />} />
             </Routes>
             <AccessibilityButton />
           </Router>
