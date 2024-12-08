@@ -278,10 +278,6 @@ function ManagerTable({ dataType }) {
             {data.map((item, index) => (
               <tr
                 key={index}
-                onClick={() => {
-                  const idField = getIdField();
-                  navigate(`/manager/${dataType}/${item[idField]}`);
-                }}
               >
                 {tableHeaders.map((key) => (
                   <td key={`${index}-${key}`}>{item[key]}</td>

@@ -29,8 +29,14 @@ function Header() {
         <div></div>
         <div></div>
         <div></div>
-        <CartIcon />
-        <CartModal />
+        {isLoggedIn && role !== "customer" ? (
+          <></>
+        ) : (
+          <>
+            <CartIcon />
+            <CartModal />
+          </>
+        )}
         <AuthButton />
       </div>
     </header>
