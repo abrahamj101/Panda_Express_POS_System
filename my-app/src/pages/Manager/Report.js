@@ -1,11 +1,11 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import Header from '../../components/Navigation/Header';
 import Footer from '../../components/Navigation/Footer';
+import ProductUsageReport from '../../components/Report/ProductUsageReport';
 import '../../styles/Pages/ReportPage.css';
 
 const ReportsPage = () => {
-  const navigate = useNavigate();
+  const [currentReport, setCurrentReport] = useState(null);
 
   return (
     <div className="report">
@@ -16,13 +16,18 @@ const ReportsPage = () => {
         <br />
         <h2>Reports</h2>
         <p>Select a report type to view details:</p>
-        <div className="report">
-          <button onClick={() => navigate('/manager/report/product-usage')}>Product Usage</button>
+        <div className="report-buttons">
+          <button onClick={() => setCurrentReport('product-usage')}>Product Usage</button>
           <button onClick={() => console.log('Sales Report')}>Sales Report</button>
           <button onClick={() => console.log('XReport Sales')}>XReport Sales</button>
           <button onClick={() => console.log('ZReport Sales')}>ZReport Sales</button>
           <button onClick={() => console.log('XReport Payments')}>XReport Payments</button>
           <button onClick={() => console.log('ZReport Payments')}>ZReport Payments</button>
+        </div>
+
+        {/* Render the selected report dynamically */}
+        <div className="report-content">
+          {currentReport === 'product-usage' && <ProductUsageReport />}
         </div>
       </main>
       <Footer />
