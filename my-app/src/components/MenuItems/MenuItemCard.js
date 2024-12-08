@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import "../../styles/FoodandMenu/Cards.css";
+import LoginContext from "../Login/LoginContext";
+import { useContext } from "react";
 
 const MenuItemCard = ({ menuItem_name, price, image_link, foodItem_ids, menuItem_id, inventoryItemIds, inStock }) => {
+  const {isLoggedIn, role} = useContext(LoginContext);
     
     return (
       <div className="item-card">
@@ -17,7 +20,12 @@ const MenuItemCard = ({ menuItem_name, price, image_link, foodItem_ids, menuItem
             inStock,
           }}
         >
-          <img src={image_link} alt={menuItem_name} className="item-image" />
+          {!isLoggedIn || isLoggedIn && role === "customer" ? (
+            <img src={image_link} alt={menuItem_name} className="item-image" />
+          ) : (
+            <></>
+          )}
+          
           <h3>{menuItem_name}</h3>
           <p>Price: ${price}</p>
         </Link>

@@ -10,6 +10,7 @@ import MenuItem from "../components/MenuItems/MenuItemClass";
 import CartContext from "../components/Cart/CartContext";
 import { useZoom } from "../components/Zoom/ZoomContext";
 import LoginContext from "../components/Login/LoginContext";
+import CartSidebar from "../components/Cart/CartSideBar";
 
 
 function Food() {
@@ -83,6 +84,11 @@ function Food() {
           onRemoveFoodItem={removeFoodItemFromMenu}
         />
         <AddToCartButton onClick={handleAddToCart} />
+        {isLoggedIn && role !== "customer" ? (
+          <CartSidebar />
+        ) : (
+          <></>
+        )}
       </div>
       <Footer />
     </div>
