@@ -15,7 +15,7 @@ const XReport = () => {
         console.log('Selected date:', date);
     
         try {
-            const url = `http://localhost:5001/api/xreport?date=${date}`; 
+            const url = `https://project-3-team-3-b-backend.vercel.app/api/xreport?date=${date}`; 
             const response = await fetch(url);
     
             if (!response.ok) {
