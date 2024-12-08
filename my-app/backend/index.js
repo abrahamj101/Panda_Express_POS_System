@@ -35,7 +35,7 @@ app.use("/api/nutrition", nutritionRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/orders", orderRoutes);
 app.use('/api', productUsageRoutes); // Product usage route
-app.use('/api/xreports', xreportRoutes); // X route
+app.use('/api', xreportRoutes); // X route
 
 // Root endpoint
 app.get("/", (req, res) => {

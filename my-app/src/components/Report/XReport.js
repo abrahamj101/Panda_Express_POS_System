@@ -15,8 +15,7 @@ const XReport = () => {
         console.log('Selected date:', date);
     
         try {
-            const url = `/api/xreports/xreport?date=${date}`;
-            console.log('Making request to', url);
+            const url = `http://localhost:5001/api/xreport?date=${date}`; 
             const response = await fetch(url);
     
             if (!response.ok) {
