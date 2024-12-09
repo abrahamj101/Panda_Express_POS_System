@@ -1,15 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../../styles/FoodandMenu/Cards.css";
 import "../../styles/FoodandMenu/FoodCard.css";
 import Nutrition from "./Nutrition";
+import LoginContext from "../Login/LoginContext";
 
 const FoodItemCard = ({ foodItem, onSelect, onDeselect, quantity, disableAdd }) => {
+  const {isLoggedIn, role} = useContext(LoginContext);
+
   return (
     <div className="item-card">
-      <div className="card-header">
-        <Nutrition foodItemId={foodItem.fooditem_id} />
-      </div>
-      <img src={foodItem.image_link} alt={foodItem.fooditem_name} className="item-image" />
+      
+      {!isLoggedIn || isLoggedIn && role === "customer" ? (
+        <>
+          <div className="card-header">
+          <Nutrition foodItemId={foodItem.fooditem_id} />
+          </div>
+          <img src={foodItem.image_link} alt={foodItem.fooditem_name} className="item-image" />
+        </>
+      ) : (
+        <></>
+      )}
+      
       <h3>{foodItem.fooditem_name}</h3>
       {foodItem.premium ? <h3 className="premium">Premium Entree</h3> : null}
       <div className="selection-controls">
