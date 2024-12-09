@@ -74,9 +74,9 @@ router.put("/:id", async (req, res) => {
 // Endpoint to delete an inventory item by ID
 router.delete("/:id", async (req, res) => {
   try {
-    const { inventoryItem_id } = req.params;
+    const { id } = req.params;
     await pool.query("DELETE FROM InventoryItems WHERE inventoryItem_id = $1", [
-      inventoryItem_id,
+      id,
     ]);
     res.json("Deleted Inventory Item Successfully");
   } catch (error) {

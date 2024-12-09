@@ -78,24 +78,24 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/menu" element={<MenuPage />} />
               <Route path="/food" element={<FoodPage />} />
-              <Route path="/order-history" element={<OrderHistoryPage />} />
-              <Route path="/manager" element={<ProtectedPage requiredRole="Manager"><ManagerPage /></ProtectedPage>} />
+              <Route path="/order-history" element={<ProtectedPage><OrderHistoryPage /></ProtectedPage>} />
+              <Route path="/manager" element={<ProtectedPage requiredRole={["manager", "admin" ]}><ManagerPage /></ProtectedPage>} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/menu-board" element={<MenuBoard />} />
 
               {/* Manager pages */}
-              <Route path="/manager/employee" element={<EmployeePage />} />
-              <Route path="/manager/order" element={<OrderPage />} />
-              <Route path="/manager/fooditem" element={<FoodItemPage />} />
-              <Route path="/manager/menuitem" element={<MenuItemPage />} />
-              <Route path="/manager/inventory" element={<InventoryPage />} />
-              <Route path="/manager/report" element={<ReportPage />} />
-              <Route path="/manager/report/product-usage" element={<ProductUsageReport />} />
-              <Route path="/manager/report/sales-report" element={<SalesReport />} />
-              <Route path="/manager/report/xreport" element={<XReport />} />
-              <Route path="/manager/report/zreport" element={<ZReport />} />
-              <Route path="/manager/report/xreport-payments" element={<XReportPayments />} />
-              <Route path="/manager/report/zreport-payments" element={<ZReportPayments />} />
+              <Route path="/manager/employee" element={<ProtectedPage requiredRole={["manager", "admin" ]}><EmployeePage /></ProtectedPage>} />
+              <Route path="/manager/order" element={<ProtectedPage requiredRole={["manager", "admin" ]}><OrderPage /></ProtectedPage>} />
+              <Route path="/manager/fooditem" element={<ProtectedPage requiredRole={["manager", "admin" ]}><FoodItemPage /></ProtectedPage>} />
+              <Route path="/manager/menuitem" element={<ProtectedPage requiredRole={["manager", "admin" ]}><MenuItemPage /></ProtectedPage>} />
+              <Route path="/manager/inventory" element={<ProtectedPage requiredRole={["manager", "admin" ]}><InventoryPage /></ProtectedPage>} />
+              <Route path="/manager/report" element={<ProtectedPage requiredRole={["manager", "admin" ]}><ReportPage /></ProtectedPage>} />
+              <Route path="/manager/report/product-usage" element={<ProtectedPage requiredRole={["manager", "admin" ]}><ProductUsageReport /></ProtectedPage>} />
+              <Route path="/manager/report/sales-report" element={<ProtectedPage requiredRole={["manager", "admin" ]}><SalesReport /></ProtectedPage>} />
+              <Route path="/manager/report/xreport" element={<ProtectedPage requiredRole={["manager", "admin" ]}><XReport /></ProtectedPage>} />
+              <Route path="/manager/report/zreport" element={<ProtectedPage requiredRole={["manager", "admin" ]}><ZReport /></ProtectedPage>} />
+              <Route path="/manager/report/xreport-payments" element={<ProtectedPage requiredRole={["manager", "admin" ]}><XReportPayments /></ProtectedPage>} />
+              <Route path="/manager/report/zreport-payments" element={<ProtectedPage requiredRole={["manager", "admin" ]}><ZReportPayments /></ProtectedPage>} />
             </Routes>
             <AccessibilityButton />
           </Router>

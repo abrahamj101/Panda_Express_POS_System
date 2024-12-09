@@ -6,7 +6,7 @@ import LoginContext from "./LoginContext";
 const ProtectedPage = ({ children, requiredRole }) => {
     const { isLoggedIn, role } = useContext(LoginContext);
 
-    const isTestingMode = process.env.REACT_APP_TESTING_MODE === "true";
+    const isTestingMode = process.env.REACT_APP_TESTING_MODE === "false";
 
     if (isTestingMode) {
         return children; // Allow access in testing mode
@@ -15,7 +15,7 @@ const ProtectedPage = ({ children, requiredRole }) => {
         return <Navigate to="/" />;
     }
 
-    if (role !== requiredRole) {
+    if (!requiredRole.includes(role)) {
         return <Navigate to="/" />;
     }
 

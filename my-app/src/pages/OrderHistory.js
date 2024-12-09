@@ -7,6 +7,7 @@ import Customer from "../components/OrderHistory/customer";
 import Cashier from "../components/OrderHistory/cashier";
 import LoginContext from "../components/Login/LoginContext";
 import BackButton from "../components/Navigation/BackButton";
+import ProtectedPage from "../components/Login/ProtectedPages";
 
 function CashierPage() {
   const { zoomLevel } = useZoom();
@@ -17,6 +18,7 @@ function CashierPage() {
       className="order-history"
       style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top left" }}
     >
+      <ProtectedPage />
       <Header />
       <div className="main-content">
       <BackButton location='/'/>

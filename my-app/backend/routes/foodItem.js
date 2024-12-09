@@ -54,9 +54,9 @@ router.put("/:id", async (req, res) => {
 // Endpoint to delete a food item by ID
 router.delete("/:id", async (req, res) => {
   try {
-    const { foodItem_id } = req.params;
+    const { id } = req.params;
     await pool.query("DELETE FROM FoodItems WHERE foodItem_id = $1", [
-      foodItem_id,
+      id,
     ]);
     res.json("Deleted Food Item Successfully");
   } catch (error) {
