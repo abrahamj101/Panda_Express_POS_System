@@ -42,8 +42,8 @@ app.use('/api', productUsageRoutes); // Product usage route
 app.use('/api', salesReportRoutes)
 app.use('/api', xreportRoutes); // X route
 app.use('/api', zreportRoutes); // Z route
-app.use('/api', xreportPaymentRoutes); // X route
-app.use('/api', zreportPaymentRoutes); // X route
+app.use('/api', xreportPaymentRoutes); // X pay route
+app.use('/api', zreportPaymentRoutes); // Z pay route
 
 // Root endpoint
 app.get("/", (req, res) => {

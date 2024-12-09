@@ -23,7 +23,7 @@ const SalesReport = () => {
 
     try {
       const response = await fetch(
-        `http://project-3-team-3-b-backend.vercel.app/api/sales-report?startDate=${startDate}&endDate=${endDate}`
+        `http://localhost:5001/api/sales-report?startDate=${startDate}&endDate=${endDate}`
       );
 
       if (!response.ok) {

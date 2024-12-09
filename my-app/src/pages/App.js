@@ -17,7 +17,7 @@ import XReport from '../components/Report/XReport';
 import ZReport from '../components/Report/ZReport';
 import XReportPayments from '../components/Report/XReportPayments';
 import ZReportPayments from '../components/Report/ZReportPayments';
-
+import SalesReport from '../components/Report/SalesReport';
 import MenuBoard from "./MenuBoard";
 import "../styles/Pages/default.css";
 import "../styles/Accessibility/Weather.css";
@@ -91,6 +91,7 @@ function App() {
               <Route path="/manager/inventory" element={<InventoryPage />} />
               <Route path="/manager/report" element={<ReportPage />} />
               <Route path="/manager/report/product-usage" element={<ProductUsageReport />} />
+              <Route path="/manager/report/sales-report" element={<SalesReport />} />
               <Route path="/manager/report/xreport" element={<XReport />} />
               <Route path="/manager/report/zreport" element={<ZReport />} />
               <Route path="/manager/report/xreport-payments" element={<XReportPayments />} />

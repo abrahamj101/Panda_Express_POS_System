@@ -16,8 +16,8 @@ const ReportsPage = () => {
     switch (currentReport) {
       case 'product-usage':
         return <ProductUsageReport />;
-        case 'sales-report':
-          return <SalesReport />;
+      case 'sales-report':
+        return <SalesReport />;
       case 'xreport':
         return <XReport />;
       case 'zreport':
@@ -44,8 +44,8 @@ const ReportsPage = () => {
         <div className="report-buttons">
           <button onClick={() => setCurrentReport('product-usage')}>Product Usage</button>
           <button onClick={() => setCurrentReport('sales-report')}>Sales Report</button>
-          <button onClick={() => setCurrentReport('xreport')}>XReport Sales</button>
-          <button onClick={() => setCurrentReport('zreport')}>ZReport Sales</button>
+          <button onClick={() => setCurrentReport('xreport')}>XReport </button>
+          <button onClick={() => setCurrentReport('zreport')}>ZReport </button>
           <button onClick={() => setCurrentReport('xreport-payments')}>XReport Payments</button>
           <button onClick={() => setCurrentReport('zreport-payments')}>ZReport Payments</button>
         </div>
