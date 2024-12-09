@@ -26,7 +26,7 @@ const MenuItemCard = ({ menuItem_name, price, image_link, foodItem_ids, menuItem
             <></>
           )}
           
-          <h3>{menuItem_name}</h3>
+          <p className="name">{menuItem_name}</p>
           <p>Price: ${price}</p>
         </Link>
       </div>

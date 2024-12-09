@@ -22,8 +22,8 @@
     object-fit: cover;
   }
   
-  .item-card h3 {
-    font-size: 18px;
+  .item-card .name {
+    font-size: 20px;
     margin: 10px 0;
     color: #333;
   }

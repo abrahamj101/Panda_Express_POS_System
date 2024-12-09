@@ -78,7 +78,7 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/menu" element={<MenuPage />} />
               <Route path="/food" element={<FoodPage />} />
-              <Route path="/order-history" element={<ProtectedPage><OrderHistoryPage /></ProtectedPage>} />
+              <Route path="/order-history" element={<ProtectedPage requiredRole={["customer", "cashier", "manager", "admin"]}><OrderHistoryPage /></ProtectedPage>} />
               <Route path="/manager" element={<ProtectedPage requiredRole={["manager", "admin" ]}><ManagerPage /></ProtectedPage>} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/menu-board" element={<MenuBoard />} />

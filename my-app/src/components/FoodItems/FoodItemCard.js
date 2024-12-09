@@ -21,7 +21,7 @@ const FoodItemCard = ({ foodItem, onSelect, onDeselect, quantity, disableAdd }) 
         <></>
       )}
       
-      <h3>{foodItem.fooditem_name}</h3>
+      <p className="name">{foodItem.fooditem_name}</p>
       {foodItem.premium ? <h3 className="premium">Premium Entree</h3> : null}
       <div className="selection-controls">
         <button onClick={onDeselect} disabled={quantity === 0}>-</button>

@@ -14,8 +14,7 @@ const ProtectedPage = ({ children, requiredRole }) => {
     if (!isLoggedIn) {
         return <Navigate to="/" />;
     }
-
-    if (!requiredRole.includes(role)) {
+    if (requiredRole && !requiredRole.includes(role)) {
         return <Navigate to="/" />;
     }
 
