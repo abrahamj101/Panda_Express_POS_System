@@ -6,7 +6,7 @@ import OrderHistoryPage from "./OrderHistory";
 import ManagerPage from "./Manager/Manager";
 import FoodItemPage from "./Manager/Fooditem";
 import MenuItemPage from "./Manager/Menuitem";
-import ProtectedPage from "../components/Login/ProtectedPages";
+import ProtectedPage from "../components/Login/ProtectedPages"; 
 import OrderPage from "./Manager/Order";
 import CheckoutPage from "./Checkout";
 import InventoryPage from "./Manager/Inventory";
@@ -15,6 +15,8 @@ import ReportPage from "./Manager/Report";
 import ProductUsageReport from '../components/Report/ProductUsageReport';
 import XReport from '../components/Report/XReport';
 import ZReport from '../components/Report/ZReport';
+import XReportPayments from '../components/Report/XReportPayments';
+
 import MenuBoard from "./MenuBoard";
 import "../styles/Pages/default.css";
 import "../styles/Accessibility/Weather.css";
@@ -90,6 +92,7 @@ function App() {
               <Route path="/manager/report/product-usage" element={<ProductUsageReport />} />
               <Route path="/manager/report/xreport" element={<XReport />} />
               <Route path="/manager/report/zreport" element={<ZReport />} />
+              <Route path="/manager/report/xreport-payments" element={<XReportPayments />} />
             </Routes>
             <AccessibilityButton />
           </Router>

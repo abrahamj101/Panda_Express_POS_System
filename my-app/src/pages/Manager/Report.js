@@ -4,6 +4,7 @@ import Footer from '../../components/Navigation/Footer';
 import ProductUsageReport from '../../components/Report/ProductUsageReport';
 import XReport from '../../components/Report/XReport';
 import ZReport from '../../components/Report/ZReport';
+import XReportPayments from '../../components/Report/XReportPayments';
 
 import '../../styles/Pages/ReportPage.css';
 
@@ -18,6 +19,8 @@ const ReportsPage = () => {
         return <XReport />;
       case 'zreport':
         return <ZReport />;
+      case 'xreport-payments':
+        return <XReportPayments />;
       // Add more cases as needed for other reports
       default:
         return <p>Please select a report type to view details.</p>;
