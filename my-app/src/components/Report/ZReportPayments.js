@@ -12,7 +12,7 @@ const ZReportPayments = () => {
         const formattedDate = new Date(date).toISOString().split('T')[0];
 
         try {
-            const response = await fetch(`http://project-3-team-3-b-backend.vercel.app/api/zreport-payments?date=${formattedDate}`, {
+            const response = await fetch(`https://project-3-team-3-b-backend.vercel.app/api/zreport-payments?date=${formattedDate}`, {
                 method: 'GET',
             });
 

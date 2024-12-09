@@ -23,7 +23,7 @@ const SalesReport = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5001/api/sales-report?startDate=${startDate}&endDate=${endDate}`
+        `https://localhost:5001/api/sales-report?startDate=${startDate}&endDate=${endDate}`
       );
 
       if (!response.ok) {

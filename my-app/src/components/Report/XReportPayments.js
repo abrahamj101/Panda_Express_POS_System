@@ -9,7 +9,7 @@ const XReportPayments = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`http://project-3-team-3-b-backend.vercel.app/api/xreport-payments?date=${date}`, {
+            const response = await fetch(`https://project-3-team-3-b-backend.vercel.app/api/xreport-payments?date=${date}`, {
                 method: 'GET',
             });
 
