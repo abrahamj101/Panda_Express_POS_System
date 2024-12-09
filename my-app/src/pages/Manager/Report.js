@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from '../../components/Navigation/Header';
 import Footer from '../../components/Navigation/Footer';
 import ProductUsageReport from '../../components/Report/ProductUsageReport';
+import SalesReport from '../../components/Report/SalesReport';
 import XReport from '../../components/Report/XReport';
 import ZReport from '../../components/Report/ZReport';
 import XReportPayments from '../../components/Report/XReportPayments';
@@ -15,6 +16,8 @@ const ReportsPage = () => {
     switch (currentReport) {
       case 'product-usage':
         return <ProductUsageReport />;
+        case 'sales-report':
+          return <SalesReport />;
       case 'xreport':
         return <XReport />;
       case 'zreport':
