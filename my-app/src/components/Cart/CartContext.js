@@ -109,9 +109,9 @@ export const CartContextProvider = ({ children }) => {
       try {
         await addOrders(customerId, menuItems, total, tax);
         console.log("Altering inventory")
-        for (let menuItem of menuItems) {
-          await menuItem.alterInventory();
-        }
+        // for (let menuItem of menuItems) {
+        //   await menuItem.alterInventory();
+        // }
         console.log("finished altering")
         emptyCart();
       } catch (error) {
