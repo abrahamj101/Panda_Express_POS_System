@@ -61,9 +61,10 @@ router.delete("/:menuItem_id", async (req, res) => {
 
 router.put("/update/instock", async (req, res) => {
   try {
+    console.log("update instock ")
     const { id, inStock } = req.body;
     const updateInventory = await pool.query(
-      "UPDATE menuitems SET in_stock = $1 WHERE menuitems = $2",
+      "UPDATE menuitems SET in_stock = $1 WHERE menuitem_id = $2",
       [inStock, id]
     );
   } catch (error) {

@@ -17,7 +17,7 @@ const OrderEntry = ({ order, menuItems, foodItems }) => {
 
   return (
       <div className="order-entry">
-          <h3>{`${formattedTime} - $${(parseFloat(order.total) + parseFloat(order.tax)).toFixed(2)}`}</h3>
+          <p className="order-time">{`${formattedTime} - $${(parseFloat(order.total) + parseFloat(order.tax)).toFixed(2)}`}</p>
           <div className="order-items">
               {order.menuitem_ids?.length > 0 ? (
                   order.menuitem_ids.map((menuItemId, index) => (
