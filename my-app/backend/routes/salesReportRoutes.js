@@ -1,40 +1,40 @@
-import express from 'express';
-import db from './db.js'; // Ensure this path matches your project structure
+// myapp/backend/routes/salesReportRoutes.js
+const express = require('express');
+const db = require('../db'); // Adjust this path if needed
 const router = express.Router();
 
+// Route for total sales report
 router.get('/sales-report', async (req, res) => {
   const { startDate, endDate } = req.query;
 
+  // Validate start and end dates
   if (!startDate || !endDate) {
-    return res.status(400).json({ message: 'Missing startDate or endDate query parameter.' });
+    return res.status(400).json({ error: 'Start and end dates are required.' });
   }
 
+  // Set the start and end times of the day
+  const formattedStartDate = new Date(startDate).setHours(0, 0, 0, 0);
+  const formattedEndDate = new Date(endDate).setHours(23, 59, 59, 999);
+
+  const startDateISO = new Date(formattedStartDate).toISOString();
+  const endDateISO = new Date(formattedEndDate).toISOString();
+
+  const query = `
+    SELECT DATE(o.ordered_time) AS order_date, 
+           SUM(o.total) AS total_sales
+    FROM orders o
+    WHERE o.ordered_time BETWEEN $1 AND $2
+    GROUP BY order_date
+    ORDER BY order_date;
+  `;
+
   try {
-    const formattedStartDate = new Date(startDate);
-    const formattedEndDate = new Date(endDate);
-
-    if (isNaN(formattedStartDate.getTime()) || isNaN(formattedEndDate.getTime())) {
-      return res.status(400).json({ message: 'Invalid date format. Please provide dates in the format YYYY-MM-DD.' });
-    }
-
-    // Assuming your query retrieves sales data based on the given date range
-    const query = `
-      SELECT * FROM sales
-      WHERE sale_date BETWEEN $1 AND $2
-    `;
-    const values = [formattedStartDate, formattedEndDate];
-
-    const result = await db.query(query, values);
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'No sales data found for the specified date range.' });
-    }
-
-    res.status(200).json(result.rows);
-  } catch (error) {
-    console.error('Error fetching sales report:', error);
-    res.status(500).json({ message: 'An error occurred while fetching the sales report.' });
+    const result = await db.query(query, [startDateISO, endDateISO]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching sales report:', err.message);
+    res.status(500).json({ error: 'Internal server error', details: err.message });
   }
 });
 
-export default router;
+module.exports = router;

@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import 'chart.js/auto';
+
+ChartJS.register(Title, Tooltip, Legend, BarElement);
 
 const SalesReport = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [reportData, setReportData] = useState(null);
+  const [reportData, setReportData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const fetchSalesReport = async () => {
     if (!startDate || !endDate) {
       alert('Please provide both start and end dates.');
       return;
@@ -16,57 +20,63 @@ const SalesReport = () => {
 
     setLoading(true);
     setError(null);
-    
+
     try {
-      const response = await fetch(`http://localhost:5001/api/sales-report?startDate=${startDate}&endDate=${endDate}`);
+      const response = await fetch(
+        `http://localhost:5001/api/sales-report?startDate=${startDate}&endDate=${endDate}`
+      );
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Error fetching data: ${response.status}`);
       }
+
       const data = await response.json();
       setReportData(data);
     } catch (err) {
-      setError(err.message);
-      console.error('Error fetching sales report:', err);
+      setError(err.message || 'Error fetching sales report.');
     } finally {
       setLoading(false);
     }
   };
 
+  const chartData = {
+    labels: reportData.map((item) => item.order_date),
+    datasets: [
+      {
+        label: 'Total Sales ($)',
+        data: reportData.map((item) => parseFloat(item.total_sales)),
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
     <div>
-      <h1>Sales Report</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="startDate">Start Date:</label>
-          <input 
-            type="date" 
-            id="startDate" 
-            value={startDate} 
-            onChange={(e) => setStartDate(e.target.value)} 
-            required 
-          />
-        </div>
-        <div>
-          <label htmlFor="endDate">End Date:</label>
-          <input 
-            type="date" 
-            id="endDate" 
-            value={endDate} 
-            onChange={(e) => setEndDate(e.target.value)} 
-            required 
-          />
-        </div>
-        <button type="submit">Generate Report</button>
-      </form>
-
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-      {reportData && (
-        <div>
-          <h2>Report Results</h2>
-          {/* Render the report data as needed */}
-          <pre>{JSON.stringify(reportData, null, 2)}</pre>
-        </div>
+      <h2>Sales Report</h2>
+      <div>
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          placeholder="Start Date"
+        />
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          placeholder="End Date"
+        />
+        <button onClick={fetchSalesReport} disabled={loading}>
+          {loading ? 'Loading...' : 'Submit'}
+        </button>
+      </div>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {reportData.length > 0 ? (
+        <Bar data={chartData} options={{ plugins: { legend: { display: true } } }} />
+      ) : (
+        !loading && <p>No data available. Please submit a valid date range.</p>
       )}
     </div>
   );
