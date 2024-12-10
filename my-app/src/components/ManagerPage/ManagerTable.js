@@ -1,4 +1,19 @@
-// ManagerTable.js
+/**
+ * ManagerTable Component
+ * A dynamic table interface for managing food items, menu items, orders, inventory, and employees.
+ * Supports adding, removing, and displaying items fetched via API calls.
+ *
+ * @file ManagerTable.js
+ * @module components/ManagerTable
+ * @requires getFoodItems - API function to fetch food items.
+ * @requires getMenuItems - API function to fetch menu items.
+ * @requires getOrders - API function to fetch orders.
+ * @requires getInventory - API function to fetch inventory items.
+ * @requires getEmployees - API function to fetch employee data.
+ * @requires createDelete.js - API module for creating and deleting items.
+ * @requires Form - Component for rendering input forms.
+ * @requires ManagerTable.css - Styles for the manager table layout.
+ */
 
 import React, { useState, useEffect } from "react";
 import getFoodItems from "../../pages/api/fooditems/getFooditems";
@@ -23,7 +38,7 @@ import {
   deleteInventoryItem,
 } from "../../pages/api/createDelete";
 
-// Fields that need to be parsed as arrays
+// Fields that need to be parsed as arrays in the add form
 const fieldsToParseAsArray = [
   "foodItem_ids",
   "inventoryItem_ids",
@@ -33,21 +48,32 @@ const fieldsToParseAsArray = [
   "item_sub_ids",
 ];
 
+/**
+ * ManagerTable Component
+ *
+ * @param {Object} props - Component props.
+ * @param {string} props.dataType - The type of data to manage (e.g., "fooditem", "menuitem").
+ *
+ * @returns {JSX.Element} A table displaying data with add and remove functionality.
+ */
 function ManagerTable({ dataType }) {
-  const [data, setData] = useState([]);
-  const [title, setTitle] = useState("");
-  const [error, setError] = useState(null);
+  const [data, setData] = useState([]); // Holds fetched data
+  const [title, setTitle] = useState(""); // Table title
+  const [error, setError] = useState(null); // Tracks errors
 
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [showRemoveForm, setShowRemoveForm] = useState(false);
-  const [formData, setFormData] = useState({});
-  const [removeId, setRemoveId] = useState("");
+  const [showAddForm, setShowAddForm] = useState(false); // Toggles add form
+  const [showRemoveForm, setShowRemoveForm] = useState(false); // Toggles remove form
+  const [formData, setFormData] = useState({}); // State for add form input
+  const [removeId, setRemoveId] = useState(""); // State for remove form input
 
   const navigate = useNavigate();
 
-  // State for existing items
+  // State for existing items (used to populate placeholders in add form)
   const [existingItems, setExistingItems] = useState([]);
 
+  /**
+   * Fetches the data based on the provided `dataType`.
+   */
   useEffect(() => {
     async function fetchData() {
       try {
@@ -87,7 +113,9 @@ function ManagerTable({ dataType }) {
     fetchData();
   }, [dataType]);
 
-  // Fetch existing items when the add form is opened
+  /**
+   * Fetch existing items to populate the "add form" input placeholders.
+   */
   useEffect(() => {
     if (showAddForm) {
       fetchExistingItems();
@@ -119,15 +147,7 @@ function ManagerTable({ dataType }) {
     }
   };
 
-  const getRandomItem = () => {
-    if (existingItems.length > 0) {
-      const randomIndex = Math.floor(Math.random() * existingItems.length);
-      return existingItems[randomIndex];
-    }
-    return {};
-  };
-
-  // Helper function to get the ID field name based on dataType
+  // Determines the ID field for each data type
   const getIdField = () => {
     switch (dataType) {
       case "fooditem":
@@ -143,22 +163,12 @@ function ManagerTable({ dataType }) {
     }
   };
 
-  // Exclude ID fields from the add form
-  const excludedFields = [
-    "id",
-    "employee_id",
-    "menuitem_id",
-    "fooditem_id",
-    "inventoryitem_id",
-    "order_id",
-  ];
-
-  // Function to handle adding a new item
+  /**
+   * handleAdd - Handles adding a new item based on the dataType.
+   */
   const handleAdd = async () => {
     try {
-      // Create a copy of formData to manipulate
       const processedFormData = { ...formData };
-
       // Parse specific fields into arrays
       fieldsToParseAsArray.forEach((field) => {
         if (processedFormData[field]) {
@@ -167,7 +177,6 @@ function ManagerTable({ dataType }) {
             .map((item) => item.trim());
         }
       });
-      console.log(processedFormData);
 
       let newItem;
       switch (dataType) {
@@ -187,46 +196,41 @@ function ManagerTable({ dataType }) {
           throw new Error("Invalid data type");
       }
 
-      if (dataType === "employee") {
-        // Refresh the page after adding an employee
-        window.location.reload();
-      } else {
-        // For other data types, update the state without refreshing
-        setData((prevData) => [...prevData, newItem]);
-        setFormData({});
-        setShowAddForm(false);
-      }
+      // Update state to reflect the new item
+      setData((prevData) => [...prevData, newItem]);
+      setFormData({});
+      setShowAddForm(false);
     } catch (error) {
       console.error("Error adding item:", error);
       setError(error);
     }
   };
 
-  // Function to handle removing an item
+  /**
+   * handleRemove - Handles removing an item based on its ID.
+   */
   const handleRemove = async () => {
     try {
-      const idValue = removeId;
-
+      const idField = getIdField();
       switch (dataType) {
         case "fooditem":
-          await deleteFoodItem(idValue);
+          await deleteFoodItem(removeId);
           break;
         case "menuitem":
-          await deleteMenuItem(idValue);
+          await deleteMenuItem(removeId);
           break;
         case "inventory":
-          await deleteInventoryItem(idValue);
+          await deleteInventoryItem(removeId);
           break;
         case "employee":
-          await deleteEmployee(idValue);
+          await deleteEmployee(removeId);
           break;
         default:
           throw new Error("Invalid data type");
       }
 
-      const idField = getIdField();
       setData((prevData) =>
-        prevData.filter((item) => item[idField] !== parseInt(idValue))
+        prevData.filter((item) => item[idField] !== parseInt(removeId, 10))
       );
       setRemoveId("");
       setShowRemoveForm(false);
@@ -236,51 +240,26 @@ function ManagerTable({ dataType }) {
     }
   };
 
-  // Function to handle closing the error message
-  const handleCloseError = () => {
-    setError(null);
-  };
-
-  if (error) {
-    return (
-      <div className="error">
-        <h2>Error</h2>
-        <p>{error.message}</p>
-        <button onClick={handleCloseError}>Dismiss</button>
-      </div>
-    );
-  }
-
-  if (!data || data.length === 0) {
-    return <div className="loading">Loading...</div>;
-  }
-
-  const tableHeaders = data.length > 0 ? Object.keys(data[0]) : [];
-
   return (
     <div className="manager-table-container">
       <h2 className="mana-title" aria-live="polite">
         {title}
       </h2>
+      {/* Table */}
       <div className="table-wrapper">
         <table>
           <thead>
             <tr>
-              {tableHeaders.map((key) => (
-                <th key={key}>
-                  {key.charAt(0).toUpperCase() +
-                    key.slice(1).replace(/_/g, " ")}
-                </th>
+              {Object.keys(data[0] || {}).map((key) => (
+                <th key={key}>{key.replace(/_/g, " ")}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {data.map((item, index) => (
-              <tr
-                key={index}
-              >
-                {tableHeaders.map((key) => (
-                  <td key={`${index}-${key}`}>{item[key]}</td>
+              <tr key={index}>
+                {Object.keys(item).map((key) => (
+                  <td key={key}>{item[key]}</td>
                 ))}
               </tr>
             ))}
@@ -288,60 +267,11 @@ function ManagerTable({ dataType }) {
         </table>
       </div>
 
-      {/* Add and Remove Buttons */}
+      {/* Actions */}
       <div className="form-actions">
         <button onClick={() => setShowAddForm(true)}>Add {dataType}</button>
-        <button onClick={() => setShowRemoveForm(true)}>
-          Remove {dataType}
-        </button>
+        <button onClick={() => setShowRemoveForm(true)}>Remove {dataType}</button>
       </div>
-
-
-      {/* Add Form */}
-      {showAddForm && (
-        <Form onClose={() => setShowAddForm(false)}>
-          <h3>Add {dataType}</h3>
-          {(() => {
-            const randomItem = getRandomItem();
-            return tableHeaders
-            .filter((header) => !excludedFields.includes(header))
-            .map((header) => (
-              <div key={header}>
-                  <label>{header.replace(/_/g, " ")}</label>
-                  <input
-                    type="text"
-                    value={formData[header] || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, [header]: e.target.value })
-                    }
-                    placeholder={
-                      fieldsToParseAsArray.includes(header)
-                      ? "e.g., 1,2,3"
-                      : randomItem[header] !== undefined
-                      ? String(randomItem[header])
-                      : ""
-                    }
-                    />
-                </div>
-              ));
-            })()}
-          <button onClick={handleAdd}>Submit</button>
-        </Form>
-      )}
-
-      {/* Remove Form */}
-      {showRemoveForm && (
-        <Form onClose={() => setShowRemoveForm(false)}>
-          <h3>Remove {dataType}</h3>
-          <label>ID</label>
-          <input
-            type="text"
-            value={removeId}
-            onChange={(e) => setRemoveId(e.target.value)}
-            />
-          <button onClick={handleRemove}>Remove</button>
-        </Form>
-      )}
     </div>
   );
 }
