@@ -3,11 +3,24 @@ import MenuItemCard from './MenuItemCard';
 import getMenuItems from '../../pages/api/menuItems/getMenuitem'
 import "../../styles/FoodandMenu/Grid.css"
 
+/**
+ * A component that renders a grid of menu items.
+ * @function MenuItemGrid
+ * @returns {JSX.Element} The MenuItemGrid component.
+ */
 function MenuItemGrid() {
+  /** @type {Array<Object>} State variable for storing menu items */
   const [menuItems, setMenuItems] = useState([]);
 
+  /**
+   * Fetches menu items from the API and updates the state.
+   * @async
+   * @function fetchMenuItems
+   * @returns {Promise<void>}
+   */
   const fetchMenuItems = async () => {
     try {
+      /** @type {Array<Object>} The fetched menu items */
       const items = await getMenuItems();
       setMenuItems(items);
     } catch (err) {
@@ -15,6 +28,7 @@ function MenuItemGrid() {
     }
   };
 
+  // Fetches menu items when the component mounts.
   useEffect(() => {
     fetchMenuItems();
   }, []);
