@@ -10,12 +10,7 @@ import ManagerButton from "./ManagerButton.js"; // Button for manager/admin spec
 import LoginContext from "../Login/LoginContext.js"; // Context for managing login state
 import { useContext } from "react"; // React hook to access context
 
-/**
- * Header component that renders the navigation header of the application.
- * Displays buttons and modals based on the user's login status and role.
- * @component
- * @returns {JSX.Element} The rendered Header component.
- */
+// Header Component: Renders the top navigation bar with dynamic buttons based on login state and user role
 function Header() {
   // Destructure the login state and role from LoginContext
   const { isLoggedIn, role } = useContext(LoginContext);
