@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/components/Carosuel/ImageCarousel.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/components/Carosuel/ImageCarousel.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * ImageCarousel component.
+ * Displays an interactive carousel of menu items with images, alt text, and legends.
+ *
+ * @file ImageCarousel.js
+ * @module components/ImageCarousel
+ * @requires react-responsive-carousel
+ * @requires react-responsive-carousel/lib/styles/carousel.min.css
+ * @requires ../../styles/carousel.css
+ */
+
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import "../../styles/carousel.css";
+
+/**
+ * Array of carousel items containing image data.
+ * Each item includes the image source, alternative text, and legend.
+ * 
+ * @constant
+ * @type {Array&lt;Object>}
+ * @property {string} src - URL of the image to display.
+ * @property {string} alt - Alternative text for accessibility.
+ * @property {string} legend - Caption for the image.
+ */
+const carouselItems = [
+  {
+    src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/Chicken_OrangeChicken.png",
+    alt: "Orange Chicken",
+    legend: "Orange Chicken",
+  },
+  {
+    src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/Beef_ShanghaiAngusSteak.png",
+    alt: "Black Pepper Sirloin Steak",
+    legend: "Black Pepper Sirloin Steak",
+  },
+  {
+    src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/Seafood_HoneyWalnutShrimp.png",
+    alt: "Honey Walnut Shrimp",
+    legend: "Honey Walnut Shrimp",
+  },
+  {
+    src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/Chicken_GrilledTeriyakiChicken.png",
+    alt: "Grilled Teriyaki Chicken",
+    legend: "Grilled Teriyaki Chicken",
+  },
+  {
+    src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/Chicken_KungPaoChicken.png",
+    alt: "Kung Pao Chicken",
+    legend: "Kung Pao Chicken",
+  },
+  {
+    src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/ChickenBreast_HoneySesameChickenBreast.png",
+    alt: "Honey Sesame Chicken Breast",
+    legend: "Honey Sesame Chicken Breast",
+  },
+  {
+    src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/Beef_BeijingBeef.png",
+    alt: "Beijing Beef",
+    legend: "Beijing Beef",
+  },
+  {
+    src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/Chicken_MushroomChicken.png",
+    alt: "Mushroom Chicken",
+    legend: "Mushroom Chicken",
+  },
+  {
+    src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/ChickenBreast_SweetFireChickenBreast.png",
+    alt: "SweetFire Chicken Breast",
+    legend: "SweetFire Chicken Breast",
+  },
+  {
+    src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/ChickenBreast_StringBeanChickenBreast.png",
+    alt: "String Bean Chicken Breast",
+    legend: "String Bean Chicken Breast",
+  },
+  {
+    src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/Beef_BroccoliBeef.png",
+    alt: "Broccoli Beef",
+    legend: "Broccoli Beef",
+  },
+  {
+    src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/Chicken_BlackPepperChicken.png",
+    alt: "Black Pepper Chicken",
+    legend: "Black Pepper Chicken",
+  },
+  {
+    src: "https://nomnom-files.pandaexpress.com/global/assets/modifiers/Vegetables_SuperGreens.png",
+    alt: "Super Greens",
+    legend: "Super Greens",
+  },
+];
+
+/**
+ * ImageCarousel functional component.
+ * Renders an accessible image carousel with autoplay, infinite looping, and keyboard navigation.
+ * 
+ * @component
+ * @returns {JSX.Element} JSX element representing the carousel.
+ */
+function ImageCarousel() {
+  return (
+    &lt;div
+      className="carousel-wrapper"
+      aria-label="Image carousel showcasing popular menu items"
+    >
+      &lt;Carousel
+        className="carousel-container"
+        showArrows={true}          // Enables navigation arrows for manual control
+        autoPlay={true}           // Carousel plays automatically on page load
+        infiniteLoop={true}       // Enables infinite looping of carousel slides
+        showThumbs={false}        // Hides thumbnail navigation below the carousel
+        interval={3000}           // Sets delay between slides to 3 seconds
+        swipeable={true}          // Allows users to swipe through slides on touch devices
+        emulateTouch={true}       // Improves touch interaction experience
+        useKeyboardArrows={true}  // Enables keyboard navigation (left/right arrows)
+        aria-roledescription="carousel" // ARIA role for screen readers
+        stopOnHover={true}        // Pauses the autoplay when hovering over the carousel
+        aria-live="polite"        // Announces changes politely for screen readers
+      >
+        {carouselItems.map((item, index) => (
+          &lt;div className="image-box" key={index}>
+            &lt;img className="carousel-image" src={item.src} alt={item.alt} />
+            &lt;p className="legend" aria-hidden="true">
+              {item.legend}
+            &lt;/p>
+          &lt;/div>
+        ))}
+      &lt;/Carousel>
+    &lt;/div>
+  );
+}
+
+export default ImageCarousel;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Form">Form</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 00:12:46 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
