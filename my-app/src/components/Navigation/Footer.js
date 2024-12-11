@@ -1,4 +1,8 @@
-// Footer Component: Displays contact information for the application
+/**
+ * @description Footer component renders the footer section of the page with contact information.
+ * @component
+ * @returns {JSX.Element} The rendered Footer component.
+ */
 const Footer = () => {
   return (
       <footer className="footer"> {/* Footer section styled with the "footer" class */}
