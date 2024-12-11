@@ -1,9 +1,19 @@
-// routes/orders.js
+/**
+ * @module Orders Router
+ * @fileoverview Provides endpoints for managing and retrieving order data.
+ */
+
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
-// Route to get all orders
+/**
+ * @route GET /
+ * @description Fetch all orders with pagination.
+ * @query {number} page - The page number to fetch (default is 1).
+ * @returns {Object} Paginated orders with total pages and current page.
+ * @throws {Error} 500 - Failed to fetch orders.
+ */
 router.get("/", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
@@ -32,6 +42,13 @@ router.get("/", async (req, res) => {
   }
 });
 
+/**
+ * @route POST /
+ * @description Add a new order.
+ * @body {Object} Order data including employee_id, customer_id, menuitem_ids, total, tax, ordered_time, and fooditem_ids.
+ * @returns {Object} The added order data.
+ * @throws {Error} 500 - An error occurred while adding the order.
+ */
 router.post("/", async (req, res) => {
   try {
     const {
@@ -66,6 +83,14 @@ router.post("/", async (req, res) => {
   }
 });
 
+/**
+ * @route GET /customer
+ * @description Fetch orders for a specific customer.
+ * @query {string} id - The ID of the customer.
+ * @returns {Object[]} Array of orders for the specified customer.
+ * @throws {Error} 400 - Customer ID is required.
+ * @throws {Error} 500 - Failed to fetch orders.
+ */
 router.get("/customer", async (req, res) => {
   try {
     const { id } = req.query;

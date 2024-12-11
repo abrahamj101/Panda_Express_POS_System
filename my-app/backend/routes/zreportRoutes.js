@@ -1,8 +1,20 @@
+/**
+ * @module Z Report Route
+ * @fileoverview Endpoint for fetching a Z report that summarizes total sales by hour of the day for a given date and resets the totals in the database.
+ */
+
 const express = require("express");
 const router = express.Router();
 const pool = require("../db"); // Assuming you're using the same database connection as X Reports
 
-// Fetch Z Report data
+/**
+ * @route GET /zreport
+ * @description Retrieves total sales by hour for a given date and resets the total sales for that date in the database.
+ * @query {string} date - The date for which the report is requested (in ISO format).
+ * @returns {Object[]} Array of objects containing hour of the day and total sales.
+ * @throws {Error} 400 - Missing date parameter in the request.
+ * @throws {Error} 500 - Error querying the database or resetting totals.
+ */
 router.get("/zreport", async (req, res) => {
     try {
         const { date } = req.query;
@@ -10,6 +22,7 @@ router.get("/zreport", async (req, res) => {
         // Log the received date to the console
         console.log("Request received with date:", date);
 
+        // Validate if the date parameter is provided
         if (!date) {
             return res.status(400).json({ error: "Date is required" });
         }
@@ -28,6 +41,7 @@ router.get("/zreport", async (req, res) => {
             ORDER BY hour_of_day;
         `);
 
+        // Main query to get Z Report data
         const query = `
             SELECT
                 EXTRACT(HOUR FROM ordered_time) AS hour_of_day,
@@ -38,6 +52,7 @@ router.get("/zreport", async (req, res) => {
             ORDER BY hour_of_day;
         `;
 
+        // Query to reset total sales in the 'Orders' table for the given date
         const updateQuery = `
             UPDATE orders
             SET total = 0
@@ -69,4 +84,5 @@ router.get("/zreport", async (req, res) => {
     }
 });
 
+// Export the router
 module.exports = router;

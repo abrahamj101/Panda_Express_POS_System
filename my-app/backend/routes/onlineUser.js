@@ -1,11 +1,19 @@
-// routes/onlineUser.js
-// This file defines routes for managing online users in the system.
+/**
+ * @module Online User Router
+ * @fileoverview Provides endpoints for managing online user data.
+ * This file defines routes for managing online users in the system.
+ */
 
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Import the database connection
 
-// Route to fetch all online users
+/**
+ * @route GET /
+ * @description Fetch all online users.
+ * @returns {Object[]} Array of online users.
+ * @throws {Error} 500 - Failed to fetch online user data.
+ */
 router.get('/', async (req, res) => {
   try {
     // Query the database to retrieve all online users, ordered by user ID
@@ -21,7 +29,13 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Route to add a new online user
+/**
+ * @route POST /
+ * @description Add a new online user.
+ * @body {Object} User data including first_name, last_name, email, role, customer_id, and employee_id.
+ * @returns {Object} The added online user data.
+ * @throws {Error} 500 - An error occurred while adding the online user.
+ */
 router.post("/", async (req, res) => {
   try {
     // Destructure user details from the request body
@@ -49,7 +63,15 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Route to check if a user exists based on their email
+/**
+ * @route GET /exists
+ * @description Check if an online user exists by email.
+ * @query {string} email - The email of the user to check.
+ * @returns {Object} The user data if found.
+ * @throws {Error} 400 - Email is required.
+ * @throws {Error} 404 - User not found.
+ * @throws {Error} 500 - Failed to fetch user.
+ */
 router.get("/exists", async (req, res) => {
   try {
     const { email } = req.query; // Extract the email from the query parameters

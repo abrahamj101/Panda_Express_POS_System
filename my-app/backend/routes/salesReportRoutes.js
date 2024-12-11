@@ -1,9 +1,20 @@
-// myapp/backend/routes/salesReportRoutes.js
+/**
+ * @module Sales Report Routes
+ * @fileoverview Provides an endpoint for fetching total sales reports within a specified date range.
+ */
 const express = require('express');
 const db = require('../db'); // Adjust this path if needed
 const router = express.Router();
 
-// Route for total sales report
+/**
+ * @route GET /sales-report
+ * @description Fetches a total sales report for a given date range.
+ * @query {string} startDate - The start date of the range (ISO string).
+ * @query {string} endDate - The end date of the range (ISO string).
+ * @returns {Object[]} Array of objects containing order date and total sales for each date.
+ * @throws {Error} 400 - Missing start or end date in the request.
+ * @throws {Error} 500 - Error querying the database.
+ */
 router.get('/sales-report', async (req, res) => {
   const { startDate, endDate } = req.query;
 

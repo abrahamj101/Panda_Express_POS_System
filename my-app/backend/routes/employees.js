@@ -1,11 +1,27 @@
-// routes/employees.js
-// This file defines routes for managing employee-related operations in the Panda Express POS system.
+/**
+ * @module Employee Routes
+ * @fileoverview Provides endpoints for managing employee data, including CRUD operations for employee records and schedules.
+ * This file defines routes for managing employee-related operations in the Panda Express POS system.
+ */
 
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Import database connection pool for executing SQL queries.
 
-// Route to get all employees
+/**
+ * @file employees.js
+ * @description Routes for handling employee-related API endpoints.
+ */
+
+/**
+ * GET /api/employees
+ * Retrieves all employees from the database.
+ * 
+ * @route GET /api/employees
+ * @async
+ * @returns {JSON} An array of employee objects.
+ * @throws {500} Returns an error message if the query fails.
+ */
 router.get('/', async (req, res) => {
   try {
     // Execute a SQL query to fetch all employees, sorted by employee ID.
@@ -21,7 +37,20 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Route to add a new employee
+/**
+ * POST /api/employees
+ * Adds a new employee to the database.
+ * 
+ * @route POST /api/employees
+ * @async
+ * @param {Object} req.body - The request body containing employee details.
+ * @param {string} req.body.employee_first_name - The first name of the employee.
+ * @param {string} req.body.employee_last_name - The last name of the employee.
+ * @param {number} req.body.hours_worked - The number of hours the employee has worked.
+ * @param {string[]} req.body.schedule - An array of times representing the employee's schedule.
+ * @returns {JSON} The newly created employee object.
+ * @throws {500} Returns an error message if the query fails.
+ */
 router.post("/", async (req, res) => {
   try {
     // Destructure employee details from the request body.
@@ -43,7 +72,18 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Route to delete an employee by ID
+/**
+ * DELETE /api/employees/:employee_id
+ * Deletes an employee from the database.
+ * 
+ * @route DELETE /api/employees/:employee_id
+ * @async
+ * @param {Object} req.params - The request parameters containing the employee ID.
+ * @param {number} req.params.employee_id - The ID of the employee to delete.
+ * @returns {JSON} A success message or an error message if the employee is not found.
+ * @throws {404} Returns an error message if the employee is not found.
+ * @throws {500} Returns an error message if the query fails.
+ */
 router.delete("/:employee_id", async (req, res) => {
   try {
     // Extract the employee_id parameter from the request URL and parse it as an integer.

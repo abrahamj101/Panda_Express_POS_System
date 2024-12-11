@@ -1,11 +1,21 @@
-// routes/nutrition.js
-// This file defines routes for managing nutrition-related data for food items.
+/**
+ * @module Nutrition Data Router
+ * @fileoverview Provides an endpoint to fetch nutrition data for food items.
+ * This file defines routes for managing nutrition-related data for food items.
+ */
 
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Import the database connection
 
-// Route to get nutrition data for a specific food item
+/**
+ * @route GET /
+ * @description Fetch all nutrition data for a specific food item based on its ID.
+ * @query {string} id - ID of the food item.
+ * @returns {Object[]} Array of nutrition data for the given food item.
+ * @throws {Error} 400 - Food Item ID is required.
+ * @throws {Error} 500 - Failed to fetch nutrition data.
+ */
 router.get("/", async (req, res) => {
   try {
     const { id } = req.query; // Extract the 'id' parameter from the query string

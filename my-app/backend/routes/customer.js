@@ -1,11 +1,26 @@
-// routes/customer.js
-// This file defines routes for managing customer-related operations in the app.
+/**
+ * @module Customer Routes
+ * @fileoverview Provides endpoints for managing customer data, including CRUD operations for customer records.
+ */
 
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Import database connection pool for executing SQL queries.
 
-// Route to get all customers
+/**
+ * @file customer.js
+ * @description Routes for handling customer-related API endpoints.
+ */
+
+/**
+ * GET /api/customers
+ * Retrieves all customers from the database.
+ * 
+ * @route GET /api/customers
+ * @async
+ * @returns {JSON} An array of customer objects.
+ * @throws {500} Returns an error message if the query fails.
+ */
 router.get('/', async (req, res) => {
   try {
     // Execute a SQL query to fetch all customers, sorted by customer ID.
@@ -21,7 +36,20 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Route to add a new customer
+/**
+ * POST /api/customers
+ * Adds a new customer to the database.
+ * 
+ * @route POST /api/customers
+ * @async
+ * @param {Object} req.body - The request body containing customer details.
+ * @param {string} req.body.customer_first_name - The first name of the customer.
+ * @param {string} req.body.customer_last_name - The last name of the customer.
+ * @param {string} req.body.payment_method - The payment method of the customer.
+ * @param {string} req.body.payment_information - The payment information of the customer.
+ * @returns {JSON} The newly created customer object.
+ * @throws {500} Returns an error message if the query fails.
+ */
 router.post("/", async (req, res) => {
   try {
     // Destructure customer details from the request body.

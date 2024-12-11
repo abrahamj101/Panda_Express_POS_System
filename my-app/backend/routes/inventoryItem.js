@@ -1,8 +1,18 @@
+/**
+ * @module Inventory Items Router
+ * @fileoverview Provides endpoints for CRUD operations and inventory management.
+ */
+
 const express = require("express");
 const router = express.Router();
 const pool = require("../db"); // Import the database connection
 
-// Endpoint to fetch all inventory items
+/**
+ * @route GET /
+ * @description Fetch all inventory items, ordered by their ID.
+ * @returns {Object[]} Array of inventory items.
+ * @throws {Error} 500 - Failed to fetch inventory items.
+ */
 router.get("/", async (req, res) => {
   try {
     // Query to fetch all inventory items, ordered by inventoryItem_id
@@ -18,7 +28,14 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Endpoint to fetch a single inventory item by ID
+/**
+ * @route GET /:id
+ * @description Fetch a single inventory item by ID.
+ * @param {string} id - ID of the inventory item.
+ * @returns {Object} Inventory item details.
+ * @throws {Error} 404 - Inventory item not found.
+ * @throws {Error} 500 - Failed to fetch inventory item.
+ */
 router.get("/:id", async (req, res) => {
   const { id } = req.params; // Extract the item ID from the request parameters
   try {
@@ -35,7 +52,15 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Endpoint to add a new inventory item
+/**
+ * @route POST /
+ * @description Add a new inventory item to the database.
+ * @body {string} inventoryitem_name - Name of the inventory item.
+ * @body {number} quantity - Quantity of the inventory item.
+ * @body {string} last_restocked - Date the item was last restocked.
+ * @returns {Object} Newly created inventory item.
+ * @throws {Error} 500 - Failed to add the inventory item.
+ */
 router.post("/", async (req, res) => {
   try {
     // Destructure inventory item details from the request body
@@ -55,7 +80,17 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Endpoint to update an inventory item by ID
+/**
+ * @route PUT /:id
+ * @description Update an existing inventory item by ID.
+ * @param {string} id - ID of the inventory item to update.
+ * @body {string} name - Updated name of the inventory item.
+ * @body {number} quantity - Updated quantity of the inventory item.
+ * @body {number} price - Updated price of the inventory item.
+ * @returns {Object} Updated inventory item.
+ * @throws {Error} 404 - Inventory item not found.
+ * @throws {Error} 500 - Failed to update inventory item.
+ */
 router.put("/:id", async (req, res) => {
   const { id } = req.params; // Extract the item ID from the request parameters
   const { name, quantity, price } = req.body; // Extract updated values from the request body
@@ -76,7 +111,13 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Endpoint to delete an inventory item by ID
+/**
+ * @route DELETE /:id
+ * @description Delete an inventory item by ID.
+ * @param {string} id - ID of the inventory item to delete.
+ * @returns {string} Success message.
+ * @throws {Error} 500 - Failed to delete inventory item.
+ */
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params; // Extract the item ID from the request parameters
@@ -89,7 +130,14 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Endpoint to update inventory item quantity after orders
+/**
+ * @route PUT /update/quantity/orders
+ * @description Update inventory quantity based on order.
+ * @body {number} quantity - Quantity to deduct from the inventory.
+ * @body {string} id - ID of the inventory item to update.
+ * @returns {string} Success message.
+ * @throws {Error} 500 - Failed to update inventory item quantity.
+ */
 router.put("/update/quantity/orders", async (req, res) => {
   try {
     const { quantity, id } = req.body; // Extract quantity and item ID from the request body

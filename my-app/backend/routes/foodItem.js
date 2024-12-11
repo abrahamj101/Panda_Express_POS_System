@@ -1,8 +1,26 @@
+/**
+ * @module Food Item Routes
+ * @fileoverview Provides endpoints for managing food item data, including CRUD operations for food item records and details.
+ */
+
 const express = require("express");
 const router = express.Router();
 const pool = require("../db"); // Import the database connection
 
-// Endpoint to fetch all food items
+/**
+ * @file fooditems.js
+ * @description Routes for managing food items in the database.
+ */
+
+/**
+ * GET /api/fooditems
+ * Retrieves all food items from the database.
+ * 
+ * @route GET /api/fooditems
+ * @async
+ * @returns {JSON} An array of food item objects.
+ * @throws {500} Returns an error message if the query fails.
+ */
 router.get("/", async (req, res) => {
   try {
     // Query the database to retrieve all food items, ordered by their ID.
@@ -16,7 +34,18 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Endpoint to fetch a single food item by ID
+/**
+ * GET /api/fooditems/:id
+ * Retrieves a single food item by ID.
+ * 
+ * @route GET /api/fooditems/:id
+ * @async
+ * @param {Object} req.params - The request parameters.
+ * @param {number} req.params.id - The ID of the food item.
+ * @returns {JSON} The food item object if found, or an error message if not found.
+ * @throws {404} Returns an error message if the food item is not found.
+ * @throws {500} Returns an error message if the query fails.
+ */
 router.get("/:id", async (req, res) => {
   const { id } = req.params; // Extract the ID from the request parameters.
   try {
@@ -33,7 +62,22 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Endpoint to update a food item by ID
+/**
+ * PUT /api/fooditems/:id
+ * Updates a food item by ID.
+ * 
+ * @route PUT /api/fooditems/:id
+ * @async
+ * @param {Object} req.params - The request parameters.
+ * @param {number} req.params.id - The ID of the food item.
+ * @param {Object} req.body - The request body containing updated food item details.
+ * @param {string} req.body.name - The updated name of the food item.
+ * @param {string} req.body.description - The updated description of the food item.
+ * @param {number} req.body.price - The updated price of the food item.
+ * @returns {JSON} The updated food item object, or an error message if not found.
+ * @throws {404} Returns an error message if the food item is not found.
+ * @throws {500} Returns an error message if the query fails.
+ */
 router.put("/:id", async (req, res) => {
   const { id } = req.params; // Extract the ID from the request parameters.
   const { name, description, price } = req.body; // Destructure updated details from the request body.
@@ -54,7 +98,17 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Endpoint to delete a food item by ID
+/**
+ * DELETE /api/fooditems/:id
+ * Deletes a food item by ID.
+ * 
+ * @route DELETE /api/fooditems/:id
+ * @async
+ * @param {Object} req.params - The request parameters.
+ * @param {number} req.params.id - The ID of the food item to delete.
+ * @returns {JSON} A success message upon successful deletion.
+ * @throws {500} Returns an error message if the query fails.
+ */
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params; // Extract the ID from the request parameters.
@@ -67,7 +121,17 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Endpoint to update the 'in_stock' status of a food item
+/**
+ * PUT /api/fooditems/update/instock
+ * Updates the stock status of a food item.
+ * 
+ * @route PUT /api/fooditems/update/instock
+ * @async
+ * @param {Object} req.body - The request body containing stock status details.
+ * @param {number} req.body.id - The ID of the food item to update.
+ * @param {boolean} req.body.inStock - The new stock status of the food item.
+ * @throws {500} Returns an error message if the query fails.
+ */
 router.put("/update/instock", async (req, res) => {
   try {
     const { id, inStock } = req.body; // Extract the ID and stock status from the request body.
@@ -83,7 +147,25 @@ router.put("/update/instock", async (req, res) => {
   }
 });
 
-// Endpoint to add a new food item
+/**
+ * POST /api/fooditems
+ * Adds a new food item to the database.
+ * 
+ * @route POST /api/fooditems
+ * @async
+ * @param {Object} req.body - The request body containing food item details.
+ * @param {string} req.body.foodItem_name - The name of the food item.
+ * @param {string} req.body.type - The type of the food item.
+ * @param {string[]} req.body.inventoryitem_ids - IDs of inventory items used.
+ * @param {number[]} req.body.inventory_amounts - Amounts of inventory items used.
+ * @param {boolean} req.body.in_stock - Whether the food item is in stock.
+ * @param {boolean} req.body.seasonal - Whether the food item is seasonal.
+ * @param {string} req.body.image_link - Link to the food item's image.
+ * @param {boolean} req.body.premium - Whether the food item is premium.
+ * @param {string[]} req.body.restriction - Dietary restrictions associated.
+ * @returns {JSON} The newly created food item object.
+ * @throws {500} Returns an error message if the query fails.
+ */
 router.post("/", async (req, res) => {
   try {
     // Destructure food item details from the request body.

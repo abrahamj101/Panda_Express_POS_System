@@ -1,9 +1,18 @@
-// routes/report.js
+/**
+ * @module Report Routes
+ * @fileoverview Provides endpoints to retrieve various reports including orders, sales by employee, and product usage.
+ */
+
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Assuming you have a db module for database connection
 
-// Route to get a summary of all orders
+/**
+ * @route GET /orders
+ * @description Fetches a summary of all orders.
+ * @returns {Object[]} Array of orders with details such as order ID, employee ID, customer ID, etc.
+ * @throws {Error} 500 - Error fetching orders.
+ */
 router.get('/orders', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -18,7 +27,12 @@ router.get('/orders', async (req, res) => {
   }
 });
 
-// Route to get a report of total sales by employee
+/**
+ * @route GET /sales-by-employee
+ * @description Fetches a report of total sales by employee.
+ * @returns {Object[]} Array of employee sales data with employee ID, name, and total sales.
+ * @throws {Error} 500 - Error fetching sales by employee.
+ */
 router.get('/sales-by-employee', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -35,24 +49,23 @@ router.get('/sales-by-employee', async (req, res) => {
   }
 });
 
-// Endpoint for fetching product usage report
+/**
+ * @route GET /product-usage
+ * @description Fetches a product usage report for a given date range.
+ * @query {string} startDate - The start date of the range (ISO string).
+ * @query {string} endDate - The end date of the range (ISO string).
+ * @returns {Object[]} Array of product usage data, including inventory item name and total order count.
+ * @throws {Error} 500 - Error fetching product usage report.
+ */
 router.get('/product-usage', async (req, res) => {
     const { startDate, endDate } = req.query;
   
     try {
-      // const query = `
-      //   SELECT ii.inventoryItem_name, SUM(t.inventory_amount) AS total_used
-      //   FROM orders o
-      //   JOIN UNNEST(o.menuitem_ids) WITH ORDINALITY AS oi(menuitem_id, ord_m) ON TRUE
-      //   JOIN menuitems mi ON mi.menuitem_id = oi.menuitem_id
-      //   JOIN UNNEST(mi.fooditem_ids) WITH ORDINALITY AS fo(fooditem_id, ord_f) ON TRUE
-      //   JOIN fooditems fi ON fi.fooditem_id = fo.fooditem_id
-      //   JOIN UNNEST(fi.inventoryitem_ids, fi.inventory_amounts) WITH ORDINALITY AS t(inventoryItem_id, inventory_amount, ord_i) ON TRUE
-      //   JOIN inventoryitems ii ON ii.inventoryitem_id = t.inventoryItem_id
-      //   WHERE o.ordered_time BETWEEN $1 AND $2
-      //   GROUP BY ii.inventoryItem_name
-      //   ORDER BY total_used DESC;
-      // `;
+      if (!startDate || !endDate) {
+        console.log('Start or end date is missing');
+        return res.status(400).json({ error: 'Start and end dates are required.' });
+      }
+      
       const query = `
         SELECT ii.inventoryItem_name, COUNT(o.order_id) AS total_orders
         FROM orders o

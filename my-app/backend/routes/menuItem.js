@@ -1,8 +1,24 @@
+/**
+ * @module Menu Items Router
+ * @fileoverview Provides endpoints for CRUD operations and managing menu items.
+ */
+
 const express = require("express");
 const pool = require("../db"); // Import the database connection
 const router = express.Router(); // Create an instance of the Express router
 
-// Endpoint to add a new menu item
+/**
+ * @route POST /
+ * @description Add a new menu item to the database.
+ * @body {string} menuitem_name - Name of the menu item.
+ * @body {number} price - Price of the menu item.
+ * @body {Array} fooditem_ids - Array of associated food item IDs.
+ * @body {Array} inventoryitem_ids - Array of associated inventory item IDs.
+ * @body {boolean} in_stock - Whether the menu item is in stock.
+ * @body {string} image_link - URL link to the menu item's image.
+ * @returns {Object} Newly created menu item.
+ * @throws {Error} 500 - Failed to add the menu item.
+ */
 router.post("/", async (req, res) => {
   try {
     // Destructure menu item details from the request body
@@ -35,7 +51,12 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Endpoint to fetch all menu items
+/**
+ * @route GET /
+ * @description Fetch all menu items, ordered by their ID.
+ * @returns {Object[]} Array of menu items.
+ * @throws {Error} 500 - Failed to fetch menu items.
+ */
 router.get("/", async (req, res) => {
   try {
     // Query the database to retrieve all menu items, ordered by menuItem_id
@@ -49,7 +70,13 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Endpoint to delete a menu item by ID
+/**
+ * @route DELETE /:menuItem_id
+ * @description Delete a menu item by its ID.
+ * @param {string} menuItem_id - ID of the menu item to delete.
+ * @returns {string} Success message.
+ * @throws {Error} 500 - Failed to delete menu item.
+ */
 router.delete("/:menuItem_id", async (req, res) => {
   try {
     const { menuItem_id } = req.params; // Extract menuItem_id from the request parameters
@@ -64,7 +91,14 @@ router.delete("/:menuItem_id", async (req, res) => {
   }
 });
 
-// Endpoint to update the 'in_stock' status of a menu item
+/**
+ * @route PUT /update/instock
+ * @description Update the stock status of a menu item.
+ * @body {string} id - ID of the menu item to update.
+ * @body {boolean} inStock - New stock status of the menu item.
+ * @returns {string} Success message.
+ * @throws {Error} 500 - Failed to update stock status.
+ */
 router.put("/update/instock", async (req, res) => {
   try {
     console.log("update instock "); // Log update operation for debugging
