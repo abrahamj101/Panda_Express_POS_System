@@ -2,7 +2,7 @@
  * addInventoryItem Utility Function
  * Adds a new inventory item to the backend API.
  *
- * @file addInventoryItem.js
+ * @file addInventoryItems.js
  * @module utils/addInventoryItem
  * @requires fetch
  */
