@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: backend/routes/menuItem.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: backend/routes/menuItem.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module Menu Items Router
+ * @fileoverview Provides endpoints for CRUD operations and managing menu items.
+ */
+
+const express = require("express");
+const pool = require("../db"); // Import the database connection
+const router = express.Router(); // Create an instance of the Express router
+
+/**
+ * @route POST /
+ * @description Add a new menu item to the database.
+ * @body {string} menuitem_name - Name of the menu item.
+ * @body {number} price - Price of the menu item.
+ * @body {Array} fooditem_ids - Array of associated food item IDs.
+ * @body {Array} inventoryitem_ids - Array of associated inventory item IDs.
+ * @body {boolean} in_stock - Whether the menu item is in stock.
+ * @body {string} image_link - URL link to the menu item's image.
+ * @returns {Object} Newly created menu item.
+ * @throws {Error} 500 - Failed to add the menu item.
+ */
+router.post("/", async (req, res) => {
+  try {
+    // Destructure menu item details from the request body
+    const {
+      menuitem_name,
+      price,
+      fooditem_ids,
+      inventoryitem_ids,
+      in_stock,
+      image_link
+    } = req.body;
+
+    // Insert a new menu item into the database and return the inserted row
+    const result = await pool.query(
+      "INSERT INTO MenuItems (menuitem_name, price, fooditem_ids, inventoryitem_ids, in_stock, image_link) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
+      [
+        menuitem_name,
+        price,
+        fooditem_ids,
+        inventoryitem_ids,
+        in_stock,
+        image_link
+      ]
+    );
+
+    res.status(201).json(result.rows[0]); // Respond with the newly created menu item
+  } catch (error) {
+    console.error(error); // Log the error to the console
+    res.status(500).json({ error: "An error occurred while adding the menu item" });
+  }
+});
+
+/**
+ * @route GET /
+ * @description Fetch all menu items, ordered by their ID.
+ * @returns {Object[]} Array of menu items.
+ * @throws {Error} 500 - Failed to fetch menu items.
+ */
+router.get("/", async (req, res) => {
+  try {
+    // Query the database to retrieve all menu items, ordered by menuItem_id
+    const result = await pool.query(
+      "SELECT * FROM MenuItems ORDER BY menuItem_id"
+    );
+    res.json(result.rows); // Send the retrieved rows as JSON response
+  } catch (err) {
+    console.error(err); // Log the error for debugging
+    res.status(500).json({ error: "Failed to fetch menu items" });
+  }
+});
+
+/**
+ * @route DELETE /:menuItem_id
+ * @description Delete a menu item by its ID.
+ * @param {string} menuItem_id - ID of the menu item to delete.
+ * @returns {string} Success message.
+ * @throws {Error} 500 - Failed to delete menu item.
+ */
+router.delete("/:menuItem_id", async (req, res) => {
+  try {
+    const { menuItem_id } = req.params; // Extract menuItem_id from the request parameters
+
+    // Delete the specified menu item from the database
+    await pool.query("DELETE FROM MenuItems WHERE menuItem_id = $1", [menuItem_id]);
+
+    res.json("Deleted Menu Item Successfully"); // Respond with a success message
+  } catch (error) {
+    console.error(error); // Log the error to the console
+    res.status(500).json({ error: "Failed to delete menu item" });
+  }
+});
+
+/**
+ * @route PUT /update/instock
+ * @description Update the stock status of a menu item.
+ * @body {string} id - ID of the menu item to update.
+ * @body {boolean} inStock - New stock status of the menu item.
+ * @returns {string} Success message.
+ * @throws {Error} 500 - Failed to update stock status.
+ */
+router.put("/update/instock", async (req, res) => {
+  try {
+    console.log("update instock "); // Log update operation for debugging
+
+    const { id, inStock } = req.body; // Extract the menu item ID and stock status from the request body
+
+    // Update the 'in_stock' column for the specified menu item
+    const updateInventory = await pool.query(
+      "UPDATE menuitems SET in_stock = $1 WHERE menuitem_id = $2",
+      [inStock, id]
+    );
+
+    res.json({ message: "Menu item stock status updated successfully" }); // Respond with success message
+  } catch (error) {
+    console.error(error); // Log any errors
+    res.status(500).json({ error: "Failed to update menu item stock status" });
+  }
+});
+
+// Export the router to be used in the main application
+module.exports = router;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Classes</h3><ul><li><a href="Employee.html">Employee</a></li><li><a href="global.html#MenuItem">MenuItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccessibilityButton">AccessibilityButton</a></li><li><a href="global.html#BackButton">BackButton</a></li><li><a href="global.html#Cashier">Cashier</a></li><li><a href="global.html#CashierTable">CashierTable</a></li><li><a href="global.html#Customer">Customer</a></li><li><a href="global.html#FoodItemCard">FoodItemCard</a></li><li><a href="global.html#FoodItemGrid">FoodItemGrid</a></li><li><a href="global.html#FoodRestrictions">FoodRestrictions</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#GoogleTranslate">GoogleTranslate</a></li><li><a href="global.html#HomeButton">HomeButton</a></li><li><a href="global.html#ManagerButton">ManagerButton</a></li><li><a href="global.html#MenuItemCard">MenuItemCard</a></li><li><a href="global.html#MenuItemGrid">MenuItemGrid</a></li><li><a href="global.html#OrderEntry">OrderEntry</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#ProductUsageReport">ProductUsageReport</a></li><li><a href="global.html#SalesReport">SalesReport</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#WeatherWidget">WeatherWidget</a></li><li><a href="global.html#XReport">XReport</a></li><li><a href="global.html#XReportPayments">XReportPayments</a></li><li><a href="global.html#ZReport">ZReport</a></li><li><a href="global.html#ZReportPayments">ZReportPayments</a></li><li><a href="global.html#ZoomProvider">ZoomProvider</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#addFoodItem">addFoodItem</a></li><li><a href="global.html#alterInventory">alterInventory</a></li><li><a href="global.html#checkRestriction">checkRestriction</a></li><li><a href="global.html#extractFoodItemData">extractFoodItemData</a></li><li><a href="global.html#fetchMenuItems">fetchMenuItems</a></li><li><a href="global.html#getFoodInventoryIds">getFoodInventoryIds</a></li><li><a href="global.html#getFoodItemIds">getFoodItemIds</a></li><li><a href="global.html#getFoodItemInventoryAmounts">getFoodItemInventoryAmounts</a></li><li><a href="global.html#getFoodItemInventoryItemIds">getFoodItemInventoryItemIds</a></li><li><a href="global.html#getFoodItemNames">getFoodItemNames</a></li><li><a href="global.html#getFoodItems">getFoodItems</a></li><li><a href="global.html#getImageLink">getImageLink</a></li><li><a href="global.html#getInventoryAmounts">getInventoryAmounts</a></li><li><a href="global.html#getMenuInventoryIds">getMenuInventoryIds</a></li><li><a href="global.html#getMenuItemId">getMenuItemId</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li><li><a href="global.html#getOrders">getOrders</a></li><li><a href="global.html#getRandomItem">getRandomItem</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#handleCloseError">handleCloseError</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#isSeason">isSeason</a></li><li><a href="global.html#processChartData">processChartData</a></li><li><a href="global.html#removeFoodItem">removeFoodItem</a></li><li><a href="global.html#tableHeaders">tableHeaders</a></li><li><a href="global.html#updateInStockFoodItem">updateInStockFoodItem</a></li><li><a href="global.html#updateInStockMenuItem">updateInStockMenuItem</a></li><li><a href="global.html#updateInventoryQuantity">updateInventoryQuantity</a></li><li><a href="global.html#useZoom">useZoom</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 14:10:49 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

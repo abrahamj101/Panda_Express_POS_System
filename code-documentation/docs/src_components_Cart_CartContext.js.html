@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/components/Cart/CartContext.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/components/Cart/CartContext.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * CartContext Module
+ * Manages cart state, operations, and persistence for the application.
+ *
+ * @file CartContext.js
+ * @module context/CartContext
+ * @requires react
+ * @requires MenuItem - Custom class for menu items.
+ * @requires addOrders - API function to handle order submission.
+ */
+
+import React, { createContext, useState, useEffect } from "react";
+import addOrders from "../../pages/api/orders/addOrders";
+import MenuItem from "../MenuItems/MenuItemClass";
+
+/**
+ * @description The CartContext is a React context used to share cart state and related functions across the application.
+ * 
+ * @type {React.Context}
+ */
+const CartContext = createContext();
+export default CartContext;
+
+/**
+ * A provider component that wraps the application and provides cart data and actions to child components.
+ * 
+ * @component
+ * @example
+ * &lt;CartContextProvider>
+ *   &lt;YourComponent />
+ * &lt;/CartContextProvider>
+ * 
+ * @param {Object} props - The component properties.
+ * @param {React.ReactNode} props.children - The child components that will have access to the cart context.
+ * 
+ * @returns {JSX.Element} The rendered CartContext.Provider component.
+ */
+export const CartContextProvider = ({ children }) => {
+  const [menuItems, setMenuItems] = useState([]); // List of menu items in the cart
+  const [total, setTotal] = useState(0); // Total cart value
+  const [tax, setTax] = useState(0); // Tax on the total cart value
+  const [isCartOpen, setIsCartOpen] = useState(false); // Tracks cart visibility
+
+  /**
+   * useEffect Hook - Initializes cart state from localStorage on component mount.
+   * Reconstructs MenuItem objects from serialized data stored in localStorage.
+   */
+  useEffect(() => {
+    const storedMenuItems = localStorage.getItem("cartMenuItems");
+    const storedTotal = localStorage.getItem("cartTotal");
+    const storedTax = localStorage.getItem("cartTax");
+
+    if (storedMenuItems) {
+      const parsedMenuItems = JSON.parse(storedMenuItems);
+      const reconstructedMenuItems = parsedMenuItems.map((item) => {
+        return new MenuItem(
+          item.menuitemId,
+          item.name,
+          item.total,
+          item.imgLink,
+          item.inventoryItemIds,
+          item.inStock,
+          item.foodItemIds
+        );
+      });
+      setMenuItems(reconstructedMenuItems);
+    }
+
+    if (storedTotal) setTotal(parseFloat(storedTotal));
+    if (storedTax) setTax(parseFloat(storedTax));
+  }, []);
+
+  /**
+   * Updates the total and tax values based on the provided menu items and stores them in local storage.
+   * 
+   * @param {MenuItem[]} items - The list of menu items to calculate totals for.
+   */
+  const updateCartTotals = (items) => {
+    const newTotal = items.reduce((acc, item) => acc + item.getTotal(), 0);
+    localStorage.setItem("cartTotal", newTotal.toString());
+    localStorage.setItem("cartTax", (newTotal * 0.0825).toString());
+    setTotal(newTotal);
+    setTax(newTotal * 0.0825);
+  };
+
+  /**
+   * Adds a menu item to the cart and updates the local storage.
+   * 
+   * @param {MenuItem} menuItem - The menu item to be added.
+   */
+  const addMenuItem = (menuItem) => {
+    console.log(menuItem);
+    setMenuItems((prevItems) => {
+      const updatedItems = [...prevItems, menuItem];
+      updateCartTotals(updatedItems);
+
+      // Serialize cart data for localStorage
+      localStorage.setItem(
+        "cartMenuItems",
+        JSON.stringify(
+          updatedItems.map((item) => ({
+            menuitemId: item.menuitemId,
+            name: item.name,
+            total: item.total,
+            imgLink: item.imgLink,
+            inventoryItemIds: item.inventoryItemIds,
+            inStock: item.inStock,
+            foodItemIds: item.foodItemIds,
+          }))
+        )
+      );
+      console.log(updatedItems);
+      return updatedItems;
+    });
+  };
+
+  /**
+   * Removes a menu item from the cart based on its index and updates the local storage.
+   * 
+   * @param {number} menuItemIndex - The index of the menu item to be removed.
+   */
+  const removeMenuItem = (menuItemIndex) => {
+    setMenuItems((prevItems) => {
+      const updatedItems = prevItems.filter((_, index) => index !== menuItemIndex);
+
+      // Update localStorage and totals after removal
+      localStorage.setItem(
+        "cartMenuItems",
+        JSON.stringify(
+          updatedItems.map((item) => ({
+            menuitemId: item.menuitemId,
+            name: item.name,
+            total: item.total,
+            imgLink: item.imgLink,
+            inventoryItemIds: item.inventoryItemIds,
+            inStock: item.inStock,
+          }))
+        )
+      );
+      updateCartTotals(updatedItems);
+      return updatedItems;
+    });
+  };
+
+  /**
+   * Returns an array of menu item IDs from the current cart.
+   * 
+   * @returns {number[]} An array of menu item IDs.
+   */
+  const getMenuIds = () => {
+    return menuItems.map((item) => item.getMenuItemId());
+  };
+
+  /**
+   * Empties the cart, resetting the state and removing data from local storage.
+   */
+  const emptyCart = () => {
+    setMenuItems([]);
+    setTotal(0);
+    setTax(0);
+    localStorage.removeItem("cartMenuItems");
+    localStorage.removeItem("cartTotal");
+    localStorage.removeItem("cartTax");
+  };
+
+  /**
+   * Completes the order and clears the cart. Sends the order data to the server.
+   * 
+   * @param {number} [customerId=0] - The ID of the customer placing the order (default is 0).
+   */
+  const completeOrder = async (customerId = 0) => {
+    if (menuItems.length > 0) {
+      try {
+        await addOrders(customerId, menuItems, total, tax);
+        console.log("Altering inventory");
+        // Placeholder for inventory alteration logic
+        console.log("finished altering");
+        emptyCart();
+      } catch (error) {
+        console.error("Failed to complete order:", error.message);
+      }
+    }
+  };
+
+  /**
+   * Toggles the state of the cart (open/close).
+   */
+  const toggleCart = () => setIsCartOpen((prev) => !prev);
+
+  /**
+   * Provides cart state and operations to child components via Context API.
+   */
+  return (
+    &lt;CartContext.Provider
+      value={{
+        menuItems,
+        total,
+        tax,
+        isCartOpen,
+        addMenuItem,
+        removeMenuItem,
+        getMenuIds,
+        emptyCart,
+        completeOrder,
+        toggleCart,
+      }}
+    >
+      {children}
+    &lt;/CartContext.Provider>
+  );
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Classes</h3><ul><li><a href="Employee.html">Employee</a></li><li><a href="global.html#MenuItem">MenuItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccessibilityButton">AccessibilityButton</a></li><li><a href="global.html#BackButton">BackButton</a></li><li><a href="global.html#Cashier">Cashier</a></li><li><a href="global.html#CashierTable">CashierTable</a></li><li><a href="global.html#Customer">Customer</a></li><li><a href="global.html#FoodItemCard">FoodItemCard</a></li><li><a href="global.html#FoodItemGrid">FoodItemGrid</a></li><li><a href="global.html#FoodRestrictions">FoodRestrictions</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#GoogleTranslate">GoogleTranslate</a></li><li><a href="global.html#HomeButton">HomeButton</a></li><li><a href="global.html#ManagerButton">ManagerButton</a></li><li><a href="global.html#MenuItemCard">MenuItemCard</a></li><li><a href="global.html#MenuItemGrid">MenuItemGrid</a></li><li><a href="global.html#OrderEntry">OrderEntry</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#ProductUsageReport">ProductUsageReport</a></li><li><a href="global.html#SalesReport">SalesReport</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#WeatherWidget">WeatherWidget</a></li><li><a href="global.html#XReport">XReport</a></li><li><a href="global.html#XReportPayments">XReportPayments</a></li><li><a href="global.html#ZReport">ZReport</a></li><li><a href="global.html#ZReportPayments">ZReportPayments</a></li><li><a href="global.html#ZoomProvider">ZoomProvider</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#addFoodItem">addFoodItem</a></li><li><a href="global.html#alterInventory">alterInventory</a></li><li><a href="global.html#checkRestriction">checkRestriction</a></li><li><a href="global.html#extractFoodItemData">extractFoodItemData</a></li><li><a href="global.html#fetchMenuItems">fetchMenuItems</a></li><li><a href="global.html#getFoodInventoryIds">getFoodInventoryIds</a></li><li><a href="global.html#getFoodItemIds">getFoodItemIds</a></li><li><a href="global.html#getFoodItemInventoryAmounts">getFoodItemInventoryAmounts</a></li><li><a href="global.html#getFoodItemInventoryItemIds">getFoodItemInventoryItemIds</a></li><li><a href="global.html#getFoodItemNames">getFoodItemNames</a></li><li><a href="global.html#getFoodItems">getFoodItems</a></li><li><a href="global.html#getImageLink">getImageLink</a></li><li><a href="global.html#getInventoryAmounts">getInventoryAmounts</a></li><li><a href="global.html#getMenuInventoryIds">getMenuInventoryIds</a></li><li><a href="global.html#getMenuItemId">getMenuItemId</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li><li><a href="global.html#getOrders">getOrders</a></li><li><a href="global.html#getRandomItem">getRandomItem</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#handleCloseError">handleCloseError</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#isSeason">isSeason</a></li><li><a href="global.html#processChartData">processChartData</a></li><li><a href="global.html#removeFoodItem">removeFoodItem</a></li><li><a href="global.html#tableHeaders">tableHeaders</a></li><li><a href="global.html#updateInStockFoodItem">updateInStockFoodItem</a></li><li><a href="global.html#updateInStockMenuItem">updateInStockMenuItem</a></li><li><a href="global.html#updateInventoryQuantity">updateInventoryQuantity</a></li><li><a href="global.html#useZoom">useZoom</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 14:10:49 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
