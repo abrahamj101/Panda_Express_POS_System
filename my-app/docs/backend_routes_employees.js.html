@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: backend/routes/employees.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: backend/routes/employees.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module Employee Routes
+ * @fileoverview Provides endpoints for managing employee data, including CRUD operations for employee records and schedules.
+ * This file defines routes for managing employee-related operations in the Panda Express POS system.
+ */
+
+const express = require('express');
+const router = express.Router();
+const pool = require('../db'); // Import database connection pool for executing SQL queries.
+
+/**
+ * @file employees.js
+ * @description Routes for handling employee-related API endpoints.
+ */
+
+/**
+ * GET /api/employees
+ * Retrieves all employees from the database.
+ * 
+ * @route GET /api/employees
+ * @async
+ * @returns {JSON} An array of employee objects.
+ * @throws {500} Returns an error message if the query fails.
+ */
+router.get('/', async (req, res) => {
+  try {
+    // Execute a SQL query to fetch all employees, sorted by employee ID.
+    const result = await pool.query(
+      "SELECT * FROM employees ORDER BY employee_id"
+    );
+    // Return the result rows (employee records) as JSON.
+    res.json(result.rows);
+  } catch (err) {
+    // Log any errors to the console and respond with a 500 status code.
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch employee data" });
+  }
+});
+
+/**
+ * POST /api/employees
+ * Adds a new employee to the database.
+ * 
+ * @route POST /api/employees
+ * @async
+ * @param {Object} req.body - The request body containing employee details.
+ * @param {string} req.body.employee_first_name - The first name of the employee.
+ * @param {string} req.body.employee_last_name - The last name of the employee.
+ * @param {number} req.body.hours_worked - The number of hours the employee has worked.
+ * @param {string[]} req.body.schedule - An array of times representing the employee's schedule.
+ * @returns {JSON} The newly created employee object.
+ * @throws {500} Returns an error message if the query fails.
+ */
+router.post("/", async (req, res) => {
+  try {
+    // Destructure employee details from the request body.
+    const { employee_first_name, employee_last_name, hours_worked, schedule } = req.body;
+    
+    // Execute a SQL query to insert a new employee into the database.
+    // Use parameterized queries ($1, $2, etc.) to prevent SQL injection.
+    const result = await pool.query(
+      "INSERT INTO Employees (employee_first_name, employee_last_name, hours_worked, schedule) VALUES ($1, $2, $3, $4) RETURNING *",
+      [employee_first_name, employee_last_name, hours_worked, schedule]
+    );
+
+    // Return the newly created employee record with a 201 status code.
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    // Log any errors to the console and respond with a 500 status code.
+    console.error(error);
+    res.status(500).json({ error: "An error occurred while adding the employee" });
+  }
+});
+
+/**
+ * DELETE /api/employees/:employee_id
+ * Deletes an employee from the database.
+ * 
+ * @route DELETE /api/employees/:employee_id
+ * @async
+ * @param {Object} req.params - The request parameters containing the employee ID.
+ * @param {number} req.params.employee_id - The ID of the employee to delete.
+ * @returns {JSON} A success message or an error message if the employee is not found.
+ * @throws {404} Returns an error message if the employee is not found.
+ * @throws {500} Returns an error message if the query fails.
+ */
+router.delete("/:employee_id", async (req, res) => {
+  try {
+    // Extract the employee_id parameter from the request URL and parse it as an integer.
+    const { employee_id } = req.params;
+    const id = parseInt(employee_id, 10);
+
+    // Check if the employee exists in the database.
+    const employee = await pool.query("SELECT * FROM Employees WHERE employee_id = $1", [id]);
+    if (employee.rows.length === 0) {
+      // Respond with a 404 status code if the employee is not found.
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    // Execute a SQL query to delete the employee by ID.
+    await pool.query("DELETE FROM Employees WHERE employee_id = $1", [id]);
+
+    // Respond with a success message upon successful deletion.
+    res.json({ message: "Deleted Employee Successfully" });
+  } catch (error) {
+    // Log any errors to the console and respond with a 500 status code.
+    console.error(error);
+    res.status(500).json({ error: "Failed to delete employee" });
+  }
+});
+
+module.exports = router; // Export the router to use in the main application file.
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Form">Form</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 00:12:46 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

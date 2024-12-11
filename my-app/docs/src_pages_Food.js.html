@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/pages/Food.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/pages/Food.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Food Component
+ * This page displays food items associated with a specific menu item. 
+ * Users can select food items, add them to a menu item, and add the menu item to their cart. 
+ * The component supports role-based restrictions and zoom accessibility features.
+ *
+ * @file Food.js
+ * @module pages/Food
+ * @requires react
+ * @requires react-router-dom
+ * @requires ../components/Navigation/Header
+ * @requires ../components/Navigation/Footer
+ * @requires ../components/FoodItems/FoodItemGrid
+ * @requires ../components/Navigation/BackButton
+ * @requires ../components/Cart/AddToCartButton
+ * @requires ../components/MenuItems/MenuItemClass
+ * @requires ../components/Cart/CartContext
+ * @requires ../components/Zoom/ZoomContext
+ * @requires ../components/Login/LoginContext
+ * @requires ../components/Cart/CartSideBar
+ * @requires ../styles/Pages/default.css
+ */
+
+import React, { useState, useContext } from "react";
+import { useLocation } from "react-router-dom";
+import Header from "../components/Navigation/Header";
+import Footer from "../components/Navigation/Footer";
+import FoodItemGrid from "../components/FoodItems/FoodItemGrid";
+import BackButton from "../components/Navigation/BackButton";
+import AddToCartButton from "../components/Cart/AddToCartButton";
+import "../styles/Pages/default.css";
+import MenuItem from "../components/MenuItems/MenuItemClass";
+import CartContext from "../components/Cart/CartContext";
+import { useZoom } from "../components/Zoom/ZoomContext";
+import LoginContext from "../components/Login/LoginContext";
+import CartSidebar from "../components/Cart/CartSideBar";
+
+/**
+ * Food Component
+ *
+ * @returns {JSX.Element} A page that displays food items for a specific menu item 
+ * and allows users to manage their cart and food selections.
+ */
+function Food() {
+  const { zoomLevel } = useZoom(); // Zoom level for accessibility
+  const location = useLocation();
+  const { role, isLoggedIn } = useContext(LoginContext);
+  const { addMenuItem } = useContext(CartContext);
+
+  /**
+   * Destructured menu item data passed via route state.
+   * @type {Object}
+   */
+  const {
+    foodItem_ids,
+    menuItem_id,
+    menuItem_name,
+    price,
+    image_link,
+    inventoryItemIds,
+    inStock,
+  } = location.state || {};
+
+  /**
+   * State to track selected food items.
+   * @type {Object}
+   */
+  const [selectedItems, setSelectedItems] = useState({});
+
+  // Create a MenuItem object
+  const menuItemObject = new MenuItem(
+    menuItem_id,
+    menuItem_name,
+    Number(price),
+    image_link,
+    inventoryItemIds,
+    inStock
+  );
+
+  /**
+   * Handles changes in food item selection.
+   *
+   * @param {Object} newSelectedItems - Updated selection of food items.
+   */
+  const handleSelectionChange = (newSelectedItems) => {
+    setSelectedItems(newSelectedItems);
+  };
+
+  /**
+   * Handles adding the menu item to the cart.
+   * Checks for restrictions and displays an alert if restrictions apply.
+   *
+   * @async
+   */
+  const handleAddToCart = async () => {
+    const restriction_ids = await menuItemObject.checkRestriction();
+    if ((role === "customer" || !isLoggedIn) &amp;&amp; Object.keys(restriction_ids).length > 0) {
+      const messages = Object.entries(restriction_ids).map(
+        ([foodItemName, restriction]) => `${foodItemName}: ${restriction}`
+      );
+      const alertMessage = `Some restrictions apply to the following items:\n\n${messages.join("\n")}`;
+      alert(alertMessage);
+    }
+    addMenuItem(menuItemObject);
+  };
+
+  /**
+   * Adds a food item to the menu item.
+   *
+   * @param {number} foodItemId - The ID of the food item to add.
+   */
+  const addFoodItemToMenu = (foodItemId) => {
+    menuItemObject.addFoodItem(foodItemId);
+  };
+
+  /**
+   * Removes a food item from the menu item.
+   *
+   * @param {number} foodItemId - The ID of the food item to remove.
+   */
+  const removeFoodItemFromMenu = (foodItemId) => {
+    menuItemObject.removeFoodItem(foodItemId);
+  };
+
+  return (
+    &lt;div
+      style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top left" }}
+    >
+      {/* Page header */}
+      &lt;Header />
+      &lt;div className="main-content">
+        {/* Back button */}
+        &lt;BackButton location="/menu" />
+
+        {/* Grid of food items */}
+        &lt;FoodItemGrid
+          foodItemIds={foodItem_ids}
+          menuItemId={menuItem_id}
+          onSelectionChange={handleSelectionChange}
+          onAddFoodItem={addFoodItemToMenu}
+          onRemoveFoodItem={removeFoodItemFromMenu}
+        />
+
+        {/* Add to Cart button */}
+        &lt;AddToCartButton onClick={handleAddToCart} />
+
+        {/* Sidebar for cart (visible for logged-in managers/admins) */}
+        {isLoggedIn &amp;&amp; role !== "customer" ? &lt;CartSidebar /> : null}
+      &lt;/div>
+
+      {/* Page footer */}
+      &lt;Footer />
+    &lt;/div>
+  );
+}
+
+export default Food;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Form">Form</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 00:12:46 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

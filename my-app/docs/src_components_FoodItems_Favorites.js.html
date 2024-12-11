@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/components/FoodItems/Favorites.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/components/FoodItems/Favorites.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Favorites Component
+ * Displays a list of the customer's favorite food items based on their past orders.
+ * Allows adding or removing food items to/from the cart while adhering to item count limits.
+ *
+ * @file Favorites.js
+ * @module components/Favorites
+ * @requires getOrders - API call to retrieve customer orders.
+ * @requires getFoodItems - API call to retrieve all available food items.
+ * @requires FoodItemCard - Component to display individual food item details.
+ */
+
+import { useEffect, useState } from "react";
+import getOrders from "../../pages/api/orders/getCustomerOrders";
+import getFoodItems from "../../pages/api/fooditems/getFooditems";
+import FoodItemCard from "./FoodItemCard";
+
+/**
+ * Favorites Component
+ *
+ * @param {Object} props - Component props.
+ * @param {number} props.menuItemId - The ID of the menu item to filter favorite food items.
+ * @param {number} props.customerId - The ID of the customer to fetch past orders.
+ * @param {Function} props.onAddFoodItem - Callback to add a food item to the cart.
+ * @param {Function} props.onRemoveFoodItem - Callback to remove a food item from the cart.
+ * @param {Object} props.itemCounts - Object tracking quantities of selected food items.
+ * @param {Function} props.getMaxCount - Function to determine the maximum count allowed per food type.
+ * @returns {JSX.Element} A grid of favorite food items with controls to add or remove them.
+ */
+const Favorites = ({
+  menuItemId,
+  customerId,
+  onAddFoodItem,
+  onRemoveFoodItem,
+  itemCounts,
+  getMaxCount,
+}) => {
+  // State to store counts of food items based on past orders
+  const [foodItemCounts, setFoodItemCounts] = useState({});
+
+  // State to store the top favorite food items
+  const [favoriteFoodItems, setFavoriteFoodItems] = useState([]);
+
+  /**
+   * fetchOrders - Fetches customer orders and calculates food item counts.
+   * Filters orders that include the specified menuItemId and aggregates food item frequencies.
+   */
+  const fetchOrders = async () => {
+    try {
+      const customerOrders = await getOrders(customerId);
+
+      // Filter orders to include only those with the given menuItemId
+      const filteredOrders = customerOrders.filter((order) =>
+        order.menuitem_ids.includes(menuItemId)
+      );
+
+      const foodItemCountMap = {};
+
+      // Count occurrences of each food item ID across the filtered orders
+      filteredOrders.forEach((order) => {
+        const menuIndex = order.menuitem_ids.indexOf(menuItemId);
+        if (menuIndex !== -1 &amp;&amp; order.fooditem_ids[menuIndex]) {
+          order.fooditem_ids[menuIndex].forEach((foodItemId) => {
+            foodItemCountMap[foodItemId] =
+              (foodItemCountMap[foodItemId] || 0) + 1;
+          });
+        }
+      });
+
+      setFoodItemCounts(foodItemCountMap);
+    } catch (err) {
+      console.error("Could not get customer's orders", err);
+    }
+  };
+
+  /**
+   * fetchFavoriteFoodItems - Fetches all available food items and determines the top favorites.
+   * Sorts food items by their counts and selects the top 5.
+   */
+  const fetchFavoriteFoodItems = async () => {
+    try {
+      const items = await getFoodItems();
+
+      // Sort food items by count in descending order and select top 5
+      const sortedFoodItemIds = Object.entries(foodItemCounts)
+        .sort(([, countA], [, countB]) => countB - countA)
+        .slice(0, 5)
+        .map(([foodItemId]) => parseInt(foodItemId, 10));
+
+      // Filter food items to include only the top favorites
+      const favorites = items.filter((item) =>
+        sortedFoodItemIds.includes(item.fooditem_id)
+      );
+      setFavoriteFoodItems(favorites);
+    } catch (err) {
+      console.error("Error fetching favorite food items:", err);
+    }
+  };
+
+  /**
+   * Initial useEffect - Fetches customer orders when the component mounts.
+   */
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  /**
+   * useEffect - Fetches favorite food items after food item counts are calculated.
+   */
+  useEffect(() => {
+    if (Object.keys(foodItemCounts).length > 0) {
+      fetchFavoriteFoodItems();
+    }
+  }, [foodItemCounts]);
+
+  return (
+    &lt;>
+      {/* Render only if there are favorite food items */}
+      {favoriteFoodItems.length > 0 &amp;&amp; (
+        &lt;>
+          &lt;h1 className="type">Favorites&lt;/h1>
+          &lt;div className="item-grid">
+            {/* Render a FoodItemCard for each favorite food item */}
+            {favoriteFoodItems.map((foodItem) => {
+              const { fooditem_id, type } = foodItem;
+
+              // Get the maximum allowed count for this type of food
+              const maxCount = getMaxCount(type);
+
+              // Calculate the current count of this food type in the cart
+              const currentTypeCount = Object.values(itemCounts).reduce(
+                (count, { type: itemType, quantity }) =>
+                  itemType === type ? count + quantity : count,
+                0
+              );
+
+              // Disable the "Add" button if the maximum count is reached
+              const disableAdd = currentTypeCount >= maxCount;
+
+              return (
+                &lt;FoodItemCard
+                  key={fooditem_id}
+                  foodItem={foodItem}
+                  onSelect={() => onAddFoodItem(foodItem)}
+                  onDeselect={() => onRemoveFoodItem(foodItem)}
+                  quantity={itemCounts[fooditem_id]?.quantity || 0}
+                  disableAdd={disableAdd}
+                />
+              );
+            })}
+          &lt;/div>
+        &lt;/>
+      )}
+    &lt;/>
+  );
+};
+
+export default Favorites;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Form">Form</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 00:12:46 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
