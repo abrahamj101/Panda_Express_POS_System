@@ -3,9 +3,9 @@
       "allowUnknownTags": true
     },
     "source": {
-      "include": ["./src"], 
+      "include": ["../my-app/backend", "../my-app/src"], 
       "includePattern": ".js$",
-      "exclude": ["node_modules", "docs"]
+      "exclude": ["../my-app/node_modules","../my-app/backend/node_modules", "../my-app/build", "../my-app/public"]
     },
     "plugins": [],
     "templates": {
@@ -14,7 +14,7 @@
     },
     "opts": {
       "encoding": "utf8",
-      "destination": "./code-documentation", 
+      "destination": "./docs", 
       "recurse": true,
       "verbose": true
     }
