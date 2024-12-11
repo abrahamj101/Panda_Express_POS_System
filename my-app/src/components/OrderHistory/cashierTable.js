@@ -1,6 +1,13 @@
 import React from 'react';
 import "../../styles/OrderHistory/cashierTable.css";
 
+/**
+ * CashierTable component that displays order details in a tabular format.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Array} props.data - The array of order objects to display in the table.
+ * @returns {JSX.Element} The rendered CashierTable component.
+ */
 const CashierTable = ({ data }) => {
   return (
     <div className="table-container">
