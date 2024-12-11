@@ -33,4 +33,3 @@ function FoodRestrictions({ restrictionMap, onConfirm, onCancel }) {
 
 export default FoodRestrictions;
 
-

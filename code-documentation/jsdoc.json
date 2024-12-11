@@ -1,0 +1,22 @@
+{
+    "tags": {
+      "allowUnknownTags": true
+    },
+    "source": {
+      "include": ["../my-app/backend", "../my-app/src"], 
+      "includePattern": ".js$",
+      "exclude": ["../my-app/node_modules","../my-app/backend/node_modules", "../my-app/build", "../my-app/public"]
+    },
+    "plugins": [],
+    "templates": {
+      "cleverLinks": false,
+      "monospaceLinks": false
+    },
+    "opts": {
+      "encoding": "utf8",
+      "destination": "./docs", 
+      "recurse": true,
+      "verbose": true
+    }
+  }
+  

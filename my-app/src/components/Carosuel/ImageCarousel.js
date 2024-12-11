@@ -1,6 +1,6 @@
 /**
  * ImageCarousel component.
- * Displays an interactive carousel of menu items with images, alt text, and legends.
+ * @description Displays an interactive carousel of menu items with images, alt text, and legends.
  *
  * @file ImageCarousel.js
  * @module components/ImageCarousel
@@ -93,7 +93,7 @@ const carouselItems = [
 
 /**
  * ImageCarousel functional component.
- * Renders an accessible image carousel with autoplay, infinite looping, and keyboard navigation.
+ * @description Renders an accessible image carousel with autoplay, infinite looping, and keyboard navigation.
  * 
  * @component
  * @returns {JSX.Element} JSX element representing the carousel.
@@ -106,17 +106,17 @@ function ImageCarousel() {
     >
       <Carousel
         className="carousel-container"
-        showArrows={true}
-        autoPlay={true}
-        infiniteLoop={true}
-        showThumbs={false}
-        interval={3000}
-        swipeable={true}
-        emulateTouch={true}
-        useKeyboardArrows={true}
-        aria-roledescription="carousel"
-        stopOnHover={true}
-        aria-live="polite"
+        showArrows={true}          // Enables navigation arrows for manual control
+        autoPlay={true}           // Carousel plays automatically on page load
+        infiniteLoop={true}       // Enables infinite looping of carousel slides
+        showThumbs={false}        // Hides thumbnail navigation below the carousel
+        interval={3000}           // Sets delay between slides to 3 seconds
+        swipeable={true}          // Allows users to swipe through slides on touch devices
+        emulateTouch={true}       // Improves touch interaction experience
+        useKeyboardArrows={true}  // Enables keyboard navigation (left/right arrows)
+        aria-roledescription="carousel" // ARIA role for screen readers
+        stopOnHover={true}        // Pauses the autoplay when hovering over the carousel
+        aria-live="polite"        // Announces changes politely for screen readers
       >
         {carouselItems.map((item, index) => (
           <div className="image-box" key={index}>

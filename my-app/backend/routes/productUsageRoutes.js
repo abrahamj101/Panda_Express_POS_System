@@ -1,9 +1,21 @@
-// myapp/backend/routes/productUsageRoutes.js
+/**
+ * @module Product Usage Routes
+ * @fileoverview Provides an endpoint to query and retrieve product usage data.
+ */
+
 const express = require('express');
 const db = require('../db'); // Adjust this path if your database module is in a different location
 const router = express.Router();
 
-// Route to handle product usage request
+/**
+ * @route GET /product-usage
+ * @description Fetch product usage data within a specified date range.
+ * @query {string} startDate - The start date for the data range (ISO string).
+ * @query {string} endDate - The end date for the data range (ISO string).
+ * @returns {Object[]} Array of product usage data, including inventory item name and total orders.
+ * @throws {Error} 400 - Start and end dates are required.
+ * @throws {Error} 500 - Internal server error during database query.
+ */
 router.get('/product-usage', async (req, res) => {
   const { startDate, endDate } = req.query;
 

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/components/Login/LoginContext.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/components/Login/LoginContext.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * LoginContext Module
+ * Manages user authentication, login state, role management, and integration with online user APIs.
+ * Stores authentication state in localStorage for persistence across sessions.
+ *
+ * @file LoginContext.js
+ * @module context/LoginContext
+ * @requires addOnlineUsers - API function to add online users.
+ * @requires addCustomer - API function to add new customers.
+ * @requires getOnlineUsersEmail - API function to retrieve online users by email.
+ * @requires react - React library for creating context and managing state.
+ */
+
+import React, { createContext, useState, useEffect } from "react";
+import addOnlineUsers from "../../pages/api/onlineUsers/addOnlineUsers";
+import addCustomer from "../../pages/api/customer/addCustomers";
+import getOnlineUsersEmail from "../../pages/api/onlineUsers/getOnlineUserEmail";
+
+/**
+ * LoginContext
+ * Provides authentication state and functions to components via React Context API.
+ */
+const LoginContext = createContext();
+
+/**
+ * LoginProvider Component
+ * Manages user login, role assignment, and session persistence.
+ *
+ * @param {Object} props - React component props.
+ * @param {React.ReactNode} props.children - Child components that consume the context.
+ *
+ * @returns {JSX.Element} A provider wrapping child components with login-related state and methods.
+ */
+export const LoginProvider = ({ children }) => {
+  // State variables for login status, user role, and customer ID
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState("");
+  const [customerId, setCustomerId] = useState(0);
+
+  /**
+   * useEffect - Initializes login state from localStorage on component mount.
+   * Retrieves stored role, login status, and customer ID for session persistence.
+   */
+  useEffect(() => {
+    const storedRole = localStorage.getItem("loginRole");
+    const storedLoginStatus = localStorage.getItem("loginStatus");
+    const storedCustomerId = localStorage.getItem("customerId");
+
+    if (storedRole) setRole(storedRole);
+    if (storedLoginStatus) setIsLoggedIn(storedLoginStatus === "true");
+    if (storedCustomerId) setCustomerId(parseInt(storedCustomerId, 10));
+  }, []);
+
+  /**
+   * checkOnlineUser - Verifies if a user exists in the system via their Google email.
+   * If not, creates a new online user and updates the login state.
+   *
+   * @param {Object} googleUser - Google user object containing user details.
+   * @param {string} googleUser.email - User's email address.
+   * @param {string} googleUser.given_name - User's first name.
+   * @param {string} googleUser.family_name - User's last name.
+   */
+  const checkOnlineUser = async (googleUser) => {
+    const user = await getOnlineUsersEmail(googleUser.email);
+
+    if (user) {
+      // User exists: Set role and customer ID
+      setRole(user.role);
+      setCustomerId(user.customer_id);
+      localStorage.setItem("loginRole", user.role);
+      localStorage.setItem("customerId", user.customer_id.toString());
+    } else {
+      // User does not exist: Create a new online user
+      createOnlineUser(googleUser);
+    }
+
+    localStorage.setItem("loginStatus", "true");
+    setIsLoggedIn(true);
+  };
+
+  /**
+   * createOnlineUser - Creates a new online user and updates the login state.
+   *
+   * @param {Object} googleUser - Google user object containing user details.
+   */
+  const createOnlineUser = async (googleUser) => {
+    const customer = await addCustomer(
+      googleUser.given_name,
+      googleUser.family_name,
+      "online",
+      null
+    );
+    setCustomerId(customer.customer_id);
+
+    localStorage.setItem("customerId", customer.customer_id.toString());
+    localStorage.setItem("loginRole", "customer");
+
+    await addOnlineUsers(
+      googleUser.given_name,
+      googleUser.family_name,
+      googleUser.email,
+      "customer",
+      customer.customer_id
+    );
+  };
+
+  /**
+   * logOut - Logs out the user by clearing login state and removing stored data from localStorage.
+   */
+  const logOut = () => {
+    setIsLoggedIn(false);
+    setRole("");
+    setCustomerId(0);
+
+    localStorage.removeItem("loginRole");
+    localStorage.removeItem("loginStatus");
+    localStorage.removeItem("customerId");
+  };
+
+  return (
+    /**
+     * LoginContext.Provider - Provides login-related state and methods to child components.
+     */
+    &lt;LoginContext.Provider
+      value={{
+        isLoggedIn,
+        setIsLoggedIn,
+        role,
+        setRole,
+        checkOnlineUser,
+        logOut,
+        customerId,
+        setCustomerId,
+      }}
+    >
+      {children}
+    &lt;/LoginContext.Provider>
+  );
+};
+
+export default LoginContext;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_FoodItemCard.html">components/FoodItemCard</a></li><li><a href="module-components_FoodItemGrid.html">components/FoodItemGrid</a></li><li><a href="module-components_FoodRestrictions.html">components/FoodRestrictions</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_MenuItemCard.html">components/MenuItemCard</a></li><li><a href="module-components_MenuItemGrid.html">components/MenuItemGrid</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Form">Form</a></li><li><a href="global.html#TTSButton">TTSButton</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 10 2024 21:37:46 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
