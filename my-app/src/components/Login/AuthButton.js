@@ -119,6 +119,14 @@ function AuthButton() {
     loadGoogleScript();
   }, []);
 
+  // useEffect to reinitialize the Google Sign-In button when `isSignedIn` changes
+  useEffect(() => {
+    if (!isSignedIn && window.google) {
+      initializeGSI();
+      renderGoogleButton();
+    }
+  }, [isSignedIn]);
+
   /**
    * Restore user session if a valid token exists in localStorage.
    */
