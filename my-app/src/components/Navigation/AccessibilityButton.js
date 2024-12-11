@@ -20,7 +20,7 @@ import "../../styles/HighContrast/HighContrast.css"; // Styles for high-contrast
   const AccessibilityButton = () => {
   /**
    * State to manage if the accessibility menu is open or closed
-   * @type {[boolean, Function]}
+   * @type {Array.<boolean, Function>}
    */
   const [isOpen, setIsOpen] = useState(false); // State to manage visibility of the accessibility menu
 
@@ -32,7 +32,7 @@ import "../../styles/HighContrast/HighContrast.css"; // Styles for high-contrast
 
   /**
    * State to manage if high contrast mode is enabled or not
-   * @type {[boolean, Function]}
+   * @type {Array.<boolean, Function>}
    */
   const [isHighContrast, setIsHighContrast] = useState(false); // State to track high-contrast mode status
 

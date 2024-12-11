@@ -250,7 +250,7 @@ class MenuItem {
      * @method extractFoodItemData
      * @async
      * @param {string} key - The key to extract from each food item.
-     * @returns {Promise<*>[]} A promise that resolves to an array of extracted data.
+     * @returns {Promise<Array<*>>} A promise that resolves to an array of extracted data
      */
     async extractFoodItemData(key) {
         const returnValue = [];
