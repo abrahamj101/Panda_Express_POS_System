@@ -42,8 +42,8 @@ const Favorites = ({
   const [favoriteFoodItems, setFavoriteFoodItems] = useState([]);
 
   /**
-   * fetchOrders - Fetches customer orders and calculates food item counts.
-   * Filters orders that include the specified menuItemId and aggregates food item frequencies.
+   * Fetches the customer's orders and counts the occurrence of food items associated with the given menu item ID.
+   * @returns {Promise<void>} A promise that resolves when the fetching is complete.
    */
   const fetchOrders = async () => {
     try {
@@ -74,8 +74,8 @@ const Favorites = ({
   };
 
   /**
-   * fetchFavoriteFoodItems - Fetches all available food items and determines the top favorites.
-   * Sorts food items by their counts and selects the top 5.
+   * Fetches the favorite food items from the list of food items based on the counts.
+   * @returns {Promise<void>} A promise that resolves when the fetching is complete.
    */
   const fetchFavoriteFoodItems = async () => {
     try {
