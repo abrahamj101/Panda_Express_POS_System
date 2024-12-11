@@ -9,6 +9,14 @@ import "my-app/src/styles/Pages/Form.css"; // Import the CSS file for styling th
  * Props:
  * - children: React nodes to be displayed within the modal content.
  * - onClose: Function to handle closing the modal when the close button is clicked.
+ * 
+ * @description A component that renders a modal form with a close button and content.
+ * 
+ * @param {Object} props - The props for the component.
+ * @param {React.ReactNode} props.children - The content to be displayed inside the modal.
+ * @param {Function} props.onClose - The function to be called when the close button is clicked.
+ * @returns {JSX.Element} The rendered modal form.
+
  */
 function Form({ children, onClose }) {
   return (

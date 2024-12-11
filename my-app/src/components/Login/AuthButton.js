@@ -1,13 +1,20 @@
 /**
  * AuthButton Component
- * Handles Google authentication (sign-in and sign-out) using Google's Identity Services API.
- * Manages user authentication state and integrates with LoginContext and CartContext.
+ * This component handles Google Sign-In and Sign-Out functionality, integrates with Google Identity Services,
+ * and manages user authentication state. It also interacts with LoginContext for user role management 
+ * and CartContext for clearing the cart on sign-out.
+ * 
+ * Features:
+ * - Displays Google Sign-In button for unauthenticated users.
+ * - Shows user profile picture and a logout button for authenticated users.
+ * - Parses JWT tokens to extract user information and checks token validity.
+ * - Automatically initializes Google Identity Services and renders the sign-in button.
  *
  * @file AuthButton.js
  * @module components/AuthButton
- * @requires react - React library for component creation.
- * @requires LoginContext - Provides user login functions and state management.
- * @requires CartContext - Provides cart-related functions, such as emptying the cart on logout.
+ * @requires react
+ * @requires ../components/Login/LoginContext
+ * @requires ../components/Cart/CartContext
  */
 
 import React, { useEffect, useState, useContext } from "react";
@@ -17,24 +24,19 @@ import CartContext from "../Cart/CartContext";
 /**
  * AuthButton Component
  *
- * @returns {JSX.Element} A button or Google Sign-In component for authentication management.
+ * @returns {JSX.Element} A button for Google Sign-In or Sign-Out with user profile display.
  */
 function AuthButton() {
-  // State to track if the user is signed in and store user details
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [user, setUser] = useState(null);
-
-  // Access LoginContext for authentication management
-  const { checkOnlineUser, logOut, isLoggedin, role } = useContext(LoginContext);
-
-  // Access CartContext to clear the cart upon logout
+  const [isSignedIn, setIsSignedIn] = useState(false); // Tracks sign-in state
+  const [user, setUser] = useState(null); // Stores user information
+  const { checkOnlineUser, logOut } = useContext(LoginContext);
   const { emptyCart } = useContext(CartContext);
 
   /**
-   * parseJwt - Parses a JSON Web Token (JWT) to extract the payload.
+   * Parses a JWT token to extract payload data.
    *
-   * @param {string} token - The JWT string.
-   * @returns {Object|null} The decoded payload or null if parsing fails.
+   * @param {string} token - The JWT token to parse.
+   * @returns {Object|null} Parsed token payload as an object, or null if parsing fails.
    */
   const parseJwt = (token) => {
     try {
@@ -54,35 +56,34 @@ function AuthButton() {
   };
 
   /**
-   * initializeGSI - Initializes the Google Identity Services API.
+   * Initializes Google Identity Services (GSI) for sign-in.
    */
   const initializeGSI = () => {
     /* global google */
     window.google.accounts.id.initialize({
-      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID, // Your Google Client ID
+      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
       callback: handleCredentialResponse,
       auto_select: false,
     });
   };
 
   /**
-   * renderGoogleButton - Renders the Google Sign-In button.
+   * Renders the Google Sign-In button.
    */
   const renderGoogleButton = () => {
-    const buttonDiv = document.getElementById("googleSignInDiv");
-    if (buttonDiv) {
-      buttonDiv.innerHTML = "";
-      window.google.accounts.id.renderButton(buttonDiv, {
-        theme: "outline",
-        size: "large",
-      });
+    if (document.getElementById("googleSignInDiv")) {
+      document.getElementById("googleSignInDiv").innerHTML = "";
+      window.google.accounts.id.renderButton(
+        document.getElementById("googleSignInDiv"),
+        { theme: "outline", size: "large" }
+      );
     }
   };
 
   /**
-   * handleCredentialResponse - Handles the Google Sign-In response.
+   * Handles the credential response from Google Identity Services.
    *
-   * @param {Object} response - The response object containing the JWT credential.
+   * @param {Object} response - Google credential response.
    */
   const handleCredentialResponse = (response) => {
     const userObject = parseJwt(response.credential);
@@ -92,12 +93,21 @@ function AuthButton() {
       localStorage.setItem("authToken", response.credential);
       checkOnlineUser(userObject);
     }
-    console.log(userObject);
   };
 
   /**
-   * Load Google's Identity Services script and render the Google button.
+   * Handles user sign-out, clears user state, and resets related data.
    */
+  const handleSignOut = () => {
+    window.google.accounts.id.disableAutoSelect();
+    setUser(null);
+    setIsSignedIn(false);
+    localStorage.removeItem("authToken");
+    logOut();
+    emptyCart();
+  };
+
+  // Load Google Identity Services script
   useEffect(() => {
     const loadGoogleScript = () => {
       if (!window.google) {
@@ -115,13 +125,18 @@ function AuthButton() {
         renderGoogleButton();
       }
     };
-
     loadGoogleScript();
   }, []);
 
-  /**
-   * Restore user session if a valid token exists in localStorage.
-   */
+  // Re-render Google button if sign-in state changes
+  useEffect(() => {
+    if (!isSignedIn && window.google) {
+      initializeGSI();
+      renderGoogleButton();
+    }
+  }, [isSignedIn]);
+
+  // Check for existing auth token on component mount
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (token) {
@@ -131,29 +146,15 @@ function AuthButton() {
         setUser(userObject);
         setIsSignedIn(true);
       } else {
-        localStorage.removeItem("authToken"); // Remove expired/invalid token
+        localStorage.removeItem("authToken");
       }
     }
   }, []);
-
-  /**
-   * handleSignOut - Handles user sign-out.
-   * Clears the user session, removes token, and resets the cart.
-   */
-  const handleSignOut = () => {
-    window.google.accounts.id.disableAutoSelect();
-    setUser(null);
-    setIsSignedIn(false);
-    localStorage.removeItem("authToken");
-    logOut();
-    emptyCart();
-  };
 
   return (
     <div className="auth-button-container">
       {isSignedIn ? (
         <>
-          {/* Display user profile picture and Logout button */}
           <img
             src={user.picture}
             alt="Profile"
@@ -183,10 +184,7 @@ function AuthButton() {
           </button>
         </>
       ) : (
-        <>
-          {/* Render Google Sign-In button */}
-          <div id="googleSignInDiv"></div>
-        </>
+        <div id="googleSignInDiv"></div>
       )}
     </div>
   );

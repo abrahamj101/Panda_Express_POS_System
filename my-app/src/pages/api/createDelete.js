@@ -1,13 +1,29 @@
-// my-app/src/pages/api/createDelete.js
+/**
+ * API Functions for Creating and Deleting Entities
+ * This module provides utility functions to create and delete employees, food items,
+ * menu items, and inventory items through API requests.
+ *
+ * @file createDelete.js
+ * @module api/createDelete
+ */
 
 const API_BASE_URL = "https://project-3-team-3-b-backend.vercel.app";
 
-// Function to create an employee
+/**
+ * Create an employee.
+ *
+ * @param {Object} employeeData - Data of the employee to be created.
+ * @param {string} employeeData.name - The employee's name.
+ * @param {string|number} employeeData.hours_worked - Hours worked, defaulted to 0 if invalid.
+ * @param {Array<string>} employeeData.schedule - Array of time strings for the employee's schedule.
+ * @returns {Promise<Object>} The created employee data.
+ * @throws {Error} If the API request fails.
+ */
 export async function createEmployee(employeeData) {
-  // Ensure hours_worked is a float, defaulting to 0 if invalid
-  employeeData["hours_worked"] = employeeData["hours_worked"] ? parseFloat(employeeData["hours_worked"]) : 0;
+  employeeData["hours_worked"] = employeeData["hours_worked"]
+    ? parseFloat(employeeData["hours_worked"])
+    : 0;
 
-  // Ensure schedule is an array of valid time strings or default to an empty array if invalid
   employeeData["schedule"] = Array.isArray(employeeData["schedule"])
     ? employeeData["schedule"]
     : [];
@@ -34,8 +50,13 @@ export async function createEmployee(employeeData) {
   }
 }
 
-
-// Function to delete an employee
+/**
+ * Delete an employee.
+ *
+ * @param {number|string} employeeId - The ID of the employee to delete.
+ * @returns {Promise<Object>} Result of the deletion operation.
+ * @throws {Error} If the API request fails.
+ */
 export async function deleteEmployee(employeeId) {
   try {
     const response = await fetch(`${API_BASE_URL}/api/employees/${employeeId}`, {
@@ -57,16 +78,27 @@ export async function deleteEmployee(employeeId) {
   }
 }
 
-// Function to create a food item
+/**
+ * Create a food item.
+ *
+ * @param {Object} foodItemData - Data of the food item to be created.
+ * @returns {Promise<Object>} The created food item data.
+ * @throws {Error} If the API request fails.
+ */
 export async function createFoodItem(foodItemData) {
-  // Formatting the foodItemData
   const formattedData = {
     foodItem_name: foodItemData["fooditem_name"] || null,
     type: foodItemData["type"] || null,
-    inventoryitem_ids: foodItemData["inventoryitem_ids"] ? foodItemData["inventoryitem_ids"].split(',').map(Number) : [], 
-    inventory_amounts: foodItemData["inventory_amounts"] ? foodItemData[3].split(',').map(Number) : [], 
+    inventoryitem_ids: foodItemData["inventoryitem_ids"]
+      ? foodItemData["inventoryitem_ids"].split(",").map(Number)
+      : [],
+    inventory_amounts: foodItemData["inventory_amounts"]
+      ? foodItemData["inventory_amounts"].split(",").map(Number)
+      : [],
     in_stock: foodItemData["in_stock"] === "true",
-    seasonal: foodItemData["seasonal"] ? foodItemData["seasonal"].split(',').map(Number) : [], 
+    seasonal: foodItemData["seasonal"]
+      ? foodItemData["seasonal"].split(",").map(Number)
+      : [],
     image_link: foodItemData["image_link"] || null,
     premium: foodItemData["premium"] === "true",
     restriction: foodItemData["restriction"] || null,
@@ -94,8 +126,13 @@ export async function createFoodItem(foodItemData) {
   }
 }
 
-
-// Function to delete a food item
+/**
+ * Delete a food item.
+ *
+ * @param {number|string} foodItemId - The ID of the food item to delete.
+ * @returns {Promise<Object>} Result of the deletion operation.
+ * @throws {Error} If the API request fails.
+ */
 export async function deleteFoodItem(foodItemId) {
   try {
     const response = await fetch(`${API_BASE_URL}/api/foodItems/${foodItemId}`, {
@@ -117,20 +154,30 @@ export async function deleteFoodItem(foodItemId) {
   }
 }
 
-// Function to create a menu item
+/**
+ * Create a menu item.
+ *
+ * @param {Object} menuItemData - Data of the menu item to be created.
+ * @returns {Promise<Object>} The created menu item data.
+ * @throws {Error} If the API request fails.
+ */
 export async function createMenuItem(menuItemData) {
-  // Formatting the menuItemData
   const formattedData = {
-    menuitem_name: menuItemData.menuitem_name || null, // Use null if the value is an empty string
-    price: isNaN(parseFloat(menuItemData.price)) ? null : parseFloat(menuItemData.price), // Convert to number or null if invalid
-    fooditem_ids: menuItemData.fooditem_ids && menuItemData.fooditem_ids.length > 0
-      ? menuItemData.fooditem_ids.map(id => parseInt(id, 10)) // Ensure integers
-      : [], // Default to empty array if invalid
-    inventoryitem_ids: menuItemData.inventoryitem_ids && menuItemData.inventoryitem_ids.length > 0
-      ? menuItemData.inventoryitem_ids.map(id => parseInt(id, 10)) // Ensure integers
-      : [], // Default to empty array if invalid
-    in_stock: menuItemData.in_stock === "true", // Convert to boolean
-    image_link: menuItemData.image_link || null, // Use null if the value is an empty string
+    menuitem_name: menuItemData.menuitem_name || null,
+    price: isNaN(parseFloat(menuItemData.price))
+      ? null
+      : parseFloat(menuItemData.price),
+    fooditem_ids:
+      menuItemData.fooditem_ids && menuItemData.fooditem_ids.length > 0
+        ? menuItemData.fooditem_ids.map((id) => parseInt(id, 10))
+        : [],
+    inventoryitem_ids:
+      menuItemData.inventoryitem_ids &&
+      menuItemData.inventoryitem_ids.length > 0
+        ? menuItemData.inventoryitem_ids.map((id) => parseInt(id, 10))
+        : [],
+    in_stock: menuItemData.in_stock === "true",
+    image_link: menuItemData.image_link || null,
   };
 
   try {
@@ -155,8 +202,13 @@ export async function createMenuItem(menuItemData) {
   }
 }
 
-
-// Function to delete a menu item
+/**
+ * Delete a menu item.
+ *
+ * @param {number|string} menuItemId - The ID of the menu item to delete.
+ * @returns {Promise<Object>} Result of the deletion operation.
+ * @throws {Error} If the API request fails.
+ */
 export async function deleteMenuItem(menuItemId) {
   try {
     const response = await fetch(`${API_BASE_URL}/api/menuItems/${menuItemId}`, {
@@ -178,19 +230,23 @@ export async function deleteMenuItem(menuItemId) {
   }
 }
 
-// Function to create an inventory item
+/**
+ * Create an inventory item.
+ *
+ * @param {Object} inventoryItemData - Data of the inventory item to be created.
+ * @returns {Promise<Object>} The created inventory item data.
+ * @throws {Error} If the API request fails.
+ */
 export async function createInventoryItem(inventoryItemData) {
-  // Format the inventoryItemData
   const formattedData = {
-    inventoryitem_name: inventoryItemData.inventoryitem_name || null, // Default to null if invalid
-    quantity: parseInt(inventoryItemData.quantity, 10) || 0, // Parse as integer, default to 0 if invalid
+    inventoryitem_name: inventoryItemData.inventoryitem_name || null,
+    quantity: parseInt(inventoryItemData.quantity, 10) || 0,
     last_restocked: isNaN(Date.parse(inventoryItemData.last_restocked))
-      ? null // Default to null if invalid
-      : new Date(inventoryItemData.last_restocked).toISOString(), // Convert to ISO format
+      ? null
+      : new Date(inventoryItemData.last_restocked).toISOString(),
   };
 
   try {
-    console.log("Formatted Inventory Item Data:", formattedData);
     const response = await fetch(`${API_BASE_URL}/api/inventoryItems`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -213,15 +269,18 @@ export async function createInventoryItem(inventoryItemData) {
   }
 }
 
-
-// Function to delete an inventory item
+/**
+ * Delete an inventory item.
+ *
+ * @param {number|string} inventoryItemId - The ID of the inventory item to delete.
+ * @returns {Promise<Object>} Result of the deletion operation.
+ * @throws {Error} If the API request fails.
+ */
 export async function deleteInventoryItem(inventoryItemId) {
   try {
     const response = await fetch(
       `${API_BASE_URL}/api/inventoryItems/${inventoryItemId}`,
-      {
-        method: "DELETE",
-      }
+      { method: "DELETE" }
     );
 
     if (!response.ok) {

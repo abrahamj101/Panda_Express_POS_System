@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/components/MenuItems/MenuItemClass.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/components/MenuItems/MenuItemClass.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import getFoodItems from "../../pages/api/fooditems/getFooditems"
+import updateInventoryItemQuantity from "../../pages/api/inventory/updateQuantityOrders";
+import getInventoryItems from "../../pages/api/inventory/getInventoryItems";
+import updateFoodItemInStock from "../../pages/api/fooditems/updateInStock";
+import updateMenuItemInStock from "../../pages/api/menuItems/updateInStock";
+
+/**
+ * @file MenuItem 
+ * @description Represents a menu item, including its properties, associated food items, 
+ * inventory items, and operations to update inventory and stock status.
+ */
+class MenuItem {
+    /**
+     * Creates an instance of MenuItem.
+     * @param {number} menuitemId - The ID of the menu item.
+     * @param {string} menuItemName - The name of the menu item.
+     * @param {number} price - The price of the menu item.
+     * @param {string} imgLink - The image link for the menu item.
+     * @param {number[]} inventoryItemIds - Array of associated inventory item IDs.
+     * @param {boolean} inStock - Whether the menu item is in stock.
+     * @param {number[]} [foodItemIds=[]] - Array of associated food item IDs.
+     */
+    constructor(menuitemId, menuItemName, price, imgLink, inventoryItemIds, inStock, foodItemIds=[]) {
+        this.menuitemId = menuitemId;
+        this.foodItemIds = foodItemIds;
+        this.total = price;
+        this.name = menuItemName;
+        this.imgLink = imgLink;
+        this.inventoryItemIds = inventoryItemIds;
+        this.inStock = inStock;
+    }
+
+    /**
+     * @method addFoodItem
+     * @param {number} foodItemId - The ID of the food item to add.
+     */
+    addFoodItem(foodItemId) {
+        this.foodItemIds.push(foodItemId);
+        if (foodItemId === 8 || foodItemId === 9) {
+            if ([1, 2, 3, 8].includes(this.menuitemId)) {
+                this.total += 1.5;
+            } else if (this.menuitemId === 5) {
+                this.total += 4.5;
+            } else if (this.menuitemId === 4) {
+                this.total += 1.0;
+            }
+        }
+        this.foodItemIds.sort()
+    }
+
+    /**
+     * @method removeFoodItem
+     * @param {number} foodItemId - The ID of the food item to remove.
+     */
+    removeFoodItem(foodItemId) {
+        for (let i = 0; i &lt; this.foodItemIds.length; ++i) {
+            if (this.foodItemIds[i] === foodItemId) {
+                this.foodItemIds.splice(i, 1);
+                if (foodItemId === 8 || foodItemId === 9) {
+                    if ([1, 2, 3, 8].includes(this.menuitemId)) {
+                        this.total -= 1.5;
+                    } else if (this.menuitemId === 5) {
+                        this.total -= 4.5;
+                    } else if (this.menuitemId === 4) {
+                        this.total -= 1.0;
+                    }
+                }
+                break;
+            }
+        }
+    }
+    
+
+
+    /**
+     * @method getTotal
+     * @returns {number} The total price of the menu item.
+     */
+    getTotal() {
+        return this.total;
+    }
+
+    /**
+     * @method getName
+     * @returns {string} The name of the menu item.
+     */
+    getName() {
+        return this.name;
+    }
+
+    /**
+     * @method getMenuItemId
+     * @returns {number} The ID of the menu item.
+     */
+    getMenuItemId() {
+        return this.menuitemId;
+    }
+
+    /**
+     * @method getImageLink
+     * @returns {string} The image link of the menu item.
+     */
+    getImageLink() {
+        return this.imgLink;
+    }
+
+    /**
+     * @method getFoodItemIds
+     * @returns {number[]} Array of food item IDs associated with the menu item.
+     */
+    getFoodItemIds() {
+        return this.foodItemIds;
+    }
+
+    /**
+     * @method alterInventory
+     * @async
+     * @description Updates the inventory and stock status for the menu item and associated food items.
+     */
+    async alterInventory() {
+
+        const inventoryIds = await this.getFoodItemInventoryItemIds();
+        const inventoryAmounts = await this.getFoodItemInventoryAmounts();
+        let foodItemIndex = 0;
+        for (let i = 0; i &lt; inventoryIds.length; i++){
+            const amountToSubtractArray = inventoryAmounts[i]
+            const inventoryIdArray = inventoryIds[i]
+            for (let j = 0; j &lt; amountToSubtractArray.length; j++) {
+                const inventoryId = inventoryIdArray[j];
+                const amountToSubtract = amountToSubtractArray[j];
+                await this.updateInventoryQuantity(inventoryId, amountToSubtract);
+                await this.updateInStockFoodItem(this.foodItemIds[foodItemIndex], inventoryId, amountToSubtract);
+            }
+            foodItemIndex++;
+        }
+
+
+        for (const inventoryId of this.inventoryItemIds) {
+            await this.updateInventoryQuantity(inventoryId, 1);
+            
+            await this.updateInStockMenuItem(this.menuitemId, inventoryId);
+        }
+    }
+
+    /**
+     * @method updateInStockFoodItem
+     * @async
+     * @param {number} foodItemId - The ID of the food item.
+     * @param {number} inventoryId - The ID of the inventory item.
+     * @param {number} neededQuantity - The required quantity.
+     */
+    async updateInStockFoodItem(foodItemId, inventoryId, neededQuantity) {
+        const quantity = (await getInventoryItems()).find(item => item.inventoryitem_id === inventoryId).quantity;
+        if (quantity &lt; neededQuantity) {
+            await updateFoodItemInStock(foodItemId, false);
+        }
+    }
+
+    /**
+     * @method updateInStockMenuItem
+     * @async
+     * @param {number} menuItemId - The ID of the menu item.
+     * @param {number} inventoryId - The ID of the inventory item.
+     */
+    async updateInStockMenuItem(menuItemId, inventoryId) {
+        const quantity = (await getInventoryItems()).find(item => item.inventoryitem_id === inventoryId).quantity;
+        if (quantity &lt; 1) {
+            await updateMenuItemInStock(menuItemId, false);
+        }
+    }
+
+    /**
+     * @method updateInventoryQuantity
+     * @param {number} inventoryId - The ID of the inventory item to update.
+     * @param {number} amountToSubtract - The amount to subtract from the inventory item's quantity.
+     */
+    async updateInventoryQuantity(inventoryId, amountToSubtract) {
+            await updateInventoryItemQuantity(inventoryId, amountToSubtract);
+    }
+
+    /**
+     * @method getFoodInventoryIds
+     * @async
+     * @param {number} foodItemId - The ID of the food item.
+     * @returns {Promise&lt;number[]>} A promise that resolves to an array of inventory item IDs.
+     */
+    async getFoodInventoryIds(foodItemId) {
+        const sql = "SELECT inventoryItem_ids FROM FoodItems WHERE foodItem_id = ?";
+        const result = await this.database.query(sql, [foodItemId]);
+        if (result.rows.length > 0 &amp;&amp; result.rows[0].inventoryItem_ids) {
+            return result.rows[0].inventoryItem_ids;
+        }
+        return [];
+    }
+
+    /**
+     * @method getMenuInventoryIds
+     * @async
+     * @param {number} menuItemId - The ID of the menu item.
+     * @returns {Promise&lt;number[]>} A promise that resolves to an array of inventory item IDs.
+     */
+    async getMenuInventoryIds(menuItemId) {
+        const sql = "SELECT inventoryitem_ids FROM MenuItems WHERE menuItem_id = ?";
+        const result = await this.database.query(sql, [menuItemId]);
+        if (result.rows.length > 0 &amp;&amp; result.rows[0].inventoryitem_ids) {
+            return result.rows[0].inventoryitem_ids;
+        }
+        return [];
+    }
+
+    /**
+     * @method getInventoryAmounts
+     * @async
+     * @param {number} foodItemId - The ID of the food item.
+     * @returns {Promise&lt;number[]>} A promise that resolves to an array of inventory amounts.
+     */
+    async getInventoryAmounts(foodItemId) {
+        const sql = "SELECT inventory_amounts FROM FoodItems WHERE foodItem_id = ?";
+        const result = await this.database.query(sql, [foodItemId]);
+        if (result.rows.length > 0 &amp;&amp; result.rows[0].inventory_amounts) {
+            return result.rows[0].inventory_amounts;
+        }
+        return [];
+    }
+
+    /**
+     * @method isSeason
+     * @param {Object} menuItem - The menu item object.
+     * @returns {boolean} True if the menu item is in season, otherwise false.
+     */
+    isSeason(menuItem) {
+        return true;
+    }
+
+    /**
+     * @method getFoodItems
+     * @async
+     * @returns {Promise&lt;Object[]>} A promise that resolves to an array of food item objects.
+     */
+    async getFoodItems() {
+        try {
+            return await getFoodItems();
+        } catch (err) {
+            console.error("Error fetching food items:", err);
+            return [];
+        }
+    }
+
+    /**
+     * @method extractFoodItemData
+     * @async
+     * @param {string} key - The key to extract from each food item.
+     * @returns {Promise&lt;*>[]} A promise that resolves to an array of extracted data.
+     */
+    async extractFoodItemData(key) {
+        const returnValue = [];
+        try {
+            const foodItems = await this.getFoodItems();
+            if (foodItems) {
+                for (const foodItemId of this.foodItemIds) {
+                    const foodItem = foodItems.find(item => item.fooditem_id === foodItemId);
+                    if (foodItem &amp;&amp; foodItem[key] !== undefined) {
+                        returnValue.push(foodItem[key]);
+                    }
+                }
+            }
+        } catch (err) {
+            console.error(`Error extracting ${key} from food items:`, err);
+        }
+        return returnValue;
+    }
+    
+    /**
+     * @method getFoodItemInventoryItemIds
+     * @async
+     * @returns {Promise&lt;number[]>} A promise that resolves to an array of inventory item IDs.
+     */
+    async getFoodItemInventoryItemIds() {
+        return await this.extractFoodItemData("inventoryitem_ids");
+    }
+    
+    /**
+     * @method getFoodItemInventoryAmounts
+     * @async
+     * @returns {Promise&lt;number[]>} A promise that resolves to an array of inventory amounts.
+     */
+    async getFoodItemInventoryAmounts() {
+        return await this.extractFoodItemData("inventory_amounts");
+    }
+    
+    /**
+     * @method getFoodItemNames
+     * @async
+     * @returns {Promise&lt;string[]>} A promise that resolves to an array of food item names.
+     */
+    async getFoodItemNames() {
+        return await this.extractFoodItemData("fooditem_name");
+    }
+    
+    /**
+     * Checks for restrictions associated with food items.
+     * @method checkRestriction
+     * @async
+     * @returns {Promise&lt;Object>} - A promise that resolves to a map of food item names and their restrictions.
+     */
+    async checkRestriction() {
+        const restrictions = await this.extractFoodItemData("restriction");
+        const foodItemNames = await this.extractFoodItemData("fooditem_name");
+        let restrictionMap = {};
+    
+        for (let i = 0; i &lt; this.foodItemIds.length; ++i) {
+            const restriction = restrictions[i];
+            const foodItemName = foodItemNames[i];
+    
+            if (restriction) {
+                restrictionMap[foodItemName] = restriction;
+            }
+        }
+    
+        return restrictionMap;
+    }
+    
+    
+
+}
+
+
+export default MenuItem;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Classes</h3><ul><li><a href="Employee.html">Employee</a></li><li><a href="global.html#MenuItem">MenuItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccessibilityButton">AccessibilityButton</a></li><li><a href="global.html#BackButton">BackButton</a></li><li><a href="global.html#Cashier">Cashier</a></li><li><a href="global.html#CashierTable">CashierTable</a></li><li><a href="global.html#Customer">Customer</a></li><li><a href="global.html#FoodItemCard">FoodItemCard</a></li><li><a href="global.html#FoodItemGrid">FoodItemGrid</a></li><li><a href="global.html#FoodRestrictions">FoodRestrictions</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#GoogleTranslate">GoogleTranslate</a></li><li><a href="global.html#HomeButton">HomeButton</a></li><li><a href="global.html#ManagerButton">ManagerButton</a></li><li><a href="global.html#MenuItemCard">MenuItemCard</a></li><li><a href="global.html#MenuItemGrid">MenuItemGrid</a></li><li><a href="global.html#OrderEntry">OrderEntry</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#ProductUsageReport">ProductUsageReport</a></li><li><a href="global.html#SalesReport">SalesReport</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#WeatherWidget">WeatherWidget</a></li><li><a href="global.html#XReport">XReport</a></li><li><a href="global.html#XReportPayments">XReportPayments</a></li><li><a href="global.html#ZReport">ZReport</a></li><li><a href="global.html#ZReportPayments">ZReportPayments</a></li><li><a href="global.html#ZoomProvider">ZoomProvider</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#addFoodItem">addFoodItem</a></li><li><a href="global.html#alterInventory">alterInventory</a></li><li><a href="global.html#checkRestriction">checkRestriction</a></li><li><a href="global.html#extractFoodItemData">extractFoodItemData</a></li><li><a href="global.html#fetchMenuItems">fetchMenuItems</a></li><li><a href="global.html#getFoodInventoryIds">getFoodInventoryIds</a></li><li><a href="global.html#getFoodItemIds">getFoodItemIds</a></li><li><a href="global.html#getFoodItemInventoryAmounts">getFoodItemInventoryAmounts</a></li><li><a href="global.html#getFoodItemInventoryItemIds">getFoodItemInventoryItemIds</a></li><li><a href="global.html#getFoodItemNames">getFoodItemNames</a></li><li><a href="global.html#getFoodItems">getFoodItems</a></li><li><a href="global.html#getImageLink">getImageLink</a></li><li><a href="global.html#getInventoryAmounts">getInventoryAmounts</a></li><li><a href="global.html#getMenuInventoryIds">getMenuInventoryIds</a></li><li><a href="global.html#getMenuItemId">getMenuItemId</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li><li><a href="global.html#getOrders">getOrders</a></li><li><a href="global.html#getRandomItem">getRandomItem</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#handleCloseError">handleCloseError</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#isSeason">isSeason</a></li><li><a href="global.html#processChartData">processChartData</a></li><li><a href="global.html#removeFoodItem">removeFoodItem</a></li><li><a href="global.html#tableHeaders">tableHeaders</a></li><li><a href="global.html#updateInStockFoodItem">updateInStockFoodItem</a></li><li><a href="global.html#updateInStockMenuItem">updateInStockMenuItem</a></li><li><a href="global.html#updateInventoryQuantity">updateInventoryQuantity</a></li><li><a href="global.html#useZoom">useZoom</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 14:00:22 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

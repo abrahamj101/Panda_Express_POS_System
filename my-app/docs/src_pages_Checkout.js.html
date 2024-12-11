@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/pages/Checkout.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/pages/Checkout.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Checkout Component
+ * This page allows users to review their cart, input payment details, and place an order.
+ * It fetches food item names dynamically, calculates totals (including tax), and validates form inputs.
+ *
+ * @file Checkout.js
+ * @module pages/Checkout
+ * @requires react
+ * @requires react-router-dom
+ * @requires ../components/Navigation/Header
+ * @requires ../components/Navigation/Footer
+ * @requires ../components/Navigation/BackButton
+ * @requires ../components/Cart/CartContext
+ * @requires ../components/Zoom/ZoomContext
+ * @requires ../components/Login/LoginContext
+ * @requires ../styles/Pages/default.css
+ * @requires ../styles/Pages/Checkout.css
+ */
+
+import React, { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../components/Navigation/Header";
+import Footer from "../components/Navigation/Footer";
+import BackButton from "../components/Navigation/BackButton";
+import "../styles/Pages/default.css";
+import CartContext from "../components/Cart/CartContext";
+import { useZoom } from "../components/Zoom/ZoomContext";
+import "../styles/Pages/Checkout.css";
+import LoginContext from "../components/Login/LoginContext";
+
+/**
+ * Checkout Component
+ *
+ * @returns {JSX.Element} The checkout page, where users can review their cart,
+ * fill in payment details, and place an order.
+ */
+function Checkout() {
+  const navigate = useNavigate(); // Navigation hook
+  const { zoomLevel } = useZoom(); // Zoom level for accessibility scaling
+  const [foodItemNames, setFoodItemNames] = useState({});
+  const { menuItems, removeMenuItem, total, tax, completeOrder } =
+    useContext(CartContext);
+  const { isLoggedIn, customerId } = useContext(LoginContext);
+
+  /**
+   * State to manage checkout form input values.
+   * @type {Object}
+   */
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    creditCard: "",
+  });
+
+  /**
+   * State to manage form validation errors.
+   * @type {string}
+   */
+  const [formError, setFormError] = useState("");
+
+  /**
+   * Handles input changes in the checkout form.
+   *
+   * @param {Object} e - Event object for input change.
+   */
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  /**
+   * Validates the checkout form input fields.
+   *
+   * @returns {boolean} True if the form inputs are valid, otherwise false.
+   */
+  const validateForm = () => {
+    const { name, email, creditCard } = formData;
+
+    if (!name || !email || !creditCard) {
+      setFormError("Please fill out all fields.");
+      return false;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setFormError("Please enter a valid email address.");
+      return false;
+    }
+
+    if (!/^\d{16}$/.test(creditCard)) {
+      setFormError("Please enter a valid 16-digit credit card number.");
+      return false;
+    }
+
+    setFormError("");
+    return true;
+  };
+
+  /**
+   * Handles the "Place Order" button click event.
+   * Validates form data and completes the order, then navigates back to the home page.
+   *
+   * @async
+   */
+  const handlePlaceOrder = async () => {
+    if (validateForm()) {
+      if (isLoggedIn) {
+        await completeOrder(customerId);
+      } else {
+        await completeOrder();
+      }
+      navigate("/");
+    }
+  };
+
+  /**
+   * Fetches food item names for each menu item in the cart.
+   * Runs when the menuItems array changes.
+   *
+   * @async
+   */
+  useEffect(() => {
+    const fetchFoodItemNames = async () => {
+      const namesMap = {};
+      for (const item of menuItems) {
+        const names = await item.getFoodItemNames();
+        namesMap[item.getMenuItemId()] = names;
+      }
+      setFoodItemNames(namesMap);
+    };
+
+    fetchFoodItemNames();
+  }, [menuItems]);
+
+  return (
+    &lt;div
+      style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top left" }}
+    >
+      {/* Page header */}
+      &lt;Header />
+      &lt;div className="main-content checkout-page">
+        &lt;BackButton location="/" />
+        &lt;h2>Checkout&lt;/h2>
+
+        {/* Cart items */}
+        &lt;ul className="checkout-cart-items">
+          {menuItems.map((item, index) => (
+            &lt;li key={index} className="cart-item">
+              &lt;img
+                src={item.getImageLink()}
+                alt={item.getName()}
+                className="cart-image"
+              />
+              &lt;div className="cart-item-details">
+                &lt;div className="cart-item-name">{item.getName()}&lt;/div>
+                &lt;div className="cart-item-food">
+                  {foodItemNames[item.getMenuItemId()]?.join(", ") ||
+                    "Loading food items..."}
+                &lt;/div>
+                &lt;div className="cart-item-price">
+                  ${item.getTotal().toFixed(2)}
+                &lt;/div>
+              &lt;/div>
+              &lt;button
+                className="cart-remove-button"
+                onClick={() => removeMenuItem(index)}
+              >
+                Remove
+              &lt;/button>
+            &lt;/li>
+          ))}
+        &lt;/ul>
+
+        {/* Cart totals */}
+        &lt;div className="cart-total">
+          &lt;p>
+            &lt;strong>Subtotal:&lt;/strong> ${total.toFixed(2)}
+          &lt;/p>
+          &lt;p>
+            &lt;strong>Tax:&lt;/strong> ${tax.toFixed(2)}
+          &lt;/p>
+          &lt;p>
+            &lt;strong>Total:&lt;/strong> ${(total + tax).toFixed(2)}
+          &lt;/p>
+        &lt;/div>
+
+        {/* Checkout form */}
+        &lt;form className="checkout-form" onSubmit={(e) => e.preventDefault()}>
+          &lt;label>
+            Name:
+            &lt;input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              className="checkout-input"
+            />
+          &lt;/label>
+          &lt;label>
+            Email:
+            &lt;input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              className="checkout-input"
+            />
+          &lt;/label>
+          &lt;label>
+            Credit Card:
+            &lt;input
+              type="text"
+              name="creditCard"
+              value={formData.creditCard}
+              onChange={handleInputChange}
+              className="checkout-input"
+            />
+          &lt;/label>
+          {formError &amp;&amp; &lt;p className="form-error">{formError}&lt;/p>}
+          &lt;button
+            type="button"
+            className="checkout-button"
+            onClick={handlePlaceOrder}
+          >
+            Place Order
+          &lt;/button>
+        &lt;/form>
+      &lt;/div>
+
+      {/* Page footer */}
+      &lt;Footer />
+    &lt;/div>
+  );
+}
+
+export default Checkout;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Classes</h3><ul><li><a href="Employee.html">Employee</a></li><li><a href="global.html#MenuItem">MenuItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccessibilityButton">AccessibilityButton</a></li><li><a href="global.html#BackButton">BackButton</a></li><li><a href="global.html#Cashier">Cashier</a></li><li><a href="global.html#CashierTable">CashierTable</a></li><li><a href="global.html#Customer">Customer</a></li><li><a href="global.html#FoodItemCard">FoodItemCard</a></li><li><a href="global.html#FoodItemGrid">FoodItemGrid</a></li><li><a href="global.html#FoodRestrictions">FoodRestrictions</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#GoogleTranslate">GoogleTranslate</a></li><li><a href="global.html#HomeButton">HomeButton</a></li><li><a href="global.html#ManagerButton">ManagerButton</a></li><li><a href="global.html#MenuItemCard">MenuItemCard</a></li><li><a href="global.html#MenuItemGrid">MenuItemGrid</a></li><li><a href="global.html#OrderEntry">OrderEntry</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#ProductUsageReport">ProductUsageReport</a></li><li><a href="global.html#SalesReport">SalesReport</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#WeatherWidget">WeatherWidget</a></li><li><a href="global.html#XReport">XReport</a></li><li><a href="global.html#XReportPayments">XReportPayments</a></li><li><a href="global.html#ZReport">ZReport</a></li><li><a href="global.html#ZReportPayments">ZReportPayments</a></li><li><a href="global.html#ZoomProvider">ZoomProvider</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#addFoodItem">addFoodItem</a></li><li><a href="global.html#alterInventory">alterInventory</a></li><li><a href="global.html#checkRestriction">checkRestriction</a></li><li><a href="global.html#extractFoodItemData">extractFoodItemData</a></li><li><a href="global.html#fetchMenuItems">fetchMenuItems</a></li><li><a href="global.html#getFoodInventoryIds">getFoodInventoryIds</a></li><li><a href="global.html#getFoodItemIds">getFoodItemIds</a></li><li><a href="global.html#getFoodItemInventoryAmounts">getFoodItemInventoryAmounts</a></li><li><a href="global.html#getFoodItemInventoryItemIds">getFoodItemInventoryItemIds</a></li><li><a href="global.html#getFoodItemNames">getFoodItemNames</a></li><li><a href="global.html#getFoodItems">getFoodItems</a></li><li><a href="global.html#getImageLink">getImageLink</a></li><li><a href="global.html#getInventoryAmounts">getInventoryAmounts</a></li><li><a href="global.html#getMenuInventoryIds">getMenuInventoryIds</a></li><li><a href="global.html#getMenuItemId">getMenuItemId</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li><li><a href="global.html#getOrders">getOrders</a></li><li><a href="global.html#getRandomItem">getRandomItem</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#handleCloseError">handleCloseError</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#isSeason">isSeason</a></li><li><a href="global.html#processChartData">processChartData</a></li><li><a href="global.html#removeFoodItem">removeFoodItem</a></li><li><a href="global.html#tableHeaders">tableHeaders</a></li><li><a href="global.html#updateInStockFoodItem">updateInStockFoodItem</a></li><li><a href="global.html#updateInStockMenuItem">updateInStockMenuItem</a></li><li><a href="global.html#updateInventoryQuantity">updateInventoryQuantity</a></li><li><a href="global.html#useZoom">useZoom</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 14:00:22 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

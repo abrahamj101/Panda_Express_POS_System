@@ -1,5 +1,12 @@
 // ManagerTable.js
-
+/**
+ * @file ManagerTable.js
+ * @description This file implements the `ManagerTable` component, a versatile interface for managing and displaying various types of data, 
+ * including food items, menu items, orders, inventory, and employees. It supports data fetching, rendering, and user interaction for 
+ * creating and deleting records. The component dynamically adapts its functionality based on the `dataType` prop, making it reusable 
+ * across multiple data management contexts. The file also defines utility functions for parsing, fetching, and processing data, as well 
+ * as handling forms for adding and removing items.
+ */
 import React, { useState, useEffect } from "react";
 import getFoodItems from "../../pages/api/fooditems/getFooditems";
 import getMenuItems from "../../pages/api/menuItems/getMenuitem";
@@ -33,6 +40,17 @@ const fieldsToParseAsArray = [
   "item_sub_ids",
 ];
 
+/**
+ * @file ManagerTable.js
+ * @description This file implements the `ManagerTable` component, a versatile interface for managing and displaying various types of data, 
+ * including food items, menu items, orders, inventory, and employees. It supports data fetching, rendering, and user interaction for 
+ * creating and deleting records. The component dynamically adapts its functionality based on the `dataType` prop, making it reusable 
+ * across multiple data management contexts. The file also defines utility functions for parsing, fetching, and processing data, as well 
+ * as handling forms for adding and removing items.
+ * @component
+ * @param {Object} props - Component props.
+ * @param {string} props.dataType - Specifies the type of data to manage (e.g., "fooditem", "menuitem", "order", "inventory", "employee").
+ */
 function ManagerTable({ dataType }) {
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
@@ -87,7 +105,9 @@ function ManagerTable({ dataType }) {
     fetchData();
   }, [dataType]);
 
-  // Fetch existing items when the add form is opened
+  /**
+   * Fetches existing items based on the current dataType.
+   */
   useEffect(() => {
     if (showAddForm) {
       fetchExistingItems();
@@ -119,6 +139,11 @@ function ManagerTable({ dataType }) {
     }
   };
 
+  /**
+   * Returns a random item from the existing items.
+   * 
+   * @returns {Object} A random item object.
+   */
   const getRandomItem = () => {
     if (existingItems.length > 0) {
       const randomIndex = Math.floor(Math.random() * existingItems.length);
@@ -127,7 +152,11 @@ function ManagerTable({ dataType }) {
     return {};
   };
 
-  // Helper function to get the ID field name based on dataType
+  /**
+   * Gets the ID field name based on the current dataType.
+   * 
+   * @returns {string} The ID field name.
+   */
   const getIdField = () => {
     switch (dataType) {
       case "fooditem":
@@ -236,7 +265,10 @@ function ManagerTable({ dataType }) {
     }
   };
 
-  // Function to handle closing the error message
+  /**
+ * Handles closing the error message by setting the error state to null.
+ * @function handleCloseError
+ */
   const handleCloseError = () => {
     setError(null);
   };
@@ -255,6 +287,10 @@ function ManagerTable({ dataType }) {
     return <div className="loading">Loading...</div>;
   }
 
+ /**
+ * Extracts table headers from the data by retrieving the keys of the first object.
+ * @constant {Array<string>} tableHeaders - List of table column headers.
+ */
   const tableHeaders = data.length > 0 ? Object.keys(data[0]) : [];
 
   return (
@@ -302,6 +338,11 @@ function ManagerTable({ dataType }) {
         <Form onClose={() => setShowAddForm(false)}>
           <h3>Add {dataType}</h3>
           {(() => {
+            /**
+           * Retrieves a random item to pre-fill form fields with sample values.
+           * @function getRandomItem
+           * @returns {Object} A random data object.
+           */
             const randomItem = getRandomItem();
             return tableHeaders
             .filter((header) => !excludedFields.includes(header))

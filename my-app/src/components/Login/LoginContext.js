@@ -1,8 +1,6 @@
 /**
  * LoginContext Module
- * Manages user authentication, login state, role management, and integration with online user APIs.
- * Stores authentication state in localStorage for persistence across sessions.
- *
+ * @description Manages user authentication, login state, role management, and integration with online user APIs. Stores authentication state in localStorage for persistence across sessions.
  * @file LoginContext.js
  * @module context/LoginContext
  * @requires addOnlineUsers - API function to add online users.
@@ -19,6 +17,7 @@ import getOnlineUsersEmail from "../../pages/api/onlineUsers/getOnlineUserEmail"
 /**
  * LoginContext
  * Provides authentication state and functions to components via React Context API.
+ * @type {React.Context}
  */
 const LoginContext = createContext();
 
@@ -33,8 +32,22 @@ const LoginContext = createContext();
  */
 export const LoginProvider = ({ children }) => {
   // State variables for login status, user role, and customer ID
+  /**
+   * The current login status of the user.
+   * @type {boolean}
+   */
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  /**
+   * The role of the current user.
+   * @type {string}
+   */
   const [role, setRole] = useState("");
+
+  /**
+   * The ID of the current customer.
+   * @type {number}
+   */
   const [customerId, setCustomerId] = useState(0);
 
   /**
@@ -82,6 +95,7 @@ export const LoginProvider = ({ children }) => {
    * createOnlineUser - Creates a new online user and updates the login state.
    *
    * @param {Object} googleUser - Google user object containing user details.
+   * @returns {Promise<void>} A promise that resolves once the new user is created.
    */
   const createOnlineUser = async (googleUser) => {
     const customer = await addCustomer(

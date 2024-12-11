@@ -28,7 +28,8 @@ const Nutrition = ({ foodItemId }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   /**
-   * fetchNutrition - Fetches nutritional information for the food item.
+   * Fetches the nutrition data for the given food item ID from the API.
+   * Sets the fetched data into the `nutrition` state.
    */
   const fetchNutrition = async () => {
     try {
@@ -70,6 +71,7 @@ const Nutrition = ({ foodItemId }) => {
               </tr>
             </thead>
             <tbody>
+              {/* Table rows displaying each nutrient and its value */}
               <tr>
                 <td>Serving Size</td>
                 <td>{nutrition.serving_size}g</td>

@@ -4,7 +4,22 @@ import getInventoryItems from "../../pages/api/inventory/getInventoryItems";
 import updateFoodItemInStock from "../../pages/api/fooditems/updateInStock";
 import updateMenuItemInStock from "../../pages/api/menuItems/updateInStock";
 
+/**
+ * @file MenuItem 
+ * @description Represents a menu item, including its properties, associated food items, 
+ * inventory items, and operations to update inventory and stock status.
+ */
 class MenuItem {
+    /**
+     * Creates an instance of MenuItem.
+     * @param {number} menuitemId - The ID of the menu item.
+     * @param {string} menuItemName - The name of the menu item.
+     * @param {number} price - The price of the menu item.
+     * @param {string} imgLink - The image link for the menu item.
+     * @param {number[]} inventoryItemIds - Array of associated inventory item IDs.
+     * @param {boolean} inStock - Whether the menu item is in stock.
+     * @param {number[]} [foodItemIds=[]] - Array of associated food item IDs.
+     */
     constructor(menuitemId, menuItemName, price, imgLink, inventoryItemIds, inStock, foodItemIds=[]) {
         this.menuitemId = menuitemId;
         this.foodItemIds = foodItemIds;
@@ -15,7 +30,10 @@ class MenuItem {
         this.inStock = inStock;
     }
 
-    // Adds a food item ID to the foodItemIds array and updates the total price if needed
+    /**
+     * @method addFoodItem
+     * @param {number} foodItemId - The ID of the food item to add.
+     */
     addFoodItem(foodItemId) {
         this.foodItemIds.push(foodItemId);
         if (foodItemId === 8 || foodItemId === 9) {
@@ -30,6 +48,10 @@ class MenuItem {
         this.foodItemIds.sort()
     }
 
+    /**
+     * @method removeFoodItem
+     * @param {number} foodItemId - The ID of the food item to remove.
+     */
     removeFoodItem(foodItemId) {
         for (let i = 0; i < this.foodItemIds.length; ++i) {
             if (this.foodItemIds[i] === foodItemId) {
@@ -49,30 +71,52 @@ class MenuItem {
     }
     
 
-    // Returns the total price of the menu item
+
+    /**
+     * @method getTotal
+     * @returns {number} The total price of the menu item.
+     */
     getTotal() {
         return this.total;
     }
 
-    // Returns the name of the menu item
+    /**
+     * @method getName
+     * @returns {string} The name of the menu item.
+     */
     getName() {
         return this.name;
     }
 
-    // Returns the menu item ID
+    /**
+     * @method getMenuItemId
+     * @returns {number} The ID of the menu item.
+     */
     getMenuItemId() {
         return this.menuitemId;
     }
 
+    /**
+     * @method getImageLink
+     * @returns {string} The image link of the menu item.
+     */
     getImageLink() {
         return this.imgLink;
     }
 
+    /**
+     * @method getFoodItemIds
+     * @returns {number[]} Array of food item IDs associated with the menu item.
+     */
     getFoodItemIds() {
         return this.foodItemIds;
     }
 
-    // Alters the inventory quantities based on the food items associated with this menu item
+    /**
+     * @method alterInventory
+     * @async
+     * @description Updates the inventory and stock status for the menu item and associated food items.
+     */
     async alterInventory() {
 
         const inventoryIds = await this.getFoodItemInventoryItemIds();
@@ -98,7 +142,13 @@ class MenuItem {
         }
     }
 
-    // Updates the stock status of a food item based on inventory quantity
+    /**
+     * @method updateInStockFoodItem
+     * @async
+     * @param {number} foodItemId - The ID of the food item.
+     * @param {number} inventoryId - The ID of the inventory item.
+     * @param {number} neededQuantity - The required quantity.
+     */
     async updateInStockFoodItem(foodItemId, inventoryId, neededQuantity) {
         const quantity = (await getInventoryItems()).find(item => item.inventoryitem_id === inventoryId).quantity;
         if (quantity < neededQuantity) {
@@ -106,7 +156,12 @@ class MenuItem {
         }
     }
 
-    // Updates the stock status of a menu item based on inventory quantity
+    /**
+     * @method updateInStockMenuItem
+     * @async
+     * @param {number} menuItemId - The ID of the menu item.
+     * @param {number} inventoryId - The ID of the inventory item.
+     */
     async updateInStockMenuItem(menuItemId, inventoryId) {
         const quantity = (await getInventoryItems()).find(item => item.inventoryitem_id === inventoryId).quantity;
         if (quantity < 1) {
@@ -114,12 +169,21 @@ class MenuItem {
         }
     }
 
-    // Updates the quantity of a specific inventory item by subtracting a given amount
+    /**
+     * @method updateInventoryQuantity
+     * @param {number} inventoryId - The ID of the inventory item to update.
+     * @param {number} amountToSubtract - The amount to subtract from the inventory item's quantity.
+     */
     async updateInventoryQuantity(inventoryId, amountToSubtract) {
-        await updateInventoryItemQuantity(inventoryId, amountToSubtract);
+            await updateInventoryItemQuantity(inventoryId, amountToSubtract);
     }
 
-    // Retrieves the inventory IDs associated with a specified food item
+    /**
+     * @method getFoodInventoryIds
+     * @async
+     * @param {number} foodItemId - The ID of the food item.
+     * @returns {Promise<number[]>} A promise that resolves to an array of inventory item IDs.
+     */
     async getFoodInventoryIds(foodItemId) {
         const sql = "SELECT inventoryItem_ids FROM FoodItems WHERE foodItem_id = ?";
         const result = await this.database.query(sql, [foodItemId]);
@@ -129,7 +193,12 @@ class MenuItem {
         return [];
     }
 
-    // Retrieves the inventory IDs associated with a specified menu item
+    /**
+     * @method getMenuInventoryIds
+     * @async
+     * @param {number} menuItemId - The ID of the menu item.
+     * @returns {Promise<number[]>} A promise that resolves to an array of inventory item IDs.
+     */
     async getMenuInventoryIds(menuItemId) {
         const sql = "SELECT inventoryitem_ids FROM MenuItems WHERE menuItem_id = ?";
         const result = await this.database.query(sql, [menuItemId]);
@@ -139,7 +208,12 @@ class MenuItem {
         return [];
     }
 
-    // Retrieves the inventory amounts associated with a specified food item
+    /**
+     * @method getInventoryAmounts
+     * @async
+     * @param {number} foodItemId - The ID of the food item.
+     * @returns {Promise<number[]>} A promise that resolves to an array of inventory amounts.
+     */
     async getInventoryAmounts(foodItemId) {
         const sql = "SELECT inventory_amounts FROM FoodItems WHERE foodItem_id = ?";
         const result = await this.database.query(sql, [foodItemId]);
@@ -149,10 +223,20 @@ class MenuItem {
         return [];
     }
 
+    /**
+     * @method isSeason
+     * @param {Object} menuItem - The menu item object.
+     * @returns {boolean} True if the menu item is in season, otherwise false.
+     */
     isSeason(menuItem) {
         return true;
     }
 
+    /**
+     * @method getFoodItems
+     * @async
+     * @returns {Promise<Object[]>} A promise that resolves to an array of food item objects.
+     */
     async getFoodItems() {
         try {
             return await getFoodItems();
@@ -162,6 +246,12 @@ class MenuItem {
         }
     }
 
+    /**
+     * @method extractFoodItemData
+     * @async
+     * @param {string} key - The key to extract from each food item.
+     * @returns {Promise<*>[]} A promise that resolves to an array of extracted data.
+     */
     async extractFoodItemData(key) {
         const returnValue = [];
         try {
@@ -180,19 +270,39 @@ class MenuItem {
         return returnValue;
     }
     
+    /**
+     * @method getFoodItemInventoryItemIds
+     * @async
+     * @returns {Promise<number[]>} A promise that resolves to an array of inventory item IDs.
+     */
     async getFoodItemInventoryItemIds() {
         return await this.extractFoodItemData("inventoryitem_ids");
     }
     
+    /**
+     * @method getFoodItemInventoryAmounts
+     * @async
+     * @returns {Promise<number[]>} A promise that resolves to an array of inventory amounts.
+     */
     async getFoodItemInventoryAmounts() {
         return await this.extractFoodItemData("inventory_amounts");
     }
     
+    /**
+     * @method getFoodItemNames
+     * @async
+     * @returns {Promise<string[]>} A promise that resolves to an array of food item names.
+     */
     async getFoodItemNames() {
         return await this.extractFoodItemData("fooditem_name");
     }
     
-    
+    /**
+     * Checks for restrictions associated with food items.
+     * @method checkRestriction
+     * @async
+     * @returns {Promise<Object>} - A promise that resolves to a map of food item names and their restrictions.
+     */
     async checkRestriction() {
         const restrictions = await this.extractFoodItemData("restriction");
         const foodItemNames = await this.extractFoodItemData("fooditem_name");

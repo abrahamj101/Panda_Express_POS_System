@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/components/ManagerPage/ManagerTable.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/components/ManagerPage/ManagerTable.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// ManagerTable.js
+/**
+ * @file ManagerTable.js
+ * @description This file implements the `ManagerTable` component, a versatile interface for managing and displaying various types of data, 
+ * including food items, menu items, orders, inventory, and employees. It supports data fetching, rendering, and user interaction for 
+ * creating and deleting records. The component dynamically adapts its functionality based on the `dataType` prop, making it reusable 
+ * across multiple data management contexts. The file also defines utility functions for parsing, fetching, and processing data, as well 
+ * as handling forms for adding and removing items.
+ */
+import React, { useState, useEffect } from "react";
+import getFoodItems from "../../pages/api/fooditems/getFooditems";
+import getMenuItems from "../../pages/api/menuItems/getMenuitem";
+import getOrders from "../../pages/api/orders/getOrders";
+import getInventory from "../../pages/api/inventory/getInventoryItems";
+import getEmployees from "../../pages/api/employees/getEmployees";
+import "../../styles/ManagerTable.css";
+
+import Form from "./Form";
+import { useNavigate } from "react-router-dom";
+
+// Import the create and delete functions
+import {
+  createEmployee,
+  deleteEmployee,
+  createFoodItem,
+  deleteFoodItem,
+  createMenuItem,
+  deleteMenuItem,
+  createInventoryItem,
+  deleteInventoryItem,
+} from "../../pages/api/createDelete";
+
+// Fields that need to be parsed as arrays
+const fieldsToParseAsArray = [
+  "foodItem_ids",
+  "inventoryItem_ids",
+  "menuitem_ids",
+  "fooditem_ids",
+  "inventoryitem_ids",
+  "item_sub_ids",
+];
+
+/**
+ * @file ManagerTable.js
+ * @description This file implements the `ManagerTable` component, a versatile interface for managing and displaying various types of data, 
+ * including food items, menu items, orders, inventory, and employees. It supports data fetching, rendering, and user interaction for 
+ * creating and deleting records. The component dynamically adapts its functionality based on the `dataType` prop, making it reusable 
+ * across multiple data management contexts. The file also defines utility functions for parsing, fetching, and processing data, as well 
+ * as handling forms for adding and removing items.
+ * @component
+ * @param {Object} props - Component props.
+ * @param {string} props.dataType - Specifies the type of data to manage (e.g., "fooditem", "menuitem", "order", "inventory", "employee").
+ */
+function ManagerTable({ dataType }) {
+  const [data, setData] = useState([]);
+  const [title, setTitle] = useState("");
+  const [error, setError] = useState(null);
+
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showRemoveForm, setShowRemoveForm] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [removeId, setRemoveId] = useState("");
+
+  const navigate = useNavigate();
+
+  // State for existing items
+  const [existingItems, setExistingItems] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        let result = [];
+        switch (dataType) {
+          case "fooditem":
+            result = await getFoodItems();
+            setTitle("Food Items");
+            break;
+          case "menuitem":
+            result = await getMenuItems();
+            setTitle("Menu Items");
+            break;
+          case "order":
+            result = await getOrders();
+            setTitle("Order History");
+            break;
+          case "inventory":
+            result = await getInventory();
+            setTitle("Inventory List");
+            break;
+          case "employee":
+            result = await getEmployees();
+            setTitle("Employee List");
+            break;
+          default:
+            throw new Error("Invalid data type");
+        }
+        setData(Array.isArray(result) ? result : []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError(error);
+        setData([]);
+      }
+    }
+
+    fetchData();
+  }, [dataType]);
+
+  /**
+   * Fetches existing items based on the current dataType.
+   */
+  useEffect(() => {
+    if (showAddForm) {
+      fetchExistingItems();
+    }
+  }, [showAddForm]);
+
+  const fetchExistingItems = async () => {
+    try {
+      let result = [];
+      switch (dataType) {
+        case "fooditem":
+          result = await getFoodItems();
+          break;
+        case "menuitem":
+          result = await getMenuItems();
+          break;
+        case "inventory":
+          result = await getInventory();
+          break;
+        case "employee":
+          result = await getEmployees();
+          break;
+        default:
+          result = [];
+      }
+      setExistingItems(Array.isArray(result) ? result : []);
+    } catch (error) {
+      console.error("Error fetching existing items:", error);
+    }
+  };
+
+  /**
+   * Returns a random item from the existing items.
+   * 
+   * @returns {Object} A random item object.
+   */
+  const getRandomItem = () => {
+    if (existingItems.length > 0) {
+      const randomIndex = Math.floor(Math.random() * existingItems.length);
+      return existingItems[randomIndex];
+    }
+    return {};
+  };
+
+  /**
+   * Gets the ID field name based on the current dataType.
+   * 
+   * @returns {string} The ID field name.
+   */
+  const getIdField = () => {
+    switch (dataType) {
+      case "fooditem":
+        return "fooditem_id";
+      case "menuitem":
+        return "menuitem_id";
+      case "inventory":
+        return "inventoryitem_id";
+      case "employee":
+        return "employee_id";
+      default:
+        return "id";
+    }
+  };
+
+  // Exclude ID fields from the add form
+  const excludedFields = [
+    "id",
+    "employee_id",
+    "menuitem_id",
+    "fooditem_id",
+    "inventoryitem_id",
+    "order_id",
+  ];
+
+  // Function to handle adding a new item
+  const handleAdd = async () => {
+    try {
+      // Create a copy of formData to manipulate
+      const processedFormData = { ...formData };
+
+      // Parse specific fields into arrays
+      fieldsToParseAsArray.forEach((field) => {
+        if (processedFormData[field]) {
+          processedFormData[field] = processedFormData[field]
+            .split(",")
+            .map((item) => item.trim());
+        }
+      });
+      console.log(processedFormData);
+
+      let newItem;
+      switch (dataType) {
+        case "fooditem":
+          newItem = await createFoodItem(processedFormData);
+          break;
+        case "menuitem":
+          newItem = await createMenuItem(processedFormData);
+          break;
+        case "inventory":
+          newItem = await createInventoryItem(processedFormData);
+          break;
+        case "employee":
+          newItem = await createEmployee(processedFormData);
+          break;
+        default:
+          throw new Error("Invalid data type");
+      }
+
+      if (dataType === "employee") {
+        // Refresh the page after adding an employee
+        window.location.reload();
+      } else {
+        // For other data types, update the state without refreshing
+        setData((prevData) => [...prevData, newItem]);
+        setFormData({});
+        setShowAddForm(false);
+      }
+    } catch (error) {
+      console.error("Error adding item:", error);
+      setError(error);
+    }
+  };
+
+  // Function to handle removing an item
+  const handleRemove = async () => {
+    try {
+      const idValue = removeId;
+
+      switch (dataType) {
+        case "fooditem":
+          await deleteFoodItem(idValue);
+          break;
+        case "menuitem":
+          await deleteMenuItem(idValue);
+          break;
+        case "inventory":
+          await deleteInventoryItem(idValue);
+          break;
+        case "employee":
+          await deleteEmployee(idValue);
+          break;
+        default:
+          throw new Error("Invalid data type");
+      }
+
+      const idField = getIdField();
+      setData((prevData) =>
+        prevData.filter((item) => item[idField] !== parseInt(idValue))
+      );
+      setRemoveId("");
+      setShowRemoveForm(false);
+    } catch (error) {
+      console.error("Error removing item:", error);
+      setError(error);
+    }
+  };
+
+  /**
+ * Handles closing the error message by setting the error state to null.
+ * @function handleCloseError
+ */
+  const handleCloseError = () => {
+    setError(null);
+  };
+
+  if (error) {
+    return (
+      &lt;div className="error">
+        &lt;h2>Error&lt;/h2>
+        &lt;p>{error.message}&lt;/p>
+        &lt;button onClick={handleCloseError}>Dismiss&lt;/button>
+      &lt;/div>
+    );
+  }
+
+  if (!data || data.length === 0) {
+    return &lt;div className="loading">Loading...&lt;/div>;
+  }
+
+ /**
+ * Extracts table headers from the data by retrieving the keys of the first object.
+ * @constant {Array&lt;string>} tableHeaders - List of table column headers.
+ */
+  const tableHeaders = data.length > 0 ? Object.keys(data[0]) : [];
+
+  return (
+    &lt;div className="manager-table-container">
+      &lt;h2 className="mana-title" aria-live="polite">
+        {title}
+      &lt;/h2>
+      &lt;div className="table-wrapper">
+        &lt;table>
+          &lt;thead>
+            &lt;tr>
+              {tableHeaders.map((key) => (
+                &lt;th key={key}>
+                  {key.charAt(0).toUpperCase() +
+                    key.slice(1).replace(/_/g, " ")}
+                &lt;/th>
+              ))}
+            &lt;/tr>
+          &lt;/thead>
+          &lt;tbody>
+            {data.map((item, index) => (
+              &lt;tr
+                key={index}
+              >
+                {tableHeaders.map((key) => (
+                  &lt;td key={`${index}-${key}`}>{item[key]}&lt;/td>
+                ))}
+              &lt;/tr>
+            ))}
+          &lt;/tbody>
+        &lt;/table>
+      &lt;/div>
+
+      {/* Add and Remove Buttons */}
+      &lt;div className="form-actions">
+        &lt;button onClick={() => setShowAddForm(true)}>Add {dataType}&lt;/button>
+        &lt;button onClick={() => setShowRemoveForm(true)}>
+          Remove {dataType}
+        &lt;/button>
+      &lt;/div>
+
+
+      {/* Add Form */}
+      {showAddForm &amp;&amp; (
+        &lt;Form onClose={() => setShowAddForm(false)}>
+          &lt;h3>Add {dataType}&lt;/h3>
+          {(() => {
+            /**
+           * Retrieves a random item to pre-fill form fields with sample values.
+           * @function getRandomItem
+           * @returns {Object} A random data object.
+           */
+            const randomItem = getRandomItem();
+            return tableHeaders
+            .filter((header) => !excludedFields.includes(header))
+            .map((header) => (
+              &lt;div key={header}>
+                  &lt;label>{header.replace(/_/g, " ")}&lt;/label>
+                  &lt;input
+                    type="text"
+                    value={formData[header] || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, [header]: e.target.value })
+                    }
+                    placeholder={
+                      fieldsToParseAsArray.includes(header)
+                      ? "e.g., 1,2,3"
+                      : randomItem[header] !== undefined
+                      ? String(randomItem[header])
+                      : ""
+                    }
+                    />
+                &lt;/div>
+              ));
+            })()}
+          &lt;button onClick={handleAdd}>Submit&lt;/button>
+        &lt;/Form>
+      )}
+
+      {/* Remove Form */}
+      {showRemoveForm &amp;&amp; (
+        &lt;Form onClose={() => setShowRemoveForm(false)}>
+          &lt;h3>Remove {dataType}&lt;/h3>
+          &lt;label>ID&lt;/label>
+          &lt;input
+            type="text"
+            value={removeId}
+            onChange={(e) => setRemoveId(e.target.value)}
+            />
+          &lt;button onClick={handleRemove}>Remove&lt;/button>
+        &lt;/Form>
+      )}
+    &lt;/div>
+  );
+}
+
+export default ManagerTable;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Classes</h3><ul><li><a href="Employee.html">Employee</a></li><li><a href="global.html#MenuItem">MenuItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccessibilityButton">AccessibilityButton</a></li><li><a href="global.html#BackButton">BackButton</a></li><li><a href="global.html#Cashier">Cashier</a></li><li><a href="global.html#CashierTable">CashierTable</a></li><li><a href="global.html#Customer">Customer</a></li><li><a href="global.html#FoodItemCard">FoodItemCard</a></li><li><a href="global.html#FoodItemGrid">FoodItemGrid</a></li><li><a href="global.html#FoodRestrictions">FoodRestrictions</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#GoogleTranslate">GoogleTranslate</a></li><li><a href="global.html#HomeButton">HomeButton</a></li><li><a href="global.html#ManagerButton">ManagerButton</a></li><li><a href="global.html#MenuItemCard">MenuItemCard</a></li><li><a href="global.html#MenuItemGrid">MenuItemGrid</a></li><li><a href="global.html#OrderEntry">OrderEntry</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#ProductUsageReport">ProductUsageReport</a></li><li><a href="global.html#SalesReport">SalesReport</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#WeatherWidget">WeatherWidget</a></li><li><a href="global.html#XReport">XReport</a></li><li><a href="global.html#XReportPayments">XReportPayments</a></li><li><a href="global.html#ZReport">ZReport</a></li><li><a href="global.html#ZReportPayments">ZReportPayments</a></li><li><a href="global.html#ZoomProvider">ZoomProvider</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#addFoodItem">addFoodItem</a></li><li><a href="global.html#alterInventory">alterInventory</a></li><li><a href="global.html#checkRestriction">checkRestriction</a></li><li><a href="global.html#extractFoodItemData">extractFoodItemData</a></li><li><a href="global.html#fetchMenuItems">fetchMenuItems</a></li><li><a href="global.html#getFoodInventoryIds">getFoodInventoryIds</a></li><li><a href="global.html#getFoodItemIds">getFoodItemIds</a></li><li><a href="global.html#getFoodItemInventoryAmounts">getFoodItemInventoryAmounts</a></li><li><a href="global.html#getFoodItemInventoryItemIds">getFoodItemInventoryItemIds</a></li><li><a href="global.html#getFoodItemNames">getFoodItemNames</a></li><li><a href="global.html#getFoodItems">getFoodItems</a></li><li><a href="global.html#getImageLink">getImageLink</a></li><li><a href="global.html#getInventoryAmounts">getInventoryAmounts</a></li><li><a href="global.html#getMenuInventoryIds">getMenuInventoryIds</a></li><li><a href="global.html#getMenuItemId">getMenuItemId</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li><li><a href="global.html#getOrders">getOrders</a></li><li><a href="global.html#getRandomItem">getRandomItem</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#handleCloseError">handleCloseError</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#isSeason">isSeason</a></li><li><a href="global.html#processChartData">processChartData</a></li><li><a href="global.html#removeFoodItem">removeFoodItem</a></li><li><a href="global.html#tableHeaders">tableHeaders</a></li><li><a href="global.html#updateInStockFoodItem">updateInStockFoodItem</a></li><li><a href="global.html#updateInStockMenuItem">updateInStockMenuItem</a></li><li><a href="global.html#updateInventoryQuantity">updateInventoryQuantity</a></li><li><a href="global.html#useZoom">useZoom</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 14:00:22 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

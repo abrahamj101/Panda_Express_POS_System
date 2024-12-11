@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/pages/MenuBoard.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/pages/MenuBoard.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * MenuPage Component
+ * This page displays a comprehensive menu with different sections: meals, appetizers, 
+ * side choices, entrée choices, and drink choices. Each section includes relevant images, 
+ * titles, and details like calories and prices. 
+ * 
+ * The page also supports zoom accessibility using the ZoomContext.
+ *
+ * @file MenuBoard.js
+ * @module pages/Menu
+ * @requires react
+ * @requires ../styles/Pages/MenuBoard.css
+ * @requires ../components/Navigation/BackButton
+ * @requires ../components/Zoom/ZoomContext
+ */
+
+import React from "react";
+import "../styles/Pages/MenuBoard.css";
+import BackButton from "../components/Navigation/BackButton";
+import { useZoom } from "../components/Zoom/ZoomContext";
+
+/**
+ * MenuPage Component
+ *
+ * @returns {JSX.Element} A fully detailed menu page divided into sections for meals, appetizers, 
+ * sides, entrées, and drinks, with accompanying images and descriptions.
+ */
+const MenuPage = () => {
+  const { zoomLevel } = useZoom();
+
+  return (
+    &lt;div
+      className="menu-page"
+      style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top left" }}
+    >
+      &lt;BackButton location="/" />
+      {/* Menu Items Meals Section */}
+      &lt;div className="menu-section">
+        &lt;h2 className="section-title">Menu Items&lt;/h2>
+        &lt;div className="meal-options">
+          &lt;div className="meal-item">
+            &lt;h3>Bowl&lt;/h3>
+            &lt;p>1 Entrée &amp; 1 Side&lt;/p>
+            &lt;p className="price">$8.30&lt;/p>
+          &lt;/div>
+          &lt;div className="meal-item">
+            &lt;h3>Plate&lt;/h3>
+            &lt;p>2 Entrées &amp; 1 Side&lt;/p>
+            &lt;p className="price">$9.80&lt;/p>
+          &lt;/div>
+          &lt;div className="meal-item">
+            &lt;h3>Bigger Plate&lt;/h3>
+            &lt;p>3 Entrées &amp; 1 Side&lt;/p>
+            &lt;p className="price">$11.30&lt;/p>
+          &lt;/div>
+          &lt;div className="meal-item">
+            &lt;h3>Panda Cub Meal&lt;/h3>
+            &lt;p>Jr. Entrée, Jr. Side, 12 oz Drink &amp; Cookie&lt;/p>
+            &lt;p className="price">$6.60&lt;/p>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+
+      {/* Appetizers Section */}
+      &lt;div className="menu-section">
+        &lt;h2 className="section-title">Appetizer Choices&lt;/h2>
+        &lt;div className="menu-grid">
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/52/524bbb9023e2409b8d3fceae944a808f.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=4f4cc30df356786bbe3968181f8c5160"
+              alt="Chicken Egg Roll"
+            />
+            &lt;h3>Chicken Egg Roll&lt;/h3>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/18/183834b8a35a4737a73a28421f68b4f0.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=0d4be7c417ec1998251da41d5bfe13fb"
+              alt="Veggie Spring Roll"
+            />
+            &lt;h3>Veggie Spring Roll&lt;/h3>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/fe/fef7db209d7d41e6ae065af16afa1577.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=f14d518edf4e7ee0fd22b4d3cddc59b8"
+              alt="Cream Cheese Rangoon"
+            />
+            &lt;h3>Cream Cheese Rangoon&lt;/h3>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/ab/ab4e688dea2b4b56b79fa2ff42a31f24.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=4b9d93576ba69591523a4c60034d54d3"
+              alt="Apple Pie Roll"
+            />
+            &lt;h3>Apple Pie Roll&lt;/h3>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+
+      {/* Side Choices Section */}
+      &lt;div className="menu-section">
+        &lt;h2 className="section-title">Side Choices&lt;/h2>
+        &lt;div className="menu-grid">
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Sides_ChowMein.png"
+              alt="Chow Mein"
+            />
+            &lt;h3>Chow Mein&lt;/h3>
+            &lt;p className="calories">600 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Sides_FriedRice.png"
+              alt="Fried Rice"
+            />
+            &lt;h3>Fried Rice&lt;/h3>
+            &lt;p className="calories">620 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Vegetables_SuperGreens.png"
+              alt="Super Greens"
+            />
+            &lt;h3>Super Greens&lt;/h3>
+            &lt;p className="calories">130 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Sides_WhiteSteamedRice.png"
+              alt="White Steamed Rice"
+            />
+            &lt;h3>White Steamed Rice&lt;/h3>
+            &lt;p className="calories">520 Cal&lt;/p>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+
+      {/* Entrée Choices Section */}
+      &lt;div className="menu-section">
+        &lt;h2 className="section-title">Entrée Choices&lt;/h2>
+        &lt;div className="menu-grid">
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Chicken_OrangeChicken.png"
+              alt="Orange Chicken"
+            />
+            &lt;h3>Orange Chicken&lt;/h3>
+            &lt;p className="calories">510 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Beef_ShanghaiAngusSteak.png"
+              alt="Black Pepper Sirloin Steak"
+            />
+            &lt;h3>Black Pepper Sirloin Steak&lt;/h3>
+            &lt;p className="calories">180 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Seafood_HoneyWalnutShrimp.png"
+              alt="Honey Walnut Shrimp"
+            />
+            &lt;h3>Honey Walnut Shrimp&lt;/h3>
+            &lt;p className="calories">430 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Chicken_GrilledTeriyakiChicken.png"
+              alt="Grilled Teriyaki Chicken"
+            />
+            &lt;h3>Grilled Teriyaki Chicken&lt;/h3>
+            &lt;p className="calories">275 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Chicken_KungPaoChicken.png"
+              alt="Kung Pao Chicken"
+            />
+            &lt;h3>Kung Pao Chicken&lt;/h3>
+            &lt;p className="calories">320 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/ChickenBreast_HoneySesameChickenBreast.png"
+              alt="Honey Sesame Chicken Breast"
+            />
+            &lt;h3>Honey Sesame Chicken Breast&lt;/h3>
+            &lt;p className="calories">340 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Beef_BeijingBeef.png"
+              alt="Beijing Beef"
+            />
+            &lt;h3>Beijing Beef&lt;/h3>
+            &lt;p className="calories">480 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Chicken_MushroomChicken.png"
+              alt="Mushroom Chicken"
+            />
+            &lt;h3>Mushroom Chicken&lt;/h3>
+            &lt;p className="calories">480 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/ChickenBreast_SweetFireChickenBreast.png"
+              alt="SweetFire Chicken Breast"
+            />
+            &lt;h3>SweetFire Chicken Breast&lt;/h3>
+            &lt;p className="calories">380 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/ChickenBreast_StringBeanChickenBreast.png"
+              alt="String Bean Chicken Breast"
+            />
+            &lt;h3>String Bean Chicken Breast&lt;/h3>
+            &lt;p className="calories">210 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Beef_BroccoliBeef.png"
+              alt="Broccoli Beef"
+            />
+            &lt;h3>Broccoli Beef&lt;/h3>
+            &lt;p className="calories">150 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Chicken_BlackPepperChicken.png"
+              alt="Black Pepper Chicken"
+            />
+            &lt;h3>Black Pepper Chicken&lt;/h3>
+            &lt;p className="calories">280 Cal&lt;/p>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://nomnom-files.pandaexpress.com/global/assets/modifiers/Vegetables_SuperGreens.png"
+              alt="Super Greens"
+            />
+            &lt;h3>Super Greens&lt;/h3>
+            &lt;p className="calories">130 Cal&lt;/p>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+
+      {/* Drink Choices Section */}
+      &lt;div className="menu-section">
+        &lt;h2 className="section-title">Drink Choices&lt;/h2>
+        &lt;div className="menu-grid">
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/30/30391bd46a144cedb219c0471be498fe.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=e821e1c6b612c6a431714fef0d0bb172"
+              alt="Dr Pepper"
+            />
+            &lt;h3>Dr Pepper&lt;/h3>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/5f/5f490aede80f4d1a99ae402bf4b76c33.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=0ae5ed7d2c52bedfbe887592b09ebc9c"
+              alt="Sweet Tea"
+            />
+            &lt;h3>Sweet Tea&lt;/h3>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/2a/2a10ad1b282741839242b728d48fae1c.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=94a12b75b2e805caa712a84259aab899"
+              alt="Pepsi"
+            />
+            &lt;h3>Pepsi&lt;/h3>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/07/07eec18462d34cd28a20e764a7c9a3f5.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=4dabda64016c0558aa782d5ffacef48a"
+              alt="Diet Pepsi"
+            />
+            &lt;h3>Diet Pepsi&lt;/h3>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/08/08fa5bd920b24cef821b992c39dc66d6.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=5fee84f8d0a73a623d4b1540f715dc44"
+              alt="Mountain Dew"
+            />
+            &lt;h3>Mountain Dew&lt;/h3>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/9f/9f95a6ded6ee426d99ce700b48f2bc14.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=dc4ec80e3034a7bd132dc2990149603a"
+              alt="Lipton Brisk Raspberry Iced Tea"
+            />
+            &lt;h3>Lipton Brisk Raspberry Iced Tea&lt;/h3>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/e5/e5aa259f1e0a41fc8fbbec970b523190.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=5a937bd6dbe226fbda87b3489827ec16"
+              alt="Sierra Mist"
+            />
+            &lt;h3>Sierra Mist&lt;/h3>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/25/25422dfbe7b340f8884288c075692b2f.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=9cbb80d268521946e202b5a34dd791f9"
+              alt="Tropicana Lemonade"
+            />
+            &lt;h3>Tropicana Lemonade&lt;/h3>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/02/02c37c0783f44e95bb99e3df9d8a33dc.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=b45bf71487256a41c2b36b012a33cd4a"
+              alt="Aquafina"
+            />
+            &lt;h3>Aquafina&lt;/h3>
+          &lt;/div>
+          &lt;div className="menu-item">
+            &lt;img
+              src="https://olo-images-live.imgix.net/57/5717db5694df4f66801ae23057a4f238.png?auto=format%2Ccompress&amp;q=60&amp;cs=tinysrgb&amp;w=810&amp;h=540&amp;fit=crop&amp;fm=png32&amp;s=1596b46ff8a0c14560eb8b52345b58b6"
+              alt="Gatorade Lemon Lime"
+            />
+            &lt;h3>Gatorade Lemon Lime&lt;/h3>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
+  );
+};
+
+export default MenuPage;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Classes</h3><ul><li><a href="Employee.html">Employee</a></li><li><a href="global.html#MenuItem">MenuItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccessibilityButton">AccessibilityButton</a></li><li><a href="global.html#BackButton">BackButton</a></li><li><a href="global.html#Cashier">Cashier</a></li><li><a href="global.html#CashierTable">CashierTable</a></li><li><a href="global.html#Customer">Customer</a></li><li><a href="global.html#FoodItemCard">FoodItemCard</a></li><li><a href="global.html#FoodItemGrid">FoodItemGrid</a></li><li><a href="global.html#FoodRestrictions">FoodRestrictions</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#GoogleTranslate">GoogleTranslate</a></li><li><a href="global.html#HomeButton">HomeButton</a></li><li><a href="global.html#ManagerButton">ManagerButton</a></li><li><a href="global.html#MenuItemCard">MenuItemCard</a></li><li><a href="global.html#MenuItemGrid">MenuItemGrid</a></li><li><a href="global.html#OrderEntry">OrderEntry</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#ProductUsageReport">ProductUsageReport</a></li><li><a href="global.html#SalesReport">SalesReport</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#WeatherWidget">WeatherWidget</a></li><li><a href="global.html#XReport">XReport</a></li><li><a href="global.html#XReportPayments">XReportPayments</a></li><li><a href="global.html#ZReport">ZReport</a></li><li><a href="global.html#ZReportPayments">ZReportPayments</a></li><li><a href="global.html#ZoomProvider">ZoomProvider</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#addFoodItem">addFoodItem</a></li><li><a href="global.html#alterInventory">alterInventory</a></li><li><a href="global.html#checkRestriction">checkRestriction</a></li><li><a href="global.html#extractFoodItemData">extractFoodItemData</a></li><li><a href="global.html#fetchMenuItems">fetchMenuItems</a></li><li><a href="global.html#getFoodInventoryIds">getFoodInventoryIds</a></li><li><a href="global.html#getFoodItemIds">getFoodItemIds</a></li><li><a href="global.html#getFoodItemInventoryAmounts">getFoodItemInventoryAmounts</a></li><li><a href="global.html#getFoodItemInventoryItemIds">getFoodItemInventoryItemIds</a></li><li><a href="global.html#getFoodItemNames">getFoodItemNames</a></li><li><a href="global.html#getFoodItems">getFoodItems</a></li><li><a href="global.html#getImageLink">getImageLink</a></li><li><a href="global.html#getInventoryAmounts">getInventoryAmounts</a></li><li><a href="global.html#getMenuInventoryIds">getMenuInventoryIds</a></li><li><a href="global.html#getMenuItemId">getMenuItemId</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li><li><a href="global.html#getOrders">getOrders</a></li><li><a href="global.html#getRandomItem">getRandomItem</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#handleCloseError">handleCloseError</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#isSeason">isSeason</a></li><li><a href="global.html#processChartData">processChartData</a></li><li><a href="global.html#removeFoodItem">removeFoodItem</a></li><li><a href="global.html#tableHeaders">tableHeaders</a></li><li><a href="global.html#updateInStockFoodItem">updateInStockFoodItem</a></li><li><a href="global.html#updateInStockMenuItem">updateInStockMenuItem</a></li><li><a href="global.html#updateInventoryQuantity">updateInventoryQuantity</a></li><li><a href="global.html#useZoom">useZoom</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 14:00:22 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

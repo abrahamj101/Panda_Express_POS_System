@@ -12,18 +12,42 @@ import GoogleTranslate from "../Translation/TranslationComponent.js"; // Import 
 import TTSButton from "../TextToSpeech/TextToSpeechComponent.js"; // Import Text-to-Speech (TTS) button component
 import "../../styles/HighContrast/HighContrast.css"; // Styles for high-contrast mode
 
-// AccessibilityButton Component: Provides a menu for various accessibility features
-const AccessibilityButton = () => {
+/**
+ * @description AccessibilityButton component provides users with options to adjust accessibility settings, such as zoom, text-to-speech, translation, and high contrast mode.
+ * @component
+ * @returns {JSX.Element} The rendered accessibility button and menu with options.
+ */
+  const AccessibilityButton = () => {
+  /**
+   * State to manage if the accessibility menu is open or closed
+   * @type {[boolean, Function]}
+   */
   const [isOpen, setIsOpen] = useState(false); // State to manage visibility of the accessibility menu
+
+  /**
+   * Custom hook for zoom functionality
+   * @type {{ zoomIn: Function, zoomOut: Function, zoomLevel: number }}
+   */
   const { zoomIn, zoomOut, zoomLevel } = useZoom(); // Destructuring zoom-related functionality from the useZoom hook
+
+  /**
+   * State to manage if high contrast mode is enabled or not
+   * @type {[boolean, Function]}
+   */
   const [isHighContrast, setIsHighContrast] = useState(false); // State to track high-contrast mode status
 
-  // Function to toggle visibility of the accessibility menu
+    /**
+   * Toggles the state of the accessibility menu.
+   * @function
+   */
   const toggleAccessibilityMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  // Function to toggle high-contrast mode
+  /**
+   * Toggles high contrast mode on or off and applies or removes the 'high-contrast' class to the document body.
+   * @function
+   */
   const toggleHighContrast = () => {
     setIsHighContrast(!isHighContrast);
     // Add or remove the "high-contrast" class on the body element

@@ -5,11 +5,25 @@ import Favorites from "./Favorites";
 import "../../styles/FoodandMenu/Grid.css";
 import LoginContext from "../Login/LoginContext";
 
+/**
+ * A grid component that displays food items grouped by type and allows users to select or deselect items.
+ *
+ * @param {Object} props - The props for the component.
+ * @param {Array<number>} props.foodItemIds - An array of food item IDs to display in the grid.
+ * @param {Function} props.onAddFoodItem - Function to handle adding a food item to the selection.
+ * @param {Function} props.onRemoveFoodItem - Function to handle removing a food item from the selection.
+ * @param {number} props.menuItemId - The ID of the menu item associated with the food item grid.
+ * @returns {JSX.Element} The rendered component.
+ */
 function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId }) {
+  // State to manage food items and item counts
   const [foodItems, setFoodItems] = useState([]);
   const [itemCounts, setItemCounts] = useState({});
   const { isLoggedIn, customerId, role } = useContext(LoginContext)
 
+  /**
+   * Fetches food items from the API and sets them in the component state.
+   */
   const fetchFoodItems = async () => {
     try {
       const items = await getFoodItems();
@@ -19,10 +33,16 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
     }
   };
 
+  // Fetch food items on component mount
   useEffect(() => {
     fetchFoodItems();
   }, []);
 
+  /**
+   * Determines the maximum count of food items that can be selected based on their type.
+   * @param {string} type - The type of the food item.
+   * @returns {number} The maximum count allowed for the given type.
+   */
   const getMaxCount = (type) => {
     const id = parseInt(menuItemId, 10);
     if (type === "Side") return 2;
@@ -40,6 +60,10 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
     return 0;
   };
 
+  /**
+   * Handles selecting a food item and updating the item count state.
+   * @param {Object} foodItem - The food item to be selected.
+   */
   const handleSelectItem = (foodItem) => {
     const { fooditem_id, type } = foodItem;
     const maxCount = getMaxCount(type);
@@ -63,6 +87,10 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
     }
   };
 
+  /**
+   * Handles deselecting a food item and updating the item count state.
+   * @param {Object} foodItem - The food item to be deselected.
+   */
   const handleDeselectItem = (foodItem) => {
     const { fooditem_id, type } = foodItem;
 
@@ -77,6 +105,7 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
     onRemoveFoodItem(fooditem_id);
   };
 
+  // Filter and group food items by type and availability
   const currentMonth = new Date().getMonth() + 1;
   const filteredFoodItems = foodItems
     .filter(
@@ -97,18 +126,21 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
 
   return (
     <Fragment>
-      {isLoggedIn &&  role === 'customer' ? (<Favorites
-        menuItemId={menuItemId}
-        customerId={customerId}
-        onAddFoodItem={handleSelectItem}
-        onRemoveFoodItem={handleDeselectItem}
-        itemCounts={itemCounts}
-        getMaxCount={getMaxCount}
+      {/* Display the Favorites section if the user is logged in and is a customer */}
+      {isLoggedIn &&  role === 'customer' ? (
+        <Favorites
+          menuItemId={menuItemId}
+          customerId={customerId}
+          onAddFoodItem={handleSelectItem}
+          onRemoveFoodItem={handleDeselectItem}
+          itemCounts={itemCounts}
+          getMaxCount={getMaxCount}
       />
       ) : (
         <></>
       )}
       
+      {/* Render food items grouped by type */}
       {Object.keys(groupedFoodItems).map((type) => {
         const maxCount = getMaxCount(type);
         const currentTypeCount = Object.values(itemCounts).reduce(

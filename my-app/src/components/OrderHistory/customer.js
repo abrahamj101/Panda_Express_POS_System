@@ -6,6 +6,11 @@ import { useState, useEffect, useContext } from "react";
 import "../../styles/OrderHistory/customer.css"
 import LoginContext from "../Login/LoginContext";
 
+/**
+ * Customer component that fetches and displays customer orders with associated menu and food items.
+ * @component
+ * @returns {JSX.Element} The rendered Customer component with a list of orders or a loading message.
+ */
 const Customer = () => {
   const [orders, setOrders] = useState([]);
   const [foodItems, setFoodItems] = useState([]);
@@ -13,6 +18,11 @@ const Customer = () => {
   const {customerId} = useContext(LoginContext)
 
   useEffect(() => {
+    /**
+     * Fetches the orders for the current customer.
+     * @async
+     * @function
+     */
       const fetchOrders = async () => {
           try {
               const ordersData = await getOrders(customerId);
@@ -23,6 +33,11 @@ const Customer = () => {
           }
       };
 
+      /**
+       * Fetches the food items available.
+       * @async
+       * @function
+       */
       const fetchFoodItems = async () => {
           try {
               const foodItemsData = await getFoodItems();
@@ -33,6 +48,11 @@ const Customer = () => {
           }
       };
 
+      /**
+     * Fetches the menu items available.
+     * @async
+     * @function
+     */
       const fetchMenuItems = async () => {
           try {
               const menuItemsData = await getMenuItems();

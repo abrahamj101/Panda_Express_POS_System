@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/pages/api/inventory/addInventoryItems.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/pages/api/inventory/addInventoryItems.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * addInventoryItem Utility Function
+ * Adds a new inventory item to the backend API.
+ *
+ * @file addInventoryItems.js
+ * @module utils/addInventoryItem
+ * @requires fetch
+ */
+
+/**
+ * Adds a new inventory item to the database.
+ *
+ * @async
+ * @function addInventoryItem
+ * @param {Object} item - The inventory item object containing details to be added.
+ * @param {string} item.name - The name of the inventory item.
+ * @param {number} item.quantity - The quantity of the item in stock.
+ * @param {string} item.category - The category of the inventory item.
+ * @returns {Promise&lt;Object>} A promise that resolves to the added inventory item object.
+ * @throws {Error} Throws an error if the network request fails or the response is not OK.
+ *
+ * @example
+ * const newItem = { name: "Soy Sauce", quantity: 50, category: "Condiments" };
+ * addInventoryItem(newItem)
+ *   .then(item => console.log("Added Inventory Item:", item))
+ *   .catch(error => console.error("Error adding inventory item:", error.message));
+ */
+const addInventoryItem = async (item) => {
+  try {
+    // Send a POST request to the backend API to add a new inventory item.
+    const response = await fetch("https://project-3-team-3-b-backend.vercel.app/api/inventoryItems", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(item),
+    });
+
+    // Throw an error if the response is not successful.
+    if (!response.ok) {
+      throw new Error("Failed to add inventory item");
+    }
+
+    // Parse and return the response JSON data.
+    const jsonData = await response.json();
+    return jsonData;
+  } catch (err) {
+    // Log the error message to the console and rethrow the error.
+    console.error(err.message);
+    throw err;
+  }
+};
+
+export default addInventoryItem;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Classes</h3><ul><li><a href="Employee.html">Employee</a></li><li><a href="global.html#MenuItem">MenuItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccessibilityButton">AccessibilityButton</a></li><li><a href="global.html#BackButton">BackButton</a></li><li><a href="global.html#Cashier">Cashier</a></li><li><a href="global.html#CashierTable">CashierTable</a></li><li><a href="global.html#Customer">Customer</a></li><li><a href="global.html#FoodItemCard">FoodItemCard</a></li><li><a href="global.html#FoodItemGrid">FoodItemGrid</a></li><li><a href="global.html#FoodRestrictions">FoodRestrictions</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#GoogleTranslate">GoogleTranslate</a></li><li><a href="global.html#HomeButton">HomeButton</a></li><li><a href="global.html#ManagerButton">ManagerButton</a></li><li><a href="global.html#MenuItemCard">MenuItemCard</a></li><li><a href="global.html#MenuItemGrid">MenuItemGrid</a></li><li><a href="global.html#OrderEntry">OrderEntry</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#ProductUsageReport">ProductUsageReport</a></li><li><a href="global.html#SalesReport">SalesReport</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#WeatherWidget">WeatherWidget</a></li><li><a href="global.html#XReport">XReport</a></li><li><a href="global.html#XReportPayments">XReportPayments</a></li><li><a href="global.html#ZReport">ZReport</a></li><li><a href="global.html#ZReportPayments">ZReportPayments</a></li><li><a href="global.html#ZoomProvider">ZoomProvider</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#addFoodItem">addFoodItem</a></li><li><a href="global.html#alterInventory">alterInventory</a></li><li><a href="global.html#checkRestriction">checkRestriction</a></li><li><a href="global.html#extractFoodItemData">extractFoodItemData</a></li><li><a href="global.html#fetchMenuItems">fetchMenuItems</a></li><li><a href="global.html#getFoodInventoryIds">getFoodInventoryIds</a></li><li><a href="global.html#getFoodItemIds">getFoodItemIds</a></li><li><a href="global.html#getFoodItemInventoryAmounts">getFoodItemInventoryAmounts</a></li><li><a href="global.html#getFoodItemInventoryItemIds">getFoodItemInventoryItemIds</a></li><li><a href="global.html#getFoodItemNames">getFoodItemNames</a></li><li><a href="global.html#getFoodItems">getFoodItems</a></li><li><a href="global.html#getImageLink">getImageLink</a></li><li><a href="global.html#getInventoryAmounts">getInventoryAmounts</a></li><li><a href="global.html#getMenuInventoryIds">getMenuInventoryIds</a></li><li><a href="global.html#getMenuItemId">getMenuItemId</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li><li><a href="global.html#getOrders">getOrders</a></li><li><a href="global.html#getRandomItem">getRandomItem</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#handleCloseError">handleCloseError</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#isSeason">isSeason</a></li><li><a href="global.html#processChartData">processChartData</a></li><li><a href="global.html#removeFoodItem">removeFoodItem</a></li><li><a href="global.html#tableHeaders">tableHeaders</a></li><li><a href="global.html#updateInStockFoodItem">updateInStockFoodItem</a></li><li><a href="global.html#updateInStockMenuItem">updateInStockMenuItem</a></li><li><a href="global.html#updateInventoryQuantity">updateInventoryQuantity</a></li><li><a href="global.html#useZoom">useZoom</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 14:00:22 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

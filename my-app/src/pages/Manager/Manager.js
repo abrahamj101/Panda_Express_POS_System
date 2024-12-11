@@ -1,3 +1,21 @@
+/**
+ * ManagerPage Component
+ * This page serves as the main manager dashboard, providing access to various reports,
+ * inventory, employee information, and menu management options.
+ * It includes navigation components (Header, Footer, and BackButton) and utilizes
+ * a zoom context to adjust the display scale.
+ *
+ * @file Manager.js
+ * @module pages/Manager
+ * @requires react
+ * @requires react-router-dom
+ * @requires ../../styles/Pages/Manager.css
+ * @requires ../../components/Navigation/Header
+ * @requires ../../components/Navigation/Footer
+ * @requires ../../components/Navigation/BackButton
+ * @requires ../../components/Zoom/ZoomContext
+ */
+
 import React, { useState, useEffect } from "react";
 import "../../styles/Pages/Manager.css";
 import Header from "../../components/Navigation/Header";
@@ -6,20 +24,29 @@ import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/Navigation/BackButton";
 import { useZoom } from "../../components/Zoom/ZoomContext";
 
+/**
+ * ManagerPage Component
+ *
+ * @returns {JSX.Element} The manager dashboard, offering navigation to reports, inventory,
+ * employee management, menu management, and food item management.
+ */
 function ManagerPage() {
   const { zoomLevel } = useZoom();
-  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [user, setUser] = useState(null);
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID; // Google client ID for authentication
+  const [isSignedIn, setIsSignedIn] = useState(false); // State to manage user sign-in status
+  const [user, setUser] = useState(null); // State to store user information
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (!isSignedIn) {
-  //     navigate("/");
-  //   }
-  // }, [isSignedIn, navigate]);
-
+  /**
+   * Array of report options available on the manager page.
+   * Each object includes a title, description, and path for navigation.
+   *
+   * @type {Array<Object>}
+   * @property {string} title - The title of the report or section.
+   * @property {string} description - A short description of the report.
+   * @property {string} path - The navigation path for the report or section.
+   */
   const reports = [
     {
       title: "Generate Reports",
@@ -58,13 +85,16 @@ function ManagerPage() {
       className="manager-page"
       style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top left" }}
     >
+      {/* Page header */}
       <Header />
 
+      {/* Main content section */}
       <main className="manager-content">
         <div className="back-button-container">
           <BackButton location="/" />
         </div>
 
+        {/* Report grid with navigation buttons */}
         <div className="report-grid">
           {reports.map((report, index) => (
             <button
@@ -79,6 +109,7 @@ function ManagerPage() {
         </div>
       </main>
 
+      {/* Page footer */}
       <Footer />
     </div>
   );
