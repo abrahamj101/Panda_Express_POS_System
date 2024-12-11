@@ -14,7 +14,7 @@
     },
     "opts": {
       "encoding": "utf8",
-      "destination": "./docs", 
+      "destination": "../code-documentation/docs", 
       "recurse": true,
       "verbose": true
     }
