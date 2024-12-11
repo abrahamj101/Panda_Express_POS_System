@@ -3,9 +3,9 @@
       "allowUnknownTags": true
     },
     "source": {
-      "include": ["../my-app/backend", "../my-app/src"], 
+      "include": ["./my-app/backend", "./my-app/src"], 
       "includePattern": ".js$",
-      "exclude": ["../my-app/node_modules","../my-app/backend/node_modules", "../my-app/build", "../my-app/public"]
+      "exclude": ["./my-app/node_modules","./my-app/backend/node_modules", "./my-app/build", "./my-app/public"]
     },
     "plugins": [],
     "templates": {
@@ -14,7 +14,7 @@
     },
     "opts": {
       "encoding": "utf8",
-      "destination": "../code-documentation/docs", 
+      "destination": "../docs", 
       "recurse": true,
       "verbose": true
     }
