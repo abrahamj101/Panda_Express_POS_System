@@ -1,6 +1,6 @@
 /**
  * CartIcon Component
- * Displays a shopping cart icon with a badge indicating the number of items in the cart.
+ * @description Displays a shopping cart icon with a badge indicating the number of items in the cart.
  * Toggles the visibility of the cart when clicked.
  *
  * @file CartIcon.js
@@ -17,11 +17,13 @@ import CartContext from "../Cart/CartContext";
 import "../../styles/Cart/cartStyle.css";
 
 /**
- * CartIcon Component
- * Displays a clickable shopping cart icon with an item count badge.
- *
+ * A component that displays the shopping cart icon with a badge showing the number of items in the cart.
+ * 
  * @component
- * @returns {JSX.Element} A shopping cart icon with item count, toggling the cart display.
+ * @example
+ * <CartIcon />
+ * 
+ * @returns {JSX.Element} The rendered CartIcon component.
  */
 const CartIcon = () => {
   // Accessing cart state and functions from the CartContext

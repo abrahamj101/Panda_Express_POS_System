@@ -14,19 +14,26 @@ import addOrders from "../../pages/api/orders/addOrders";
 import MenuItem from "../MenuItems/MenuItemClass";
 
 /**
- * CartContext
- * Context object for managing cart-related state and functions.
+ * @description The CartContext is a React context used to share cart state and related functions across the application.
+ * 
+ * @type {React.Context}
  */
 const CartContext = createContext();
 export default CartContext;
 
 /**
- * CartContextProvider
- * Provides cart state and methods to children components via React Context API.
- *
- * @param {Object} props - React component props.
- * @param {React.ReactNode} props.children - Child components wrapped by the provider.
- * @returns {JSX.Element} Cart context provider wrapping the children.
+ * A provider component that wraps the application and provides cart data and actions to child components.
+ * 
+ * @component
+ * @example
+ * <CartContextProvider>
+ *   <YourComponent />
+ * </CartContextProvider>
+ * 
+ * @param {Object} props - The component properties.
+ * @param {React.ReactNode} props.children - The child components that will have access to the cart context.
+ * 
+ * @returns {JSX.Element} The rendered CartContext.Provider component.
  */
 export const CartContextProvider = ({ children }) => {
   const [menuItems, setMenuItems] = useState([]); // List of menu items in the cart
@@ -64,9 +71,9 @@ export const CartContextProvider = ({ children }) => {
   }, []);
 
   /**
-   * updateCartTotals - Updates cart total and tax based on current cart items.
-   *
-   * @param {Array} items - Array of MenuItem objects.
+   * Updates the total and tax values based on the provided menu items and stores them in local storage.
+   * 
+   * @param {MenuItem[]} items - The list of menu items to calculate totals for.
    */
   const updateCartTotals = (items) => {
     const newTotal = items.reduce((acc, item) => acc + item.getTotal(), 0);
@@ -77,9 +84,9 @@ export const CartContextProvider = ({ children }) => {
   };
 
   /**
-   * addMenuItem - Adds a new menu item to the cart and updates localStorage.
-   *
-   * @param {MenuItem} menuItem - The menu item to add to the cart.
+   * Adds a menu item to the cart and updates the local storage.
+   * 
+   * @param {MenuItem} menuItem - The menu item to be added.
    */
   const addMenuItem = (menuItem) => {
     console.log(menuItem);
@@ -108,9 +115,9 @@ export const CartContextProvider = ({ children }) => {
   };
 
   /**
-   * removeMenuItem - Removes a menu item from the cart by its index.
-   *
-   * @param {number} menuItemIndex - Index of the menu item to remove.
+   * Removes a menu item from the cart based on its index and updates the local storage.
+   * 
+   * @param {number} menuItemIndex - The index of the menu item to be removed.
    */
   const removeMenuItem = (menuItemIndex) => {
     setMenuItems((prevItems) => {
@@ -136,16 +143,16 @@ export const CartContextProvider = ({ children }) => {
   };
 
   /**
-   * getMenuIds - Returns an array of menu item IDs currently in the cart.
-   *
-   * @returns {Array<string>} List of menu item IDs.
+   * Returns an array of menu item IDs from the current cart.
+   * 
+   * @returns {number[]} An array of menu item IDs.
    */
   const getMenuIds = () => {
     return menuItems.map((item) => item.getMenuItemId());
   };
 
   /**
-   * emptyCart - Clears all items from the cart and resets localStorage.
+   * Empties the cart, resetting the state and removing data from local storage.
    */
   const emptyCart = () => {
     setMenuItems([]);
@@ -157,10 +164,9 @@ export const CartContextProvider = ({ children }) => {
   };
 
   /**
-   * completeOrder - Finalizes the order by calling an API and resetting the cart.
-   *
-   * @param {number} [customerId=0] - ID of the customer placing the order.
-   * @async
+   * Completes the order and clears the cart. Sends the order data to the server.
+   * 
+   * @param {number} [customerId=0] - The ID of the customer placing the order (default is 0).
    */
   const completeOrder = async (customerId = 0) => {
     if (menuItems.length > 0) {
@@ -177,7 +183,7 @@ export const CartContextProvider = ({ children }) => {
   };
 
   /**
-   * toggleCart - Toggles the visibility of the cart.
+   * Toggles the state of the cart (open/close).
    */
   const toggleCart = () => setIsCartOpen((prev) => !prev);
 

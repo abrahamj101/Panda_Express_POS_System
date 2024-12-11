@@ -1,6 +1,6 @@
 /**
  * ImageCarousel component.
- * Displays an interactive carousel of menu items with images, alt text, and legends.
+ * @description Displays an interactive carousel of menu items with images, alt text, and legends.
  *
  * @file ImageCarousel.js
  * @module components/ImageCarousel
@@ -93,7 +93,7 @@ const carouselItems = [
 
 /**
  * ImageCarousel functional component.
- * Renders an accessible image carousel with autoplay, infinite looping, and keyboard navigation.
+ * @description Renders an accessible image carousel with autoplay, infinite looping, and keyboard navigation.
  * 
  * @component
  * @returns {JSX.Element} JSX element representing the carousel.
