@@ -19,11 +19,16 @@ import LoginContext from "../Login/LoginContext";
 import { useNavigate } from "react-router-dom";
 
 /**
- * CartSidebar Component
- * Displays cart items with their details, totals, and checkout options.
- *
+ * A component that displays a sidebar showing the contents of the shopping cart,
+ * including item details, subtotal, tax, and total price.
+ * 
+ * The component also provides an option for checking out.
+ * 
  * @component
- * @returns {JSX.Element} A cart sidebar with item listing, totals, and checkout functionality.
+ * @example
+ * <CartSidebar />
+ * 
+ * @returns {JSX.Element} The rendered CartSidebar component.
  */
 const CartSidebar = () => {
   // Access cart-related state and methods from CartContext
@@ -39,8 +44,9 @@ const CartSidebar = () => {
   const navigate = useNavigate();
 
   /**
-   * useEffect Hook - Fetches food item names when menuItems change.
-   * Updates the foodItemNames state with data fetched from each item's method.
+   * Fetches the names of food items associated with each menu item in the cart.
+   * Updates the state with a mapping of menu item IDs to their corresponding food item names.
+   * The effect runs whenever the `menuItems` dependency changes.
    */
   useEffect(() => {
     const fetchFoodItemNames = async () => {
@@ -57,9 +63,8 @@ const CartSidebar = () => {
   }, [menuItems]);
 
   /**
-   * finishOrder - Handles the checkout process based on user role and login status.
-   * - Completes the order directly for privileged roles (cashier, admin, manager).
-   * - Navigates to the checkout page for other users.
+   * Handles the completion of an order. If the user is logged in and has an appropriate role,
+   * the order is completed. Otherwise, navigates the user to the checkout page.
    */
   const finishOrder = () => {
     if (isLoggedIn && (role === "cashier" || role === "admin" || role === "manager")) {

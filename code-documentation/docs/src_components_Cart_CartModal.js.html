@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/components/Cart/CartModal.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/components/Cart/CartModal.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * CartModal Component
+ * Displays a modal showing the items in the cart with options to remove items, view totals, 
+ * and proceed to checkout or finalize the order.
+ *
+ * @file CartModal.js
+ * @module components/CartModal
+ * @requires react
+ * @requires CartContext - Provides cart state and functions.
+ * @requires LoginContext - Provides login status and user role.
+ * @requires react-router-dom - Enables navigation to the checkout page.
+ * @requires cartStyle.css - Styles for the cart modal.
+ */
+
+import React, { useContext, useState, useEffect } from "react";
+import CartContext from "./CartContext";
+import "../../styles/Cart/cartStyle.css";
+import LoginContext from "../Login/LoginContext";
+import { useNavigate } from "react-router-dom";
+
+/**
+ * CartModal Component
+ * Displays a list of cart items, totals (subtotal, tax, total), and buttons for actions like 
+ * removing items, proceeding to checkout, or completing an order.
+ *
+ * @component
+ * @returns {JSX.Element|null} Cart modal if the cart is open; null otherwise.
+ */
+const CartModal = () => {
+  // Access cart-related state and functions from CartContext
+  const {
+    menuItems,
+    isCartOpen,
+    removeMenuItem,
+    toggleCart,
+    total,
+    tax,
+    completeOrder,
+  } = useContext(CartContext);
+
+  // State to store food item names for each cart item
+  const [foodItemNames, setFoodItemNames] = useState({});
+
+  // Access login state from LoginContext
+  const { isLoggedIn, customerId, role } = useContext(LoginContext);
+
+  // React Router's navigation hook
+  const navigate = useNavigate();
+
+  /**
+   * useEffect Hook
+   * Fetches food item names for all cart items when the cart is opened.
+   */
+  useEffect(() => {
+    const fetchFoodItemNames = async () => {
+      const namesMap = {};
+      for (const item of menuItems) {
+        // Fetch names for each food item in the cart asynchronously
+        const names = await item.getFoodItemNames();
+        namesMap[item.getMenuItemId()] = names;
+      }
+      setFoodItemNames(namesMap);
+    };
+
+    if (isCartOpen) {
+      fetchFoodItemNames();
+    }
+  }, [menuItems, isCartOpen]);
+
+  /**
+   * finishOrder - Handles the "Checkout" button click.
+   * - Finalizes the order if the user is logged in with specific roles.
+   * - Navigates to the checkout page for other users.
+   */
+  const finishOrder = () => {
+    if (isLoggedIn &amp;&amp; (role === "cashier" || role === "admin" || role === "manager")) {
+      completeOrder();
+    } else {
+      navigate("/checkout");
+      toggleCart();
+    }
+  };
+
+  // Return null if the cart is not open
+  if (!isCartOpen) return null;
+
+  return (
+    /**
+     * Cart modal container displaying the cart content.
+     */
+    &lt;div className="cart-modal">
+      &lt;div className="cart-modal-content">
+        &lt;h2>Your Cart&lt;/h2>
+        &lt;ul>
+          {/* Map through menuItems to display each cart item */}
+          {menuItems.map((item, index) => (
+            &lt;li key={index} className="cart-item">
+              {/* Item image */}
+              &lt;img
+                src={item.getImageLink()}
+                alt={item.getName()}
+                className="cart-image"
+              />
+              {/* Item details: name, food items, and price */}
+              &lt;div className="cart-item-details">
+                &lt;div className="cart-item-name">{item.getName()}&lt;/div>
+                &lt;div className="cart-item-food">
+                  {foodItemNames[item.getMenuItemId()]?.join(", ") ||
+                    "Loading food items..."}
+                &lt;/div>
+                &lt;div className="cart-item-price">
+                  ${item.getTotal().toFixed(2)}
+                &lt;/div>
+              &lt;/div>
+              {/* Remove button for each cart item */}
+              &lt;button
+                className="cart-remove-button"
+                onClick={() => removeMenuItem(index)}
+              >
+                Remove
+              &lt;/button>
+            &lt;/li>
+          ))}
+        &lt;/ul>
+        {/* Cart totals: subtotal, tax, and overall total */}
+        &lt;div className="cart-total">
+          &lt;span className="totals">
+            &lt;strong>Subtotal: &lt;/strong>
+            &lt;span className="right-justified">${total.toFixed(2)}&lt;/span>
+          &lt;/span>
+          &lt;span className="totals">
+            &lt;strong>Tax: &lt;/strong>
+            &lt;span className="right-justified">${tax.toFixed(2)}&lt;/span>
+          &lt;/span>
+          &lt;span className="totals">
+            &lt;strong>Total: &lt;/strong>
+            &lt;span className="right-justified">
+              ${(total + tax).toFixed(2)}
+            &lt;/span>
+          &lt;/span>
+        &lt;/div>
+      &lt;/div>
+      {/* Checkout and Close buttons */}
+      &lt;button className="checkout-button" onClick={finishOrder}>
+        Checkout
+      &lt;/button>
+      &lt;button className="close-button" onClick={toggleCart}>
+        Close
+      &lt;/button>
+    &lt;/div>
+  );
+};
+
+export default CartModal;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_FoodItemCard.html">components/FoodItemCard</a></li><li><a href="module-components_FoodItemGrid.html">components/FoodItemGrid</a></li><li><a href="module-components_FoodRestrictions.html">components/FoodRestrictions</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_MenuItemCard.html">components/MenuItemCard</a></li><li><a href="module-components_MenuItemGrid.html">components/MenuItemGrid</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Form">Form</a></li><li><a href="global.html#TTSButton">TTSButton</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 10 2024 21:37:46 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

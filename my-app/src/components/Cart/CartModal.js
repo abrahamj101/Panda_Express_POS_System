@@ -1,6 +1,6 @@
 /**
  * CartModal Component
- * Displays a modal showing the items in the cart with options to remove items, view totals, 
+ * @description Displays a modal showing the items in the cart with options to remove items, view totals, 
  * and proceed to checkout or finalize the order.
  *
  * @file CartModal.js
@@ -19,15 +19,19 @@ import LoginContext from "../Login/LoginContext";
 import { useNavigate } from "react-router-dom";
 
 /**
- * CartModal Component
- * Displays a list of cart items, totals (subtotal, tax, total), and buttons for actions like 
- * removing items, proceeding to checkout, or completing an order.
- *
+ * A component that displays a modal showing the contents of the shopping cart,
+ * including item details, subtotal, tax, and total price.
+ * 
+ * The component also provides options for checking out and closing the cart.
+ * 
  * @component
- * @returns {JSX.Element|null} Cart modal if the cart is open; null otherwise.
+ * @example
+ * <CartModal />
+ * 
+ * @returns {JSX.Element | null} The rendered CartModal component or null if the cart is not open.
  */
 const CartModal = () => {
-  // Access cart-related state and functions from CartContext
+  // Accesses cart context for managing cart items and actions
   const {
     menuItems,
     isCartOpen,
@@ -38,18 +42,19 @@ const CartModal = () => {
     completeOrder,
   } = useContext(CartContext);
 
-  // State to store food item names for each cart item
+  // State for storing the mapping of menu item IDs to their associated food item names
   const [foodItemNames, setFoodItemNames] = useState({});
 
-  // Access login state from LoginContext
+  // Accesses login context for user information like authentication status and role
   const { isLoggedIn, customerId, role } = useContext(LoginContext);
 
   // React Router's navigation hook
   const navigate = useNavigate();
 
   /**
-   * useEffect Hook
-   * Fetches food item names for all cart items when the cart is opened.
+   * Fetches the names of food items associated with each menu item in the cart.
+   * Updates the state with a mapping of menu item IDs to their corresponding food item names.
+   * The effect runs whenever the `menuItems` or `isCartOpen` dependencies change.
    */
   useEffect(() => {
     const fetchFoodItemNames = async () => {
@@ -68,9 +73,8 @@ const CartModal = () => {
   }, [menuItems, isCartOpen]);
 
   /**
-   * finishOrder - Handles the "Checkout" button click.
-   * - Finalizes the order if the user is logged in with specific roles.
-   * - Navigates to the checkout page for other users.
+   * Handles the completion of an order. If the user is logged in and has an appropriate role,
+   * the order is completed. Otherwise, navigates the user to the checkout page.
    */
   const finishOrder = () => {
     if (isLoggedIn && (role === "cashier" || role === "admin" || role === "manager")) {

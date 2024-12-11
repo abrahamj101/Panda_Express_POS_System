@@ -1,7 +1,21 @@
 import MenuItem from "./menuItem";
 
+/**
+ * OrderEntry component displays details of a single order and its associated menu items.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Object} props.order - The order object containing order details such as ordered time, total, tax, and menu item IDs.
+ * @param {Array} props.menuItems - Array of menu item objects used to find specific menu item details.
+ * @param {Array} props.foodItems - Array of food item objects used to find associated food items for the menu items.
+ * @returns {JSX.Element} The rendered OrderEntry component.
+ */
 const OrderEntry = ({ order, menuItems, foodItems }) => {
+  // Create a Date object from the order's ordered time.
+  /** @type {Date} */
   const orderedTime = new Date(order.ordered_time);
+
+  // Options for formatting the date to a localized string in CST.
+  /** @type {Object} */
   const options = {
       weekday: "short",
       year: "numeric",
@@ -13,6 +27,8 @@ const OrderEntry = ({ order, menuItems, foodItems }) => {
       hour12: true,
       timeZone: "America/Chicago",
   };
+  // Format the ordered time as a string with the defined options.
+  /** @type {string} */
   const formattedTime = orderedTime.toLocaleString("en-US", options);
 
   return (

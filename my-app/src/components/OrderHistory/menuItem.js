@@ -1,3 +1,13 @@
+/**
+ * MenuItem component that displays details of a specific menu item and its related food items.
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Array} props.menuItems - Array of menu item objects.
+ * @param {number} props.menuItemId - The ID of the specific menu item to display.
+ * @param {Array} props.foodItems - Array of food item objects.
+ * @param {Array} props.foodItemIds - Array of IDs of food items related to the menu item.
+ * @returns {JSX.Element} The rendered MenuItem component or a message if no menu item is found.
+ */
 const MenuItem = ({ menuItems, menuItemId, foodItems, foodItemIds }) => {
     const menuItem = menuItems?.find((item) => item.menuitem_id === menuItemId);
     const relatedFoodItems = foodItems?.filter((item) =>

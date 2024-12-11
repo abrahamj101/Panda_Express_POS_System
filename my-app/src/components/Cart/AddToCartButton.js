@@ -13,11 +13,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 /**
- * AddToCartButton Component
- *
- * @param {Object} props - React component props.
- * @param {function} props.onClick - Callback function to handle the "Add to Cart" action when the button is clicked.
- * @returns {JSX.Element} A styled button wrapped in a Link component for navigation.
+ * @description A button component that redirects the user to the menu page and triggers a function when clicked.
+ * 
+ * @component
+ * @example
+ * <AddToCartButton onClick={() => console.log('Button clicked!')} />
+ * 
+ * @param {Object} props - The component properties.
+ * @param {function} props.onClick - The function to be called when the button is clicked.
+ * 
+ * @returns {JSX.Element} The rendered button component wrapped in a Link.
  */
 const AddToCartButton = ({ onClick }) => {
   return (

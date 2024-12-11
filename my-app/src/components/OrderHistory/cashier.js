@@ -3,7 +3,11 @@ import CashierTable from "./cashierTable"; // Import the table component to disp
 import getOrders from "../../pages/api/orders/getOrders"; // Import the API function to fetch orders
 import "../../styles/OrderHistory/cashier.css"; // Import CSS for styling
 
-// Component to manage and display cashier orders with pagination
+/**
+ * @description Cashier component that displays a table of orders with pagination controls. The component fetches order data from an API and allows the user to navigate through pages.
+ * @component
+ * @returns {JSX.Element} The rendered Cashier component.
+ */
 const Cashier = () => {
   // State to store the list of orders
   const [orders, setOrders] = useState([]);

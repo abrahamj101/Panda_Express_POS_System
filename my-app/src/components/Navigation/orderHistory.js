@@ -3,6 +3,12 @@ import LoginContext from "../Login/LoginContext"; // Import LoginContext to chec
 import { useContext } from "react"; // Import useContext to use context API
 
 // Component to conditionally render the "Order History" link based on login status
+/**
+ * @description OrderHistory component that conditionally renders a link to the Order History page.
+ * The button is only displayed if the user is logged in.
+ * @component
+ * @returns {JSX.Element} The rendered OrderHistory component.
+ */
 const OrderHistory = () => {
   // Retrieve the 'isLoggedIn' state from LoginContext
   const { isLoggedIn } = useContext(LoginContext);
