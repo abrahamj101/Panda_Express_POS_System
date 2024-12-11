@@ -32,11 +32,22 @@ const LoginContext = createContext();
  */
 export const LoginProvider = ({ children }) => {
   // State variables for login status, user role, and customer ID
-  /** @type {boolean} - The current login status of the user. */
+  /**
+   * The current login status of the user.
+   * @type {boolean}
+   */
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  /** @type {string} - The role of the current user. */
+
+  /**
+   * The role of the current user.
+   * @type {string}
+   */
   const [role, setRole] = useState("");
-  /** @type {number} - The ID of the current customer. */
+
+  /**
+   * The ID of the current customer.
+   * @type {number}
+   */
   const [customerId, setCustomerId] = useState(0);
 
   /**

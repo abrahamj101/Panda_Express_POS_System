@@ -20,19 +20,19 @@ ChartJS.register(Title, Tooltip, Legend, BarElement);
  * @returns {JSX.Element} The rendered ProductUsageReport component.
  */
 const ProductUsageReport = () => {
-  /** @type {string} The start date for the report. */
+  /** @param {string} startDate The start date for the report. */
   const [startDate, setStartDate] = useState('');
 
-  /** @type {string} The end date for the report. */
+  /** @param {string} endDate The end date for the report. */
   const [endDate, setEndDate] = useState('');
 
-  /** @type {Array} Array to hold the data for the report. */
+  /** @param {string} reportData Array to hold the data for the report. */
   const [reportData, setReportData] = useState([]);
 
-  /** @type {string|null} Error message if an error occurs during data fetch. */
+  /** @param {string} error Error message if an error occurs during data fetch. */
   const [error, setError] = useState(null);
 
-  /** @type {boolean} Indicates whether the data fetching process is ongoing. */
+  /** @param {boolean} loading Indicates whether the data fetching process is ongoing. */
   const [loading, setLoading] = useState(false);
 
     /**

@@ -18,13 +18,22 @@ import "../../styles/HighContrast/HighContrast.css"; // Styles for high-contrast
  * @returns {JSX.Element} The rendered accessibility button and menu with options.
  */
   const AccessibilityButton = () => {
-  /** @type {[boolean, Function]} - State to manage if the accessibility menu is open or closed */
+  /**
+   * State to manage if the accessibility menu is open or closed
+   * @type {[boolean, Function]}
+   */
   const [isOpen, setIsOpen] = useState(false); // State to manage visibility of the accessibility menu
-  
-  /** @type {{ zoomIn: Function, zoomOut: Function, zoomLevel: number }} - Custom hook for zoom functionality */
+
+  /**
+   * Custom hook for zoom functionality
+   * @type {{ zoomIn: Function, zoomOut: Function, zoomLevel: number }}
+   */
   const { zoomIn, zoomOut, zoomLevel } = useZoom(); // Destructuring zoom-related functionality from the useZoom hook
-  
-  /** @type {[boolean, Function]} - State to manage if high contrast mode is enabled or not */
+
+  /**
+   * State to manage if high contrast mode is enabled or not
+   * @type {[boolean, Function]}
+   */
   const [isHighContrast, setIsHighContrast] = useState(false); // State to track high-contrast mode status
 
     /**

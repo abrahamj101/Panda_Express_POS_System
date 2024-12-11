@@ -19,10 +19,10 @@ ChartJS.register(Title, Tooltip, Legend, BarElement);
  * @returns {JSX.Element} The rendered XReport component.
  */
 const XReportPayments = () => {
-    /** @type {string} State variable for storing the selected date */
+    /** @param {string} setDate  State variable for storing the selected date */
     const [date, setDate] = useState('');
 
-    /** @type {?Object} State variable for storing chart data */
+    /** @param {object} chartData State variable for storing chart data */
     const [chartData, setChartData] = useState(null);
 
     /**

@@ -9,7 +9,10 @@ import "../../styles/FoodandMenu/Grid.css"
  * @returns {JSX.Element} The MenuItemGrid component.
  */
 function MenuItemGrid() {
-  /** @type {Array<Object>} State variable for storing menu items */
+  /**
+   * State variable for storing menu items
+   * @type {Array<Object>}
+   */
   const [menuItems, setMenuItems] = useState([]);
 
   /**
@@ -20,8 +23,12 @@ function MenuItemGrid() {
    */
   const fetchMenuItems = async () => {
     try {
-      /** @type {Array<Object>} The fetched menu items */
+      /**
+       * The fetched menu items
+       * @type {Array<Object>}
+       */
       const items = await getMenuItems();
+
       setMenuItems(items);
     } catch (err) {
       console.error('Error fetching menu items:', err);
