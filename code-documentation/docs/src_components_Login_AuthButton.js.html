@@ -28,14 +28,21 @@
         <article>
             <pre class="prettyprint source linenums"><code>/**
  * AuthButton Component
- * Handles Google authentication (sign-in and sign-out) using Google's Identity Services API.
- * Manages user authentication state and integrates with LoginContext and CartContext.
+ * This component handles Google Sign-In and Sign-Out functionality, integrates with Google Identity Services,
+ * and manages user authentication state. It also interacts with LoginContext for user role management 
+ * and CartContext for clearing the cart on sign-out.
+ * 
+ * Features:
+ * - Displays Google Sign-In button for unauthenticated users.
+ * - Shows user profile picture and a logout button for authenticated users.
+ * - Parses JWT tokens to extract user information and checks token validity.
+ * - Automatically initializes Google Identity Services and renders the sign-in button.
  *
  * @file AuthButton.js
  * @module components/AuthButton
- * @requires react - React library for component creation.
- * @requires LoginContext - Provides user login functions and state management.
- * @requires CartContext - Provides cart-related functions, such as emptying the cart on logout.
+ * @requires react
+ * @requires ../components/Login/LoginContext
+ * @requires ../components/Cart/CartContext
  */
 
 import React, { useEffect, useState, useContext } from "react";
@@ -45,24 +52,19 @@ import CartContext from "../Cart/CartContext";
 /**
  * AuthButton Component
  *
- * @returns {JSX.Element} A button or Google Sign-In component for authentication management.
+ * @returns {JSX.Element} A button for Google Sign-In or Sign-Out with user profile display.
  */
 function AuthButton() {
-  // State to track if the user is signed in and store user details
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [user, setUser] = useState(null);
-
-  // Access LoginContext for authentication management
-  const { checkOnlineUser, logOut, isLoggedin, role } = useContext(LoginContext);
-
-  // Access CartContext to clear the cart upon logout
+  const [isSignedIn, setIsSignedIn] = useState(false); // Tracks sign-in state
+  const [user, setUser] = useState(null); // Stores user information
+  const { checkOnlineUser, logOut } = useContext(LoginContext);
   const { emptyCart } = useContext(CartContext);
 
   /**
-   * parseJwt - Parses a JSON Web Token (JWT) to extract the payload.
+   * Parses a JWT token to extract payload data.
    *
-   * @param {string} token - The JWT string.
-   * @returns {Object|null} The decoded payload or null if parsing fails.
+   * @param {string} token - The JWT token to parse.
+   * @returns {Object|null} Parsed token payload as an object, or null if parsing fails.
    */
   const parseJwt = (token) => {
     try {
@@ -82,35 +84,34 @@ function AuthButton() {
   };
 
   /**
-   * initializeGSI - Initializes the Google Identity Services API.
+   * Initializes Google Identity Services (GSI) for sign-in.
    */
   const initializeGSI = () => {
     /* global google */
     window.google.accounts.id.initialize({
-      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID, // Your Google Client ID
+      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
       callback: handleCredentialResponse,
       auto_select: false,
     });
   };
 
   /**
-   * renderGoogleButton - Renders the Google Sign-In button.
+   * Renders the Google Sign-In button.
    */
   const renderGoogleButton = () => {
-    const buttonDiv = document.getElementById("googleSignInDiv");
-    if (buttonDiv) {
-      buttonDiv.innerHTML = "";
-      window.google.accounts.id.renderButton(buttonDiv, {
-        theme: "outline",
-        size: "large",
-      });
+    if (document.getElementById("googleSignInDiv")) {
+      document.getElementById("googleSignInDiv").innerHTML = "";
+      window.google.accounts.id.renderButton(
+        document.getElementById("googleSignInDiv"),
+        { theme: "outline", size: "large" }
+      );
     }
   };
 
   /**
-   * handleCredentialResponse - Handles the Google Sign-In response.
+   * Handles the credential response from Google Identity Services.
    *
-   * @param {Object} response - The response object containing the JWT credential.
+   * @param {Object} response - Google credential response.
    */
   const handleCredentialResponse = (response) => {
     const userObject = parseJwt(response.credential);
@@ -120,12 +121,21 @@ function AuthButton() {
       localStorage.setItem("authToken", response.credential);
       checkOnlineUser(userObject);
     }
-    console.log(userObject);
   };
 
   /**
-   * Load Google's Identity Services script and render the Google button.
+   * Handles user sign-out, clears user state, and resets related data.
    */
+  const handleSignOut = () => {
+    window.google.accounts.id.disableAutoSelect();
+    setUser(null);
+    setIsSignedIn(false);
+    localStorage.removeItem("authToken");
+    logOut();
+    emptyCart();
+  };
+
+  // Load Google Identity Services script
   useEffect(() => {
     const loadGoogleScript = () => {
       if (!window.google) {
@@ -143,13 +153,18 @@ function AuthButton() {
         renderGoogleButton();
       }
     };
-
     loadGoogleScript();
   }, []);
 
-  /**
-   * Restore user session if a valid token exists in localStorage.
-   */
+  // Re-render Google button if sign-in state changes
+  useEffect(() => {
+    if (!isSignedIn &amp;&amp; window.google) {
+      initializeGSI();
+      renderGoogleButton();
+    }
+  }, [isSignedIn]);
+
+  // Check for existing auth token on component mount
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (token) {
@@ -159,29 +174,15 @@ function AuthButton() {
         setUser(userObject);
         setIsSignedIn(true);
       } else {
-        localStorage.removeItem("authToken"); // Remove expired/invalid token
+        localStorage.removeItem("authToken");
       }
     }
   }, []);
-
-  /**
-   * handleSignOut - Handles user sign-out.
-   * Clears the user session, removes token, and resets the cart.
-   */
-  const handleSignOut = () => {
-    window.google.accounts.id.disableAutoSelect();
-    setUser(null);
-    setIsSignedIn(false);
-    localStorage.removeItem("authToken");
-    logOut();
-    emptyCart();
-  };
 
   return (
     &lt;div className="auth-button-container">
       {isSignedIn ? (
         &lt;>
-          {/* Display user profile picture and Logout button */}
           &lt;img
             src={user.picture}
             alt="Profile"
@@ -211,10 +212,7 @@ function AuthButton() {
           &lt;/button>
         &lt;/>
       ) : (
-        &lt;>
-          {/* Render Google Sign-In button */}
-          &lt;div id="googleSignInDiv">&lt;/div>
-        &lt;/>
+        &lt;div id="googleSignInDiv">&lt;/div>
       )}
     &lt;/div>
   );
@@ -231,13 +229,13 @@ export default AuthButton;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_FoodItemCard.html">components/FoodItemCard</a></li><li><a href="module-components_FoodItemGrid.html">components/FoodItemGrid</a></li><li><a href="module-components_FoodRestrictions.html">components/FoodRestrictions</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_MenuItemCard.html">components/MenuItemCard</a></li><li><a href="module-components_MenuItemGrid.html">components/MenuItemGrid</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Form">Form</a></li><li><a href="global.html#TTSButton">TTSButton</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Classes</h3><ul><li><a href="Employee.html">Employee</a></li><li><a href="global.html#MenuItem">MenuItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccessibilityButton">AccessibilityButton</a></li><li><a href="global.html#BackButton">BackButton</a></li><li><a href="global.html#Cashier">Cashier</a></li><li><a href="global.html#CashierTable">CashierTable</a></li><li><a href="global.html#Customer">Customer</a></li><li><a href="global.html#FoodItemCard">FoodItemCard</a></li><li><a href="global.html#FoodItemGrid">FoodItemGrid</a></li><li><a href="global.html#FoodRestrictions">FoodRestrictions</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#GoogleTranslate">GoogleTranslate</a></li><li><a href="global.html#HomeButton">HomeButton</a></li><li><a href="global.html#ManagerButton">ManagerButton</a></li><li><a href="global.html#MenuItemCard">MenuItemCard</a></li><li><a href="global.html#MenuItemGrid">MenuItemGrid</a></li><li><a href="global.html#OrderEntry">OrderEntry</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#ProductUsageReport">ProductUsageReport</a></li><li><a href="global.html#SalesReport">SalesReport</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#WeatherWidget">WeatherWidget</a></li><li><a href="global.html#XReport">XReport</a></li><li><a href="global.html#XReportPayments">XReportPayments</a></li><li><a href="global.html#ZReport">ZReport</a></li><li><a href="global.html#ZReportPayments">ZReportPayments</a></li><li><a href="global.html#ZoomProvider">ZoomProvider</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#addFoodItem">addFoodItem</a></li><li><a href="global.html#alterInventory">alterInventory</a></li><li><a href="global.html#checkRestriction">checkRestriction</a></li><li><a href="global.html#extractFoodItemData">extractFoodItemData</a></li><li><a href="global.html#fetchMenuItems">fetchMenuItems</a></li><li><a href="global.html#getFoodInventoryIds">getFoodInventoryIds</a></li><li><a href="global.html#getFoodItemIds">getFoodItemIds</a></li><li><a href="global.html#getFoodItemInventoryAmounts">getFoodItemInventoryAmounts</a></li><li><a href="global.html#getFoodItemInventoryItemIds">getFoodItemInventoryItemIds</a></li><li><a href="global.html#getFoodItemNames">getFoodItemNames</a></li><li><a href="global.html#getFoodItems">getFoodItems</a></li><li><a href="global.html#getImageLink">getImageLink</a></li><li><a href="global.html#getInventoryAmounts">getInventoryAmounts</a></li><li><a href="global.html#getMenuInventoryIds">getMenuInventoryIds</a></li><li><a href="global.html#getMenuItemId">getMenuItemId</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li><li><a href="global.html#getOrders">getOrders</a></li><li><a href="global.html#getRandomItem">getRandomItem</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#handleCloseError">handleCloseError</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#isSeason">isSeason</a></li><li><a href="global.html#processChartData">processChartData</a></li><li><a href="global.html#removeFoodItem">removeFoodItem</a></li><li><a href="global.html#tableHeaders">tableHeaders</a></li><li><a href="global.html#updateInStockFoodItem">updateInStockFoodItem</a></li><li><a href="global.html#updateInStockMenuItem">updateInStockMenuItem</a></li><li><a href="global.html#updateInventoryQuantity">updateInventoryQuantity</a></li><li><a href="global.html#useZoom">useZoom</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 10 2024 21:37:46 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 14:10:49 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

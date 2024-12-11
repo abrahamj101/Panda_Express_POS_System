@@ -26,21 +26,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * FoodItemGrid Component
- * Renders a grid of food items, grouped by type, with options to add or remove items.
- * Includes a Favorites section for logged-in customers and handles seasonal filtering.
- *
- * @file FoodItemGrid.js
- * @module components/FoodItemGrid
- * @requires getFoodItems - API call to fetch all food items.
- * @requires FoodItemCard - Component to display individual food items.
- * @requires Favorites - Component to display the user's favorite food items.
- * @requires Grid.css - Styles for the food item grid layout.
- * @requires LoginContext - Provides user login status and role.
- */
-
-import React, { Fragment, useState, useEffect, useContext } from "react";
+            <pre class="prettyprint source linenums"><code>import React, { Fragment, useState, useEffect, useContext } from "react";
 import getFoodItems from "../../pages/api/fooditems/getFooditems";
 import FoodItemCard from "./FoodItemCard";
 import Favorites from "./Favorites";
@@ -48,28 +34,23 @@ import "../../styles/FoodandMenu/Grid.css";
 import LoginContext from "../Login/LoginContext";
 
 /**
- * FoodItemGrid Component
+ * A grid component that displays food items grouped by type and allows users to select or deselect items.
  *
- * @param {Object} props - Component props.
- * @param {Array&lt;number>} props.foodItemIds - List of food item IDs to display.
- * @param {Function} props.onAddFoodItem - Callback to add a food item to the cart.
- * @param {Function} props.onRemoveFoodItem - Callback to remove a food item from the cart.
- * @param {number} props.menuItemId - Menu ID used for determining max selection limits.
- *
- * @returns {JSX.Element} A grid of food items grouped by type and a Favorites section.
+ * @param {Object} props - The props for the component.
+ * @param {Array&lt;number>} props.foodItemIds - An array of food item IDs to display in the grid.
+ * @param {Function} props.onAddFoodItem - Function to handle adding a food item to the selection.
+ * @param {Function} props.onRemoveFoodItem - Function to handle removing a food item from the selection.
+ * @param {number} props.menuItemId - The ID of the menu item associated with the food item grid.
+ * @returns {JSX.Element} The rendered component.
  */
 function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId }) {
-  // State to hold all available food items
+  // State to manage food items and item counts
   const [foodItems, setFoodItems] = useState([]);
-
-  // State to track selected food items and their quantities
   const [itemCounts, setItemCounts] = useState({});
-
-  // Access login status and customer ID from LoginContext
-  const { isLoggedIn, customerId, role } = useContext(LoginContext);
+  const { isLoggedIn, customerId, role } = useContext(LoginContext)
 
   /**
-   * fetchFoodItems - Fetches all available food items from the API.
+   * Fetches food items from the API and sets them in the component state.
    */
   const fetchFoodItems = async () => {
     try {
@@ -86,10 +67,9 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
   }, []);
 
   /**
-   * getMaxCount - Determines the maximum allowed count for a given food type.
-   *
-   * @param {string} type - The food item type (e.g., Side, Entree).
-   * @returns {number} The maximum allowable count for the specified type.
+   * Determines the maximum count of food items that can be selected based on their type.
+   * @param {string} type - The type of the food item.
+   * @returns {number} The maximum count allowed for the given type.
    */
   const getMaxCount = (type) => {
     const id = parseInt(menuItemId, 10);
@@ -109,15 +89,13 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
   };
 
   /**
-   * handleSelectItem - Handles adding a food item to the cart.
-   *
-   * @param {Object} foodItem - The selected food item.
+   * Handles selecting a food item and updating the item count state.
+   * @param {Object} foodItem - The food item to be selected.
    */
   const handleSelectItem = (foodItem) => {
     const { fooditem_id, type } = foodItem;
     const maxCount = getMaxCount(type);
 
-    // Calculate the current count for this type of food
     const currentTypeCount = Object.values(itemCounts).reduce(
       (count, { type: itemType, quantity }) =>
         itemType === type ? count + quantity : count,
@@ -132,14 +110,14 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
           quantity: (prevCounts[fooditem_id]?.quantity || 0) + 1,
         },
       }));
+
       onAddFoodItem(fooditem_id);
     }
   };
 
   /**
-   * handleDeselectItem - Handles removing a food item from the cart.
-   *
-   * @param {Object} foodItem - The deselected food item.
+   * Handles deselecting a food item and updating the item count state.
+   * @param {Object} foodItem - The food item to be deselected.
    */
   const handleDeselectItem = (foodItem) => {
     const { fooditem_id, type } = foodItem;
@@ -151,17 +129,12 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
         quantity: (prevCounts[fooditem_id]?.quantity || 0) - 1,
       },
     }));
+
     onRemoveFoodItem(fooditem_id);
   };
 
-  // Get the current month to filter seasonal food items
+  // Filter and group food items by type and availability
   const currentMonth = new Date().getMonth() + 1;
-
-  /**
-   * Filter and sort food items:
-   * - Include only items that match the provided IDs and are in stock.
-   * - Filter items based on their seasonal availability for the current month.
-   */
   const filteredFoodItems = foodItems
     .filter(
       (foodItem) =>
@@ -172,9 +145,6 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
     .sort((a, b) => a.type.localeCompare(b.type))
     .reverse();
 
-  /**
-   * Group filtered food items by their type (e.g., Side, Entree, Appetizer).
-   */
   const groupedFoodItems = filteredFoodItems.reduce((acc, foodItem) => {
     const { type } = foodItem;
     if (!acc[type]) acc[type] = [];
@@ -184,8 +154,8 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
 
   return (
     &lt;Fragment>
-      {/* Render Favorites section for logged-in customers */}
-      {isLoggedIn &amp;&amp; role === "customer" ? (
+      {/* Display the Favorites section if the user is logged in and is a customer */}
+      {isLoggedIn &amp;&amp;  role === 'customer' ? (
         &lt;Favorites
           menuItemId={menuItemId}
           customerId={customerId}
@@ -193,9 +163,11 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
           onRemoveFoodItem={handleDeselectItem}
           itemCounts={itemCounts}
           getMaxCount={getMaxCount}
-        />
-      ) : null}
-
+      />
+      ) : (
+        &lt;>&lt;/>
+      )}
+      
       {/* Render food items grouped by type */}
       {Object.keys(groupedFoodItems).map((type) => {
         const maxCount = getMaxCount(type);
@@ -228,8 +200,7 @@ function FoodItemGrid({ foodItemIds, onAddFoodItem, onRemoveFoodItem, menuItemId
   );
 }
 
-export default FoodItemGrid;
-</code></pre>
+export default FoodItemGrid;</code></pre>
         </article>
     </section>
 
@@ -239,13 +210,13 @@ export default FoodItemGrid;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_FoodItemCard.html">components/FoodItemCard</a></li><li><a href="module-components_FoodItemGrid.html">components/FoodItemGrid</a></li><li><a href="module-components_FoodRestrictions.html">components/FoodRestrictions</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_MenuItemCard.html">components/MenuItemCard</a></li><li><a href="module-components_MenuItemGrid.html">components/MenuItemGrid</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Form">Form</a></li><li><a href="global.html#TTSButton">TTSButton</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Classes</h3><ul><li><a href="Employee.html">Employee</a></li><li><a href="global.html#MenuItem">MenuItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccessibilityButton">AccessibilityButton</a></li><li><a href="global.html#BackButton">BackButton</a></li><li><a href="global.html#Cashier">Cashier</a></li><li><a href="global.html#CashierTable">CashierTable</a></li><li><a href="global.html#Customer">Customer</a></li><li><a href="global.html#FoodItemCard">FoodItemCard</a></li><li><a href="global.html#FoodItemGrid">FoodItemGrid</a></li><li><a href="global.html#FoodRestrictions">FoodRestrictions</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#GoogleTranslate">GoogleTranslate</a></li><li><a href="global.html#HomeButton">HomeButton</a></li><li><a href="global.html#ManagerButton">ManagerButton</a></li><li><a href="global.html#MenuItemCard">MenuItemCard</a></li><li><a href="global.html#MenuItemGrid">MenuItemGrid</a></li><li><a href="global.html#OrderEntry">OrderEntry</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#ProductUsageReport">ProductUsageReport</a></li><li><a href="global.html#SalesReport">SalesReport</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#WeatherWidget">WeatherWidget</a></li><li><a href="global.html#XReport">XReport</a></li><li><a href="global.html#XReportPayments">XReportPayments</a></li><li><a href="global.html#ZReport">ZReport</a></li><li><a href="global.html#ZReportPayments">ZReportPayments</a></li><li><a href="global.html#ZoomProvider">ZoomProvider</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#addFoodItem">addFoodItem</a></li><li><a href="global.html#alterInventory">alterInventory</a></li><li><a href="global.html#checkRestriction">checkRestriction</a></li><li><a href="global.html#extractFoodItemData">extractFoodItemData</a></li><li><a href="global.html#fetchMenuItems">fetchMenuItems</a></li><li><a href="global.html#getFoodInventoryIds">getFoodInventoryIds</a></li><li><a href="global.html#getFoodItemIds">getFoodItemIds</a></li><li><a href="global.html#getFoodItemInventoryAmounts">getFoodItemInventoryAmounts</a></li><li><a href="global.html#getFoodItemInventoryItemIds">getFoodItemInventoryItemIds</a></li><li><a href="global.html#getFoodItemNames">getFoodItemNames</a></li><li><a href="global.html#getFoodItems">getFoodItems</a></li><li><a href="global.html#getImageLink">getImageLink</a></li><li><a href="global.html#getInventoryAmounts">getInventoryAmounts</a></li><li><a href="global.html#getMenuInventoryIds">getMenuInventoryIds</a></li><li><a href="global.html#getMenuItemId">getMenuItemId</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li><li><a href="global.html#getOrders">getOrders</a></li><li><a href="global.html#getRandomItem">getRandomItem</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#handleCloseError">handleCloseError</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#isSeason">isSeason</a></li><li><a href="global.html#processChartData">processChartData</a></li><li><a href="global.html#removeFoodItem">removeFoodItem</a></li><li><a href="global.html#tableHeaders">tableHeaders</a></li><li><a href="global.html#updateInStockFoodItem">updateInStockFoodItem</a></li><li><a href="global.html#updateInStockMenuItem">updateInStockMenuItem</a></li><li><a href="global.html#updateInventoryQuantity">updateInventoryQuantity</a></li><li><a href="global.html#useZoom">useZoom</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Dec 10 2024 21:37:46 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 14:10:49 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

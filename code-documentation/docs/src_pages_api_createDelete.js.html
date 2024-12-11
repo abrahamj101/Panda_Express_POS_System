@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/pages/api/createDelete.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/pages/api/createDelete.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * API Functions for Creating and Deleting Entities
+ * This module provides utility functions to create and delete employees, food items,
+ * menu items, and inventory items through API requests.
+ *
+ * @file createDelete.js
+ * @module api/createDelete
+ */
+
+const API_BASE_URL = "https://project-3-team-3-b-backend.vercel.app";
+
+/**
+ * Create an employee.
+ *
+ * @param {Object} employeeData - Data of the employee to be created.
+ * @param {string} employeeData.name - The employee's name.
+ * @param {string|number} employeeData.hours_worked - Hours worked, defaulted to 0 if invalid.
+ * @param {Array&lt;string>} employeeData.schedule - Array of time strings for the employee's schedule.
+ * @returns {Promise&lt;Object>} The created employee data.
+ * @throws {Error} If the API request fails.
+ */
+export async function createEmployee(employeeData) {
+  employeeData["hours_worked"] = employeeData["hours_worked"]
+    ? parseFloat(employeeData["hours_worked"])
+    : 0;
+
+  employeeData["schedule"] = Array.isArray(employeeData["schedule"])
+    ? employeeData["schedule"]
+    : [];
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/employees`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(employeeData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        errorData.error || `Failed to create employee: ${response.statusText}`
+      );
+    }
+
+    const newEmployee = await response.json();
+    return newEmployee;
+  } catch (error) {
+    console.error("Error creating employee:", error);
+    throw error;
+  }
+}
+
+/**
+ * Delete an employee.
+ *
+ * @param {number|string} employeeId - The ID of the employee to delete.
+ * @returns {Promise&lt;Object>} Result of the deletion operation.
+ * @throws {Error} If the API request fails.
+ */
+export async function deleteEmployee(employeeId) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/employees/${employeeId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        errorData.error || `Failed to delete employee: ${response.statusText}`
+      );
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error deleting employee:", error);
+    throw error;
+  }
+}
+
+/**
+ * Create a food item.
+ *
+ * @param {Object} foodItemData - Data of the food item to be created.
+ * @returns {Promise&lt;Object>} The created food item data.
+ * @throws {Error} If the API request fails.
+ */
+export async function createFoodItem(foodItemData) {
+  const formattedData = {
+    foodItem_name: foodItemData["fooditem_name"] || null,
+    type: foodItemData["type"] || null,
+    inventoryitem_ids: foodItemData["inventoryitem_ids"]
+      ? foodItemData["inventoryitem_ids"].split(",").map(Number)
+      : [],
+    inventory_amounts: foodItemData["inventory_amounts"]
+      ? foodItemData["inventory_amounts"].split(",").map(Number)
+      : [],
+    in_stock: foodItemData["in_stock"] === "true",
+    seasonal: foodItemData["seasonal"]
+      ? foodItemData["seasonal"].split(",").map(Number)
+      : [],
+    image_link: foodItemData["image_link"] || null,
+    premium: foodItemData["premium"] === "true",
+    restriction: foodItemData["restriction"] || null,
+  };
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/foodItems`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formattedData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        errorData.error || `Failed to create food item: ${response.statusText}`
+      );
+    }
+
+    const newFoodItem = await response.json();
+    return newFoodItem;
+  } catch (error) {
+    console.error("Error creating food item:", error);
+    throw error;
+  }
+}
+
+/**
+ * Delete a food item.
+ *
+ * @param {number|string} foodItemId - The ID of the food item to delete.
+ * @returns {Promise&lt;Object>} Result of the deletion operation.
+ * @throws {Error} If the API request fails.
+ */
+export async function deleteFoodItem(foodItemId) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/foodItems/${foodItemId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        errorData.error || `Failed to delete food item: ${response.statusText}`
+      );
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error deleting food item:", error);
+    throw error;
+  }
+}
+
+/**
+ * Create a menu item.
+ *
+ * @param {Object} menuItemData - Data of the menu item to be created.
+ * @returns {Promise&lt;Object>} The created menu item data.
+ * @throws {Error} If the API request fails.
+ */
+export async function createMenuItem(menuItemData) {
+  const formattedData = {
+    menuitem_name: menuItemData.menuitem_name || null,
+    price: isNaN(parseFloat(menuItemData.price))
+      ? null
+      : parseFloat(menuItemData.price),
+    fooditem_ids:
+      menuItemData.fooditem_ids &amp;&amp; menuItemData.fooditem_ids.length > 0
+        ? menuItemData.fooditem_ids.map((id) => parseInt(id, 10))
+        : [],
+    inventoryitem_ids:
+      menuItemData.inventoryitem_ids &amp;&amp;
+      menuItemData.inventoryitem_ids.length > 0
+        ? menuItemData.inventoryitem_ids.map((id) => parseInt(id, 10))
+        : [],
+    in_stock: menuItemData.in_stock === "true",
+    image_link: menuItemData.image_link || null,
+  };
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/menuItems`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formattedData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        errorData.error || `Failed to create menu item: ${response.statusText}`
+      );
+    }
+
+    const newMenuItem = await response.json();
+    return newMenuItem;
+  } catch (error) {
+    console.error("Error creating menu item:", error);
+    throw error;
+  }
+}
+
+/**
+ * Delete a menu item.
+ *
+ * @param {number|string} menuItemId - The ID of the menu item to delete.
+ * @returns {Promise&lt;Object>} Result of the deletion operation.
+ * @throws {Error} If the API request fails.
+ */
+export async function deleteMenuItem(menuItemId) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/menuItems/${menuItemId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        errorData.error || `Failed to delete menu item: ${response.statusText}`
+      );
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error deleting menu item:", error);
+    throw error;
+  }
+}
+
+/**
+ * Create an inventory item.
+ *
+ * @param {Object} inventoryItemData - Data of the inventory item to be created.
+ * @returns {Promise&lt;Object>} The created inventory item data.
+ * @throws {Error} If the API request fails.
+ */
+export async function createInventoryItem(inventoryItemData) {
+  const formattedData = {
+    inventoryitem_name: inventoryItemData.inventoryitem_name || null,
+    quantity: parseInt(inventoryItemData.quantity, 10) || 0,
+    last_restocked: isNaN(Date.parse(inventoryItemData.last_restocked))
+      ? null
+      : new Date(inventoryItemData.last_restocked).toISOString(),
+  };
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/inventoryItems`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formattedData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        errorData.error ||
+          `Failed to create inventory item: ${response.statusText}`
+      );
+    }
+
+    const newInventoryItem = await response.json();
+    return newInventoryItem;
+  } catch (error) {
+    console.error("Error creating inventory item:", error);
+    throw error;
+  }
+}
+
+/**
+ * Delete an inventory item.
+ *
+ * @param {number|string} inventoryItemId - The ID of the inventory item to delete.
+ * @returns {Promise&lt;Object>} Result of the deletion operation.
+ * @throws {Error} If the API request fails.
+ */
+export async function deleteInventoryItem(inventoryItemId) {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/api/inventoryItems/${inventoryItemId}`,
+      { method: "DELETE" }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        errorData.error ||
+          `Failed to delete inventory item: ${response.statusText}`
+      );
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error deleting inventory item:", error);
+    throw error;
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-api_createDelete.html">api/createDelete</a></li><li><a href="module-components_AddToCartButton.html">components/AddToCartButton</a></li><li><a href="module-components_AuthButton.html">components/AuthButton</a></li><li><a href="module-components_CartIcon.html">components/CartIcon</a></li><li><a href="module-components_CartModal.html">components/CartModal</a></li><li><a href="module-components_CartSidebar.html">components/CartSidebar</a></li><li><a href="module-components_Favorites.html">components/Favorites</a></li><li><a href="module-components_ImageCarousel.html">components/ImageCarousel</a></li><li><a href="module-components_Nutrition.html">components/Nutrition</a></li><li><a href="module-components_ProtectedPage.html">components/ProtectedPage</a></li><li><a href="module-context_CartContext.html">context/CartContext</a></li><li><a href="module-context_LoginContext.html">context/LoginContext</a></li><li><a href="module-db.html">db</a></li><li><a href="module-index.html">index</a></li><li><a href="module-pages_Checkout.html">pages/Checkout</a></li><li><a href="module-pages_Employee.html">pages/Employee</a></li><li><a href="module-pages_Food.html">pages/Food</a></li><li><a href="module-pages_FoodItem.html">pages/FoodItem</a></li><li><a href="module-pages_Inventory.html">pages/Inventory</a></li><li><a href="module-pages_Manager.html">pages/Manager</a></li><li><a href="module-pages_Menu.html">pages/Menu</a></li><li><a href="module-pages_MenuItem.html">pages/MenuItem</a></li><li><a href="module-pages_Order.html">pages/Order</a></li><li><a href="module-pages_OrderHistory.html">pages/OrderHistory</a></li><li><a href="module-pages_Reports.html">pages/Reports</a></li><li><a href="module-pages_api_weatherApi.html">pages/api/weatherApi</a></li><li><a href="module-reportWebVitals.html">reportWebVitals</a></li><li><a href="module-utils_addInventoryItem.html">utils/addInventoryItem</a></li><li><a href="module-utils_addOnlineUsers.html">utils/addOnlineUsers</a></li><li><a href="module-utils_addOrders.html">utils/addOrders</a></li><li><a href="module-utils_getEmployees.html">utils/getEmployees</a></li><li><a href="module-utils_getFoodItems.html">utils/getFoodItems</a></li><li><a href="module-utils_getInventoryItems.html">utils/getInventoryItems</a></li><li><a href="module-utils_getMenuItems.html">utils/getMenuItems</a></li><li><a href="module-utils_getNutrition.html">utils/getNutrition</a></li><li><a href="module-utils_getOnlineUsers.html">utils/getOnlineUsers</a></li><li><a href="module-utils_getOnlineUsersEmail.html">utils/getOnlineUsersEmail</a></li><li><a href="module-utils_getOrders.html">utils/getOrders</a></li><li><a href="module-utils_removeMenuItem.html">utils/removeMenuItem</a></li><li><a href="module-utils_updateFoodItemInStock.html">utils/updateFoodItemInStock</a></li><li><a href="module-utils_updateInventoryItemQuantity.html">utils/updateInventoryItemQuantity</a></li><li><a href="module-utils_updateMenuItemInStock.html">utils/updateMenuItemInStock</a></li><li><a href="tests_App.module_test.html">tests/App.test</a></li></ul><h3>Classes</h3><ul><li><a href="Employee.html">Employee</a></li><li><a href="global.html#MenuItem">MenuItem</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccessibilityButton">AccessibilityButton</a></li><li><a href="global.html#BackButton">BackButton</a></li><li><a href="global.html#Cashier">Cashier</a></li><li><a href="global.html#CashierTable">CashierTable</a></li><li><a href="global.html#Customer">Customer</a></li><li><a href="global.html#FoodItemCard">FoodItemCard</a></li><li><a href="global.html#FoodItemGrid">FoodItemGrid</a></li><li><a href="global.html#FoodRestrictions">FoodRestrictions</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#GoogleTranslate">GoogleTranslate</a></li><li><a href="global.html#HomeButton">HomeButton</a></li><li><a href="global.html#ManagerButton">ManagerButton</a></li><li><a href="global.html#MenuItemCard">MenuItemCard</a></li><li><a href="global.html#MenuItemGrid">MenuItemGrid</a></li><li><a href="global.html#OrderEntry">OrderEntry</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#ProductUsageReport">ProductUsageReport</a></li><li><a href="global.html#SalesReport">SalesReport</a></li><li><a href="global.html#TTSButton">TTSButton</a></li><li><a href="global.html#WeatherWidget">WeatherWidget</a></li><li><a href="global.html#XReport">XReport</a></li><li><a href="global.html#XReportPayments">XReportPayments</a></li><li><a href="global.html#ZReport">ZReport</a></li><li><a href="global.html#ZReportPayments">ZReportPayments</a></li><li><a href="global.html#ZoomProvider">ZoomProvider</a></li><li><a href="global.html#addCustomer">addCustomer</a></li><li><a href="global.html#addFoodItem">addFoodItem</a></li><li><a href="global.html#alterInventory">alterInventory</a></li><li><a href="global.html#checkRestriction">checkRestriction</a></li><li><a href="global.html#extractFoodItemData">extractFoodItemData</a></li><li><a href="global.html#fetchMenuItems">fetchMenuItems</a></li><li><a href="global.html#getFoodInventoryIds">getFoodInventoryIds</a></li><li><a href="global.html#getFoodItemIds">getFoodItemIds</a></li><li><a href="global.html#getFoodItemInventoryAmounts">getFoodItemInventoryAmounts</a></li><li><a href="global.html#getFoodItemInventoryItemIds">getFoodItemInventoryItemIds</a></li><li><a href="global.html#getFoodItemNames">getFoodItemNames</a></li><li><a href="global.html#getFoodItems">getFoodItems</a></li><li><a href="global.html#getImageLink">getImageLink</a></li><li><a href="global.html#getInventoryAmounts">getInventoryAmounts</a></li><li><a href="global.html#getMenuInventoryIds">getMenuInventoryIds</a></li><li><a href="global.html#getMenuItemId">getMenuItemId</a></li><li><a href="global.html#getName">getName</a></li><li><a href="global.html#getOnlineUsers">getOnlineUsers</a></li><li><a href="global.html#getOrders">getOrders</a></li><li><a href="global.html#getRandomItem">getRandomItem</a></li><li><a href="global.html#getTotal">getTotal</a></li><li><a href="global.html#handleCloseError">handleCloseError</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#isSeason">isSeason</a></li><li><a href="global.html#processChartData">processChartData</a></li><li><a href="global.html#removeFoodItem">removeFoodItem</a></li><li><a href="global.html#tableHeaders">tableHeaders</a></li><li><a href="global.html#updateInStockFoodItem">updateInStockFoodItem</a></li><li><a href="global.html#updateInStockMenuItem">updateInStockMenuItem</a></li><li><a href="global.html#updateInventoryQuantity">updateInventoryQuantity</a></li><li><a href="global.html#useZoom">useZoom</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 14:10:49 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
