@@ -1,8 +1,30 @@
+/**
+ * MenuPage Component
+ * This page displays a comprehensive menu with different sections: meals, appetizers, 
+ * side choices, entrée choices, and drink choices. Each section includes relevant images, 
+ * titles, and details like calories and prices. 
+ * 
+ * The page also supports zoom accessibility using the ZoomContext.
+ *
+ * @file MenuBoard.js
+ * @module pages/Menu
+ * @requires react
+ * @requires ../styles/Pages/MenuBoard.css
+ * @requires ../components/Navigation/BackButton
+ * @requires ../components/Zoom/ZoomContext
+ */
+
 import React from "react";
 import "../styles/Pages/MenuBoard.css";
 import BackButton from "../components/Navigation/BackButton";
 import { useZoom } from "../components/Zoom/ZoomContext";
 
+/**
+ * MenuPage Component
+ *
+ * @returns {JSX.Element} A fully detailed menu page divided into sections for meals, appetizers, 
+ * sides, entrées, and drinks, with accompanying images and descriptions.
+ */
 const MenuPage = () => {
   const { zoomLevel } = useZoom();
 

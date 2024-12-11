@@ -5,7 +5,7 @@
  * a zoom context to adjust the display scale.
  *
  * @file Employee.js
- * @module pages/EmployeePage
+ * @module pages/Employee
  * @requires ../../components/Navigation/Header
  * @requires ../../components/Navigation/Footer
  * @requires ../../components/ManagerPage/ManagerTable
